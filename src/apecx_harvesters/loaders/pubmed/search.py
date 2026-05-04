@@ -22,15 +22,19 @@ def pubmed_author_term(name: str | None = None, orcid: str | None = None) -> str
     *orcid* must be supplied.
 
     PubMed indexes author names as ``"LastName FirstName"`` or ``"LastName F"``
-    (last name first, no comma, space-separated).  Both the full-name and
-    initial forms are OR'd together to cover older records that lack full given
-    names.  When only *orcid* is supplied, the query matches exclusively on the
+    (last name first, no comma, space-separated).  Three forms are OR'd to cover
+    records with full given names, records indexed with combined initials (common
+    before full-name indexing was introduced), and records with a single initial.
+    When only *orcid* is supplied, the query matches exclusively on the
     ``[auid]`` field.  When both are supplied, ORCID and name variants are OR'd.
 
     Examples::
 
         pubmed_author_term("Andrzej Joachimiak")
         # → ("Joachimiak Andrzej"[Author] OR "Joachimiak A"[Author])
+
+        pubmed_author_term("Jane Marie Smith")
+        # → ("Smith Jane Marie"[Author] OR "Smith JM"[Author] OR "Smith J"[Author])
 
         pubmed_author_term(orcid="0000-0002-1234-5678")
         # → ("0000-0002-1234-5678"[auid])
@@ -46,9 +50,14 @@ def pubmed_author_term(name: str | None = None, orcid: str | None = None) -> str
     if name is not None:
         family, given = _parse_author_name(name)
         if given:
-            initial = given[0]
-            if len(given) > 1:
+            given_parts = given.split()
+            initial = given_parts[0][0]
+            is_full_name = len(given_parts[0].rstrip(".")) > 1
+            multi_initials = "".join(p[0] for p in given_parts) if len(given_parts) > 1 else None
+            if is_full_name:
                 clauses.append(f'"{family} {given}"[Author]')
+            if multi_initials:
+                clauses.append(f'"{family} {multi_initials}"[Author]')
             clauses.append(f'"{family} {initial}"[Author]')
         else:
             clauses.append(f'"{family}"[Author]')

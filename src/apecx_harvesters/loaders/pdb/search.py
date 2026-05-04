@@ -25,25 +25,37 @@ def _author_name_nodes(family: str, given: str | None) -> list[SearchQuery]:
     """
     Return ``SearchQuery`` terminal nodes covering all expected PDB name variants.
 
-    PDB stores author names as ``"Smith, Jane"`` or ``"Smith, J."``.  When a
-    full given name is available, both the full form and the initial form are
-    included so that either storage convention is matched.
+    PDB stores author names as ``"Smith, Jane"``, ``"Smith, J"``, or dotted
+    multi-initial forms such as ``"Tesmer, J.J.G."``.  The concatenated form
+    used by PubMed (``"Smith JM"``) does not appear in PDB.  When given is
+    all initials, the dotted form is reconstructed (``"J.J.G"`` from
+    ``"J. J. G."``).  The single-initial form is always included as a fallback.
     """
     if given is None:
         return [SearchQuery(value=family, attribute="audit_author.name", operator="contains_words")]
 
-    initial = given[0]
+    given_parts = given.split()
+    initial = given_parts[0][0]
+    is_full_name = len(given_parts[0].rstrip(".")) > 1
     nodes: list[SearchQuery] = []
 
-    if len(given) > 1:
-        # Full given name — search for the full "Smith, Jane" form
+    if is_full_name:
+        # Full given name — search for the "Smith, Jane Marie" form
         nodes.append(SearchQuery(
             value=f"{family}, {given}",
             attribute="audit_author.name",
             operator="contains_phrase",
         ))
+    elif len(given_parts) > 1:
+        # Multiple initials — reconstruct PDB dotted form e.g. "Tesmer, J.J.G"
+        dotted = ".".join(p[0] for p in given_parts)
+        nodes.append(SearchQuery(
+            value=f"{family}, {dotted}",
+            attribute="audit_author.name",
+            operator="contains_phrase",
+        ))
 
-    # Always include the initial form "Smith, J" to catch abbreviated entries
+    # Always include the single-initial form "Smith, J" as a fallback
     nodes.append(SearchQuery(
         value=f"{family}, {initial}",
         attribute="audit_author.name",

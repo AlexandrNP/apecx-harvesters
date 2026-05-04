@@ -59,11 +59,15 @@ class TestParseAuthorName:
     def test_family_only(self):
         assert parse_author_name("Smith") == ("Smith", None)
 
-    # Middle names — only first token taken as given in space-separated form
-    def test_middle_name_ignored(self):
-        family, given = parse_author_name("Jane Marie Smith")
-        assert family == "Smith"
-        assert given == "Jane"
+    # Middle names — included in given for space-separated form
+    def test_middle_name_included(self):
+        assert parse_author_name("Jane Marie Smith") == ("Smith", "Jane Marie")
+
+    def test_middle_initial_included(self):
+        assert parse_author_name("Jane M. Smith") == ("Smith", "Jane M")
+
+    def test_multiple_initials(self):
+        assert parse_author_name("J. M. Smith") == ("Smith", "J. M")
 
     # Hyphenated names
     def test_hyphenated_family(self):

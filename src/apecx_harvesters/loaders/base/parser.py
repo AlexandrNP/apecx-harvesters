@@ -19,12 +19,16 @@ from .model import (
 def parse_author_name(name: str) -> tuple[str, str | None]:
     """Parse a human name string into ``(family, given)`` components.
 
+    The *given* component includes middle names and initials when present.
     Accepts any of these formats::
 
-        "Jane Smith"   → ("Smith", "Jane")
-        "Smith, Jane"  → ("Smith", "Jane")
-        "J. Smith"     → ("Smith", "J")
-        "Smith"        → ("Smith", None)
+        "Jane Smith"        → ("Smith", "Jane")
+        "Jane Marie Smith"  → ("Smith", "Jane Marie")
+        "Smith, Jane"       → ("Smith", "Jane")
+        "Smith, Jane Marie" → ("Smith", "Jane Marie")
+        "J. Smith"          → ("Smith", "J")
+        "J. M. Smith"       → ("Smith", "J. M")
+        "Smith"             → ("Smith", None)
     """
     name = name.strip()
     if "," in name:
@@ -37,7 +41,7 @@ def parse_author_name(name: str) -> tuple[str, str | None]:
         return parts[0], None
 
     family = parts[-1]
-    given = parts[0].rstrip(".")
+    given = " ".join(parts[:-1]).rstrip(".")
     return family, given or None
 
 

@@ -42,7 +42,14 @@ def emdb_author_term(name: str | None = None, *, orcid: str | None = None) -> st
     if name is not None:
         family, given = _parse_author_name(name)
         if given:
-            clauses.append(f'author:"{family} {given[0]}"')
+            given_parts = given.split()
+            # EMDB indexes authors as "Family I" (initial only); full given names
+            # are not searchable.  Multi-initial form ("Smith JM") covers older
+            # records where both initials were stored together.
+            multi_initials = "".join(p[0] for p in given_parts) if len(given_parts) > 1 else None
+            if multi_initials:
+                clauses.append(f'author:"{family} {multi_initials}"')
+            clauses.append(f'author:"{family} {given_parts[0][0]}"')
         else:
             clauses.append(f'author:"{family}"')
 
