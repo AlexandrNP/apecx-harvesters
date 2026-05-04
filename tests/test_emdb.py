@@ -26,6 +26,7 @@ from pydantic import ValidationError
 from apecx_harvesters.loaders.emdb import EMDBHarvester
 from apecx_harvesters.loaders.base import DateType, RelatedIdentifierType, RelationType
 from apecx_harvesters.loaders.emdb import EMDBContainer
+from apecx_harvesters.loaders.emdb.search import emdb_author_term
 
 
 def _parse(data: dict) -> EMDBContainer:
@@ -327,3 +328,31 @@ class TestEdgeCases:
         record = _parse(p)
         assert len(record.fundingReferences) == 1
         assert record.fundingReferences[0].funderName == "Lone Funder"
+
+
+# ---------------------------------------------------------------------------
+# emdb_author_term
+# ---------------------------------------------------------------------------
+
+class TestEmdbAuthorTerm:
+    def test_full_name(self):
+        assert emdb_author_term("Jane Smith") == 'author:"Smith J"'
+
+    def test_full_name_with_middle(self):
+        # Multi-initial form added alongside single-initial form
+        assert emdb_author_term("Jane Marie Smith") == 'author:"Smith JM" OR author:"Smith J"'
+
+    def test_initial_only(self):
+        assert emdb_author_term("J. Smith") == 'author:"Smith J"'
+
+    def test_multiple_initials(self):
+        assert emdb_author_term("J. M. Smith") == 'author:"Smith JM" OR author:"Smith J"'
+
+    def test_orcid_only(self):
+        assert emdb_author_term(orcid="0000-0002-1234-5678") == 'author_orcid:"0000-0002-1234-5678"'
+
+    def test_name_and_orcid(self):
+        term = emdb_author_term("Jane Marie Smith", orcid="0000-0002-1234-5678")
+        assert 'author:"Smith JM"' in term
+        assert 'author:"Smith J"' in term
+        assert 'author_orcid:"0000-0002-1234-5678"' in term

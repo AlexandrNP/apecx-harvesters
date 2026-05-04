@@ -22,18 +22,46 @@ import apecx_harvesters.loaders  # noqa: F401  — register all harvester subcla
 from apecx_harvesters.loaders.base import RateLimiter
 from apecx_harvesters.loaders.emdb import EMDBHarvester
 from apecx_harvesters.loaders.emdb.constants import rate_limit as _EMDB_RATE_LIMIT
+from apecx_harvesters.loaders.emdb.search import count as emdb_count
 from apecx_harvesters.loaders.emdb.search import search as emdb_search
 from apecx_harvesters.loaders.pdb import PDBHarvester
 from apecx_harvesters.loaders.pdb.constants import rate_limit as _PDB_RATE_LIMIT
 from apecx_harvesters.loaders.pdb.search import SearchQuery
+from apecx_harvesters.loaders.pdb.search import count as pdb_count
 from apecx_harvesters.loaders.pdb.search import search as pdb_search
 from apecx_harvesters.loaders.pubmed import PubMedHarvester
 from apecx_harvesters.loaders.pubmed.constants import rate_limit as _PUBMED_RATE_LIMIT
 from apecx_harvesters.loaders.pubmed.constants import rate_limit_with_key as _PUBMED_RATE_LIMIT_WITH_KEY
+from apecx_harvesters.loaders.pubmed.search import count as pubmed_count
 from apecx_harvesters.loaders.pubmed.search import search as pubmed_search
 from apecx_harvesters.pipeline import PipelineSpec, report, run_parallel
 
 logger = logging.getLogger(__name__)
+
+
+async def _count_results(
+    term: str,
+    begin_year: int | None,
+    end_year: int | None,
+    api_key: str | None,
+) -> None:
+    if begin_year is not None or end_year is not None:
+        start = begin_year or 1800
+        end = end_year or date.today().year
+        pubmed_term = f"{term} AND {start}:{end}[pdat]"
+    else:
+        pubmed_term = term
+    pdb_query = SearchQuery.full_text(term)
+
+    pubmed_n, pdb_n, emdb_n = await asyncio.gather(
+        pubmed_count(pubmed_term, api_key=api_key),
+        pdb_count(pdb_query),
+        emdb_count(term),
+    )
+
+    print(f"  pubmed: {pubmed_n:,}")
+    print(f"     pdb: {pdb_n:,}")
+    print(f"    emdb: {emdb_n:,}")
 
 
 async def _run(
@@ -118,6 +146,12 @@ def main() -> None:
         help="NCBI API key. Raises the PubMed rate limit to 10 req/s (vs 3 req/s without).",
     )
     parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        default=False,
+        help="Report the number of matches per source without scraping any records.",
+    )
+    parser.add_argument(
         "--debug",
         action="store_true",
         default=False,
@@ -142,8 +176,12 @@ def main() -> None:
             terms = [line.strip() for line in f if line.strip() and not line.startswith("#")]
 
     for term in terms:
-        logger.info("Searching: %s", term)
-        asyncio.run(_run(term, begin, end, args.api_key))
+        print(term)
+        if args.dry_run:
+            asyncio.run(_count_results(term, begin, end, args.api_key))
+        else:
+            logger.info("Searching: %s", term)
+            asyncio.run(_run(term, begin, end, args.api_key))
 
 
 if __name__ == "__main__":

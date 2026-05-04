@@ -21,8 +21,39 @@ import respx
 from apecx_harvesters.loaders.pubmed.search import (
     _ESEARCH_URL,
     _search_bounded,
+    pubmed_author_term,
     search,
 )
+
+# ---------------------------------------------------------------------------
+# pubmed_author_term
+# ---------------------------------------------------------------------------
+
+class TestPubmedAuthorTerm:
+    def test_full_name(self):
+        assert pubmed_author_term("Jane Smith") == '("Smith Jane"[Author] OR "Smith J"[Author])'
+
+    def test_full_name_with_middle(self):
+        assert pubmed_author_term("Jane Marie Smith") == (
+            '("Smith Jane Marie"[Author] OR "Smith JM"[Author] OR "Smith J"[Author])'
+        )
+
+    def test_initial_only(self):
+        assert pubmed_author_term("J. Smith") == '("Smith J"[Author])'
+
+    def test_multiple_initials(self):
+        # No full-name form; multi-initial and single-initial forms only
+        assert pubmed_author_term("J. M. Smith") == '("Smith JM"[Author] OR "Smith J"[Author])'
+
+    def test_orcid_only(self):
+        assert pubmed_author_term(orcid="0000-0002-1234-5678") == '("0000-0002-1234-5678"[auid])'
+
+    def test_name_and_orcid(self):
+        term = pubmed_author_term("Jane Smith", orcid="0000-0002-1234-5678")
+        assert '"Smith Jane"[Author]' in term
+        assert '"Smith J"[Author]' in term
+        assert '"0000-0002-1234-5678"[auid]' in term
+
 
 # Fixed date window used throughout — bisection midpoints are fully deterministic.
 _START = date(2020, 1, 1)

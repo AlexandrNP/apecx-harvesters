@@ -18,6 +18,7 @@ import pytest
 from pydantic import ValidationError
 
 from apecx_harvesters.loaders.pdb import PDBHarvester
+from apecx_harvesters.loaders.pdb.search import SearchQuery
 from apecx_harvesters.loaders.pdb.parser import _parse_entry
 from apecx_harvesters.loaders.base import DateType, RelatedIdentifierType, RelatedItemType, RelationType, ResourceTypeGeneral, Subject
 from apecx_harvesters.loaders.pdb import PDBContainer
@@ -430,3 +431,53 @@ class TestBatchParsing:
         raw = raw_items["1OMW"]
         restored = asyncio.run(harvester._parse_item(raw))
         assert restored.titles[0].title == record_1omw.titles[0].title
+
+
+# ---------------------------------------------------------------------------
+# SearchQuery.by_author — query node generation
+# ---------------------------------------------------------------------------
+
+def _phrase_values(query) -> list[str]:
+    """Extract contains_phrase values from a SearchQuery or GroupQuery node."""
+    node = query._to_node()
+    if node["type"] == "terminal":
+        return [node["parameters"]["value"]]
+    return [
+        child["parameters"]["value"]
+        for child in node["nodes"]
+        if child.get("type") == "terminal"
+    ]
+
+
+class TestPdbByAuthor:
+    def test_full_name_generates_full_and_initial_forms(self):
+        q = SearchQuery.by_author("Jane Smith")
+        values = _phrase_values(q)
+        assert "Smith, Jane" in values
+        assert "Smith, J" in values
+
+    def test_full_name_with_middle_includes_middle(self):
+        q = SearchQuery.by_author("Jane Marie Smith")
+        values = _phrase_values(q)
+        assert "Smith, Jane Marie" in values
+        assert "Smith, J" in values
+
+    def test_space_separated_initials_produce_dotted_form(self):
+        # "J. J. G. Tesmer" → "Tesmer, J.J.G" (matches PDB storage "Tesmer, J.J.G.")
+        q = SearchQuery.by_author("J. J. G. Tesmer")
+        values = _phrase_values(q)
+        assert "Tesmer, J.J.G" in values
+        assert "Tesmer, J" in values
+        assert "Tesmer, J. J. G" not in values  # space-separated form not emitted
+
+    def test_comma_form_dotted_initials(self):
+        # Comma form preserves the dotted string as-is
+        q = SearchQuery.by_author("Tesmer, J.J.G.")
+        values = _phrase_values(q)
+        assert "Tesmer, J.J.G" in values
+        assert "Tesmer, J" in values
+
+    def test_single_initial_no_dotted_form(self):
+        q = SearchQuery.by_author("J. Smith")
+        values = _phrase_values(q)
+        assert values == ["Smith, J"]

@@ -25,25 +25,37 @@ def _author_name_nodes(family: str, given: str | None) -> list[SearchQuery]:
     """
     Return ``SearchQuery`` terminal nodes covering all expected PDB name variants.
 
-    PDB stores author names as ``"Smith, Jane"`` or ``"Smith, J."``.  When a
-    full given name is available, both the full form and the initial form are
-    included so that either storage convention is matched.
+    PDB stores author names as ``"Smith, Jane"``, ``"Smith, J"``, or dotted
+    multi-initial forms such as ``"Tesmer, J.J.G."``.  The concatenated form
+    used by PubMed (``"Smith JM"``) does not appear in PDB.  When given is
+    all initials, the dotted form is reconstructed (``"J.J.G"`` from
+    ``"J. J. G."``).  The single-initial form is always included as a fallback.
     """
     if given is None:
         return [SearchQuery(value=family, attribute="audit_author.name", operator="contains_words")]
 
-    initial = given[0]
+    given_parts = given.split()
+    initial = given_parts[0][0]
+    is_full_name = len(given_parts[0].rstrip(".")) > 1
     nodes: list[SearchQuery] = []
 
-    if len(given) > 1:
-        # Full given name — search for the full "Smith, Jane" form
+    if is_full_name:
+        # Full given name — search for the "Smith, Jane Marie" form
         nodes.append(SearchQuery(
             value=f"{family}, {given}",
             attribute="audit_author.name",
             operator="contains_phrase",
         ))
+    elif len(given_parts) > 1:
+        # Multiple initials — reconstruct PDB dotted form e.g. "Tesmer, J.J.G"
+        dotted = ".".join(p[0] for p in given_parts)
+        nodes.append(SearchQuery(
+            value=f"{family}, {dotted}",
+            attribute="audit_author.name",
+            operator="contains_phrase",
+        ))
 
-    # Always include the initial form "Smith, J" to catch abbreviated entries
+    # Always include the single-initial form "Smith, J" as a fallback
     nodes.append(SearchQuery(
         value=f"{family}, {initial}",
         attribute="audit_author.name",
@@ -94,10 +106,12 @@ class SearchQuery:
 
     def _to_node(self) -> dict[str, Any]:
         if self.service == "full_text":
+            # Wrap in quotes so the API treats the value as a phrase rather than
+            # tokenizing on hyphens and spaces.
             return {
                 "type": "terminal",
                 "service": "full_text",
-                "parameters": {"value": self.value},
+                "parameters": {"value": f'"{self.value}"'},
             }
         return {
             "type": "terminal",
@@ -201,6 +215,41 @@ class SearchQuery:
             ],
             logical_operator="and",
         )
+
+
+async def count(
+    query: SearchQuery | GroupQuery,
+    *,
+    client: httpx.AsyncClient | None = None,
+    rate_limiter: RateLimiter | None = None,
+) -> int:
+    """Return the total number of PDB entries matching *query* without fetching IDs."""
+    limiter = rate_limiter if rate_limiter is not None else RateLimiter(_default_rate_limit)
+    owned = client is None
+    if owned:
+        client = httpx.AsyncClient()
+    try:
+        payload = {
+            "return_type": "entry",
+            "query": query._to_node(),
+            "request_options": {"paginate": {"start": 0, "rows": 0}},
+        }
+        response = await _http_request(
+            client,
+            "POST",
+            _SEARCH_URL,
+            rate_limiter=limiter,
+            content=orjson.dumps(payload),
+            headers={"Content-Type": "application/json"},
+        )
+        response.raise_for_status()
+        if not response.content:
+            return 0
+        data = orjson.loads(response.content)
+        return int(data.get("total_count", 0))
+    finally:
+        if owned:
+            await client.aclose()
 
 
 async def search(

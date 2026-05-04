@@ -42,7 +42,14 @@ def emdb_author_term(name: str | None = None, *, orcid: str | None = None) -> st
     if name is not None:
         family, given = _parse_author_name(name)
         if given:
-            clauses.append(f'author:"{family} {given[0]}"')
+            given_parts = given.split()
+            # EMDB indexes authors as "Family I" (initial only); full given names
+            # are not searchable.  Multi-initial form ("Smith JM") covers older
+            # records where both initials were stored together.
+            multi_initials = "".join(p[0] for p in given_parts) if len(given_parts) > 1 else None
+            if multi_initials:
+                clauses.append(f'author:"{family} {multi_initials}"')
+            clauses.append(f'author:"{family} {given_parts[0][0]}"')
         else:
             clauses.append(f'author:"{family}"')
 
@@ -51,6 +58,46 @@ def emdb_author_term(name: str | None = None, *, orcid: str | None = None) -> st
         clauses.append(f'author_orcid:"{orcid_clean}"')
 
     return " OR ".join(clauses)
+
+
+async def count(
+    term: str,
+    *,
+    client: httpx.AsyncClient | None = None,
+    rate_limiter: RateLimiter | None = None,
+    page_size: int = _DEFAULT_PAGE_SIZE,
+) -> int:
+    """Return the total number of EMDB entries matching *term* without fetching records.
+
+    EMDB exposes no count-only endpoint, so this paginates ID-only CSV pages. TODO this is a bit hacky; if we find a good count option, prefer that
+    """
+    limiter: RateLimiter = rate_limiter if rate_limiter is not None else RateLimiter(_default_rate_limit)
+    owned = client is None
+    if owned:
+        client = httpx.AsyncClient()
+    try:
+        url = f"{_SEARCH_BASE}/{urllib.parse.quote(term)}"
+        total = 0
+        page = 1
+        while True:
+            response = await _http_request(
+                client,
+                "GET",
+                url,
+                rate_limiter=limiter,
+                params={"rows": page_size, "page": page, "fl": "emdb_id"},
+                headers={"Accept": "text/csv"},
+            )
+            response.raise_for_status()
+            data_lines = [ln for ln in response.text.splitlines()[1:] if ln.strip()]
+            total += len(data_lines)
+            if len(data_lines) < page_size:
+                break
+            page += 1
+        return total
+    finally:
+        if owned:
+            await client.aclose()
 
 
 async def search(

@@ -22,18 +22,48 @@ import apecx_harvesters.loaders  # noqa: F401  — register all harvester subcla
 from apecx_harvesters.loaders.base import RateLimiter
 from apecx_harvesters.loaders.emdb import EMDBHarvester
 from apecx_harvesters.loaders.emdb.constants import rate_limit as _EMDB_RATE_LIMIT
+from apecx_harvesters.loaders.emdb.search import count as emdb_count
 from apecx_harvesters.loaders.emdb.search import emdb_author_term, search as emdb_search
 from apecx_harvesters.loaders.pdb import PDBHarvester
 from apecx_harvesters.loaders.pdb.constants import rate_limit as _PDB_RATE_LIMIT
 from apecx_harvesters.loaders.pdb.search import SearchQuery
+from apecx_harvesters.loaders.pdb.search import count as pdb_count
 from apecx_harvesters.loaders.pdb.search import search as pdb_search
 from apecx_harvesters.loaders.pubmed import PubMedHarvester
 from apecx_harvesters.loaders.pubmed.constants import rate_limit as _PUBMED_RATE_LIMIT
 from apecx_harvesters.loaders.pubmed.constants import rate_limit_with_key as _PUBMED_RATE_LIMIT_WITH_KEY
+from apecx_harvesters.loaders.pubmed.search import count as pubmed_count
 from apecx_harvesters.loaders.pubmed.search import pubmed_author_term, search as pubmed_search
 from apecx_harvesters.pipeline import PipelineSpec, report, run_parallel
 
 logger = logging.getLogger(__name__)
+
+
+async def _count_results(
+    author: str | None,
+    orcid: str | None,
+    institution: str | None,
+    api_key: str | None,
+) -> None:
+    pdb_query = SearchQuery.by_author(author, orcid=orcid, institution=institution)
+    pubmed_term = pubmed_author_term(author, orcid=orcid)
+    emdb_term = emdb_author_term(author, orcid=orcid) if (author is not None or orcid is not None) else None
+
+    tasks = [
+        pubmed_count(pubmed_term, api_key=api_key),
+        pdb_count(pdb_query),
+    ]
+    if emdb_term is not None:
+        tasks.append(emdb_count(emdb_term))
+    results = await asyncio.gather(*tasks)
+
+    pubmed_n, pdb_n = results[0], results[1]
+    emdb_n = results[2] if emdb_term is not None else None
+
+    print(f"  pubmed: {pubmed_n:,}")
+    print(f"     pdb: {pdb_n:,}")
+    if emdb_n is not None:
+        print(f"    emdb: {emdb_n:,}")
 
 
 async def _run(
@@ -120,6 +150,12 @@ def main() -> None:
         help="NCBI API key. Raises the PubMed rate limit to 10 req/s (vs 3 req/s without).",
     )
     parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        default=False,
+        help="Report the number of matches per source without scraping any records.",
+    )
+    parser.add_argument(
         "--debug",
         action="store_true",
         default=False,
@@ -141,10 +177,19 @@ def main() -> None:
         with open(args.file) as f:
             authors = [line.strip() for line in f if line.strip() and not line.startswith("#")]
         for author in authors:
-            logger.info("Searching: %s", author)
-            asyncio.run(_run(author, None, None, args.api_key))
+            print(author)
+            if args.dry_run:
+                asyncio.run(_count_results(author, None, None, args.api_key))
+            else:
+                logger.info("Searching: %s", author)
+                asyncio.run(_run(author, None, None, args.api_key))
     else:
-        asyncio.run(_run(args.author, args.orcid, args.institution, args.api_key))
+        if args.dry_run:
+            label = args.author or args.orcid or ""
+            print(label)
+            asyncio.run(_count_results(args.author, args.orcid, args.institution, args.api_key))
+        else:
+            asyncio.run(_run(args.author, args.orcid, args.institution, args.api_key))
 
 
 if __name__ == "__main__":
