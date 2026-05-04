@@ -94,10 +94,12 @@ class SearchQuery:
 
     def _to_node(self) -> dict[str, Any]:
         if self.service == "full_text":
+            # Wrap in quotes so the API treats the value as a phrase rather than
+            # tokenizing on hyphens and spaces.
             return {
                 "type": "terminal",
                 "service": "full_text",
-                "parameters": {"value": self.value},
+                "parameters": {"value": f'"{self.value}"'},
             }
         return {
             "type": "terminal",
