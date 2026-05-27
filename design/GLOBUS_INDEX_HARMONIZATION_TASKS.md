@@ -56,6 +56,12 @@ role on each index (Globus Search role API `POST /v1/index/<id>/role` or the web
 self-grant (no admin role on these indices). Everything else (harmonize + publish code + guards)
 is ready; the publish CLI then runs per source.
 
+**RESOLVED 2026-05-27:** the `writer` role was granted to the client on all 9 indices via
+`globus search index role create <idx> writer <client> --type identity`, run through the Globus
+CLI authenticated as the owning identity `onarykov@globusid.org` (which has admin) -- no new
+login needed (CLI token store `~/.globus/cli/storage.db`). Confidential client write confirmed
+(test ingest SUCCESS). Source→dest mapping recorded in `pipeline/harmonize.py::DEST_REGISTRY`.
+
 ## Real-data anchors (measured 2026-05-26)
 
 | Source | UUID (prefix) | docs | shape | max doc | notes |
@@ -361,3 +367,15 @@ Goal: full corpus ingested into a production (non-trial) index.
   corpus-validated. **The only remaining work is Phase 5 (full multi-source ingest), which is
   hard-blocked externally** on the `support@globus.org` allocation bump (1 MB trial cap) and a
   stable BVBRC:Genome window. No further code/validation is unblocked.
+- 2026-05-27 — **PHASE 5 PUBLISH (8 stable sources) — DONE, all public.** After the writer-role
+  grant, batch-published each source to its production index (harmonize → collision guard →
+  publish → verify). Every count reconciled exactly (harmonized = ingested = authenticated =
+  anonymous), 0 parse errors:
+  AntiviralDB 35 | VIOLIN:Pathogen 217 | BVBRC:Epitope 442 | ProtaBank 1,643 | VIOLIN:Vaccine
+  3,507 | VIOLIN:Gene 4,063 | BVBRC:Protein_Structure 4,566 | BVBRC:Protein 24,902
+  = **39,375 records live + publicly searchable** across 8 indices (BVBRC:Protein ~9.5 min).
+  - Added `harmonize_publish_streaming` (memory-safe one-pass: canonical-set guard + batch
+    ingest, no full-corpus materialization) for the 746k Genome source; CLI gained
+    `--publish auto` (DEST_REGISTRY) + `--streaming`. 1272 tests green, ruff clean.
+  - BVBRC:Genome (the 9th) stabilized at 745,917; streaming publish to `dfefcd85-...` LAUNCHED
+    (in progress). On success → all 9 sources public (~785k records total).

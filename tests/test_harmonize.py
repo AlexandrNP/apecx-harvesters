@@ -35,6 +35,13 @@ def test_registry_covers_all_nine_sources():
     }
 
 
+def test_dest_registry_covers_every_source_with_distinct_indices():
+    from apecx_harvesters.pipeline.harmonize import DEST_REGISTRY
+
+    assert set(DEST_REGISTRY) == set(SOURCE_REGISTRY), "every source must have a dest index"
+    assert len(set(DEST_REGISTRY.values())) == 9, "dest indices must be distinct (per-source)"
+
+
 def test_collision_guard_passes_on_unique():
     records = [parse_antiviraldb(d["content"]) for d in _AVDB]
     assert_unique_canonical(records)  # all 35 distinct -> no raise

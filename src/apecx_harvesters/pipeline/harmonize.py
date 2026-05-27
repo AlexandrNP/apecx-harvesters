@@ -53,6 +53,21 @@ SOURCE_REGISTRY: dict[str, tuple[str, Callable[[dict[str, Any]], DataCite]]] = {
     "b676edbe-3286-4514-bc13-5cbe891c4bb1": ("bvbrc_genome", parse_bvbrc_genome),
 }
 
+# Production destination index per SOURCE index (provisioned 2026-05-27, non-trial).
+# The confidential client holds the `writer` role on each (granted via the Globus CLI
+# under the owning identity). Per-source layout (not a single combined index).
+DEST_REGISTRY: dict[str, str] = {
+    "9e902471-9c77-49d3-a12c-516cc0808c3b": "be999b57-88c4-4aff-a883-4b96c57b66cc",  # ProtaBank
+    "e8097a7b-a280-4031-9df1-1e837193494f": "23a7bffd-10b7-4d40-9cec-1a435f32b04e",  # AntiviralDB
+    "a67c7310-5115-446f-bfb6-d889bc4efa06": "b4965a61-e6de-4e8b-b312-7ab37c7c39d3",  # VIOLIN:Pathogen
+    "c5ff64fd-5e78-4cf0-848a-2788a78e71cd": "12dfce07-0b4a-40b9-8890-48c3e943f9a1",  # VIOLIN:Vaccine
+    "205c1a5b-c9bd-4137-8ac6-ca879c9a4f9c": "667dc223-55ba-423a-b116-3bb434813238",  # VIOLIN:Gene
+    "f873c7d5-8652-466d-806b-b5da46f0f786": "4c0b4e3d-1d9d-40be-8cbc-d0f2601e44bf",  # BVBRC:Epitope
+    "439f2b66-09d4-4141-8c3d-b4dc18ef8a07": "96fbabbb-06b2-4ea3-91f9-8510bfabb52a",  # BVBRC:Protein_Structure
+    "249efe96-14d2-443d-ad47-5621ed43a343": "826e5d28-c906-4f74-816c-9b37b6ef0a7b",  # BVBRC:Protein
+    "b676edbe-3286-4514-bc13-5cbe891c4bb1": "dfefcd85-d130-4dd1-b37a-4bc05f3bcdc8",  # BVBRC:Genome
+}
+
 
 class CanonicalCollisionError(RuntimeError):
     """Two harmonized records share a canonical_uri (would overwrite at ingest)."""
@@ -146,6 +161,72 @@ async def publish_records(
         task_ids.append(resp["task_id"])
         ingested += len(doc["ingest_data"]["gmeta"])
     return ingested, task_ids
+
+
+async def harmonize_publish_streaming(
+    index_uuid: str,
+    *,
+    client: globus_sdk.SearchClient,
+    dest_index: str,
+    visible_to: list[str] | None = None,
+) -> dict[str, Any]:
+    """Memory-safe one-pass harmonize + publish for large sources (e.g. BVBRC:Genome ~746k).
+
+    Unlike ``harmonize_index`` (which materializes all records to run the collision guard
+    up front), this streams: it tracks canonical_uri uniqueness in a set (FAIL LOUD on a
+    duplicate) and ingests each GMetaList batch as it fills, so peak memory is one batch +
+    the uri set, not the whole corpus. Drift is checked *post-hoc* -- acceptable because
+    re-ingest is idempotent on canonical_uri, so a torn snapshot is corrected by re-running
+    once the source is stable. Returns a provenance dict; the caller MUST verify
+    ``all_success`` and ``stable_total``.
+    """
+    if index_uuid not in SOURCE_REGISTRY:
+        raise KeyError(f"no parser registered for Globus Search index {index_uuid!r}")
+    name, parser = SOURCE_REGISTRY[index_uuid]
+    total_before = await index_total(client, index_uuid)
+
+    seen: set[str] = set()
+    errors = 0
+
+    async def _stream() -> AsyncIterator[RetrievalResult[Any]]:
+        nonlocal errors
+        async for result in globus_index_source(index_uuid, parser, client=client):
+            if not result.ok:
+                errors += 1
+                continue
+            assert result.record is not None
+            uri = result.record.canonical_uri
+            if uri in seen:
+                raise CanonicalCollisionError(
+                    f"duplicate canonical_uri {uri!r}: ingest would silently overwrite."
+                )
+            seen.add(uri)
+            yield result
+
+    ingested = 0
+    task_ids: list[str] = []
+    async for doc in to_gmetalist(_stream(), visible_to=visible_to):
+        resp = await asyncio.to_thread(client.ingest, dest_index, doc)
+        task_ids.append(resp["task_id"])
+        ingested += len(doc["ingest_data"]["gmeta"])
+
+    states = await wait_for_ingest(client, task_ids, timeout=1800.0)
+    total_after = await index_total(client, index_uuid)
+    return {
+        "source_index": index_uuid,
+        "source_name": name,
+        "dest_index": dest_index,
+        "pipeline_version": PIPELINE_VERSION,
+        "timestamp_utc": _dt.datetime.now(_dt.timezone.utc).isoformat(),
+        "scraped_total_before": total_before,
+        "scraped_total_after": total_after,
+        "stable_total": total_before == total_after,
+        "harmonized_count": ingested,
+        "parse_error_count": errors,
+        "ingest_batches": len(task_ids),
+        "ingest_states": sorted(set(states.values())),
+        "all_success": bool(states) and all(s == "SUCCESS" for s in states.values()),
+    }
 
 
 async def wait_for_ingest(
