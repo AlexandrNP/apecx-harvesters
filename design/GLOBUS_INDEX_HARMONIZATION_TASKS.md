@@ -269,3 +269,19 @@ Goal: full corpus ingested into a production (non-trial) index.
   - canonical_uri keys: ProtaBank = Title (source subject, unique); VIOLIN:{Vaccine,Gene} = int id.
   - Next: the 4 nested BVBRC sources need the record-granularity decision (per-organism
     aggregate vs. explode to per-entity) -- to be made on real data per source.
+- 2026-05-26 — **Granularity decision (BVBRC nested sources): AGGREGATE** -- one harmonized
+  record per source document (the source's own organism grouping), NOT exploded to per-entity.
+  Rationale: Globus Search indexes nested fields (a per-protein/epitope query still matches
+  the aggregate record), exploding would multiply ~25k/746k docs into ~370k/millions of
+  records for marginal discovery gain, and aggregate keeps the parser contract uniform.
+  canonical_uri = {source}:{organism field}, which == the Globus-unique source subject
+  (verified == subject across all 4 BVBRC samples). Explode is a documented DEFERRED
+  enhancement if per-entity discovery proves necessary.
+  - Publish-layer guard (Phase 4 requirement): ingest MUST assert canonical_uri uniqueness
+    and FAIL LOUD on collision (never silently overwrite). This is the full-set safety net,
+    since {organism}==subject is sample-verified, not proven for every doc.
+- 2026-05-26 — Phase 2 parsers #6-7: **BVBRC:Protein, BVBRC:Genome** (aggregate). Nested
+  models (`ProteinFeature` / `GenomeEntry`, strict + extra=forbid); per-feature/per-genome
+  accessions (BV-BRC Genome ID, GenBank, NCBI Taxonomy) lifted to alternateIdentifiers. Real
+  fixtures (30-doc samples); full suite **1247 green**, ruff clean. Ingest deferred. 7/9 done;
+  remaining: BVBRC:Epitope + BVBRC:Protein_Structure (3-level nesting -- deeper inspection next).
