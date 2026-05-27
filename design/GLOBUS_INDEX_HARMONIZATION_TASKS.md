@@ -31,6 +31,31 @@ impossible on trial (8 remaining sources, 2 slots), and most sources exceed 1 MB
 (see "Real-data anchors"). Full multi-source ingestion is gated on the `support@globus.org`
 allocation bump.
 
+### Production destination indices (provisioned 2026-05-27 — PER-SOURCE, not combined)
+
+The support conversion produced **9 non-trial indices, one per source** (a deviation from the
+plan's single-combined-index assumption, which was only trial-cap-driven). All empty at handoff.
+
+| Source | Dest index UUID | Allocation |
+|---|---|---|
+| ProtaBank | `be999b57-88c4-4aff-a883-4b96c57b66cc` | 250 MB |
+| AntiviralDB | `23a7bffd-10b7-4d40-9cec-1a435f32b04e` | 250 MB |
+| VIOLIN:Pathogen | `b4965a61-e6de-4e8b-b312-7ab37c7c39d3` | 250 MB |
+| VIOLIN:Vaccine | `12dfce07-0b4a-40b9-8890-48c3e943f9a1` | 250 MB |
+| VIOLIN:Gene | `667dc223-55ba-423a-b116-3bb434813238` | 250 MB |
+| BVBRC:Epitope | `4c0b4e3d-1d9d-40be-8cbc-d0f2601e44bf` | 250 MB |
+| BVBRC:Protein_Structure | `96fbabbb-06b2-4ea3-91f9-8510bfabb52a` | 250 MB |
+| BVBRC:Protein | `826e5d28-c906-4f74-816c-9b37b6ef0a7b` | 1500 MB |
+| BVBRC:Genome | `dfefcd85-d130-4dd1-b37a-4bc05f3bcdc8` | 7000 MB |
+
+**BLOCKER (write access), 2026-05-27:** our confidential client
+`bbcdba6f-0c71-4fe2-9d6e-72fe95f2d8e7` can READ all 9 but ingest returns **HTTP 403 "ingest
+request denied by service"** -- it lacks the `writer` role. Phase 5 ingest is blocked until the
+index OWNER grants `urn:globus:auth:identity:bbcdba6f-0c71-4fe2-9d6e-72fe95f2d8e7` the `writer`
+role on each index (Globus Search role API `POST /v1/index/<id>/role` or the web UI). We cannot
+self-grant (no admin role on these indices). Everything else (harmonize + publish code + guards)
+is ready; the publish CLI then runs per source.
+
 ## Real-data anchors (measured 2026-05-26)
 
 | Source | UUID (prefix) | docs | shape | max doc | notes |
