@@ -285,3 +285,16 @@ Goal: full corpus ingested into a production (non-trial) index.
   accessions (BV-BRC Genome ID, GenBank, NCBI Taxonomy) lifted to alternateIdentifiers. Real
   fixtures (30-doc samples); full suite **1247 green**, ruff clean. Ingest deferred. 7/9 done;
   remaining: BVBRC:Epitope + BVBRC:Protein_Structure (3-level nesting -- deeper inspection next).
+- 2026-05-26 — Phase 2 parsers #8-9: **BVBRC:Epitope, BVBRC:Protein_Structure** (aggregate,
+  3-level nesting). **ALL 9 SOURCE PARSERS NOW DONE + registered** (verified via SchemaRegistry).
+  Epitope: Organism -> proteins -> epitopes (Epitope_ID/Sequence/Type/assays preserved).
+  Structure: Organism -> publications -> structures (PDB/UniProtKB/Method/Resolution).
+  Taxon/PDB/UniProt/PMID/GenBank cross-refs lifted. Real fixtures (352K / 728K). Full suite
+  **1264 green**, ruff clean. Ingest deferred (allocation blocker).
+  - Finding: `extra=forbid` caught a `Taxon_ID` field in some Protein_Structure publication
+    groups (9/667) that single-doc inspection missed -- added to the model. Exactly the
+    silent schema-drift the strict gate exists to prevent.
+- 2026-05-26 — **Phase 2 COMPLETE: 9/9 sources harmonized + real-data tested.** Remaining
+  work is Phases 3-5 (provenance wiring, the publish/ingest layer with the fail-loud collision
+  guard, and the full-scale ingest) -- the latter two gated on the `support@globus.org`
+  allocation bump. Only AntiviralDB is currently live in the dev index (Phase 0).
