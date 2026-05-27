@@ -255,3 +255,17 @@ Goal: full corpus ingested into a production (non-trial) index.
     ingestion -- but a consumer reloading records into the DataCite model strictly would need
     `strict=False`. Affects every parser that sets a description (pdb/pubmed too). Tests now
     assert JSON-serializability of `to_dict()` rather than a strict round-trip.
+- 2026-05-26 — Phase 2 parsers #3-5: **ProtaBank, VIOLIN:Vaccine, VIOLIN:Gene** (flat tier
+  complete). Each: `<Source>Container(DataCite)` + parser + full real fixture (120-doc samples)
+  + tests. Full suite **1181 green**, ruff clean. Ingest deferred (awaits allocation bump).
+  5 of 9 sources done; 4 remain (nested BVBRC quartet).
+  - ProtaBank maps cleanly to base DataCite (publication metadata: Title/Abstract/Authors/Year
+    promoted; protein studies nested). Finding: ProtaBank `Protein` is a list of OBJECTS
+    (ProtaBank_ID / PDB_ID / UniProt accession / Number_of_Data_Points / ...), NOT name strings;
+    my initial `list[str]` failed strict validation -- the test caught it before ingest. Now
+    modeled as `ProtaBankProteinEntry`; accessions lifted to `alternateIdentifiers`.
+  - VIOLIN:Gene carries rich external accessions (NCBI Gene/Protein/Nucleotide, GenBank, PDB,
+    VO) -- all lifted to `alternateIdentifiers` for cross-source linkage by shared accession.
+  - canonical_uri keys: ProtaBank = Title (source subject, unique); VIOLIN:{Vaccine,Gene} = int id.
+  - Next: the 4 nested BVBRC sources need the record-granularity decision (per-organism
+    aggregate vs. explode to per-entity) -- to be made on real data per source.

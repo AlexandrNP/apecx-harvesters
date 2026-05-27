@@ -1,0 +1,5054 @@
+[
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "peptide vaccine derived from the von Hippel-Lindau (VHL) tumor suppressor protein",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A peptide vaccine derived from the von Hippel-Lindau (VHL) tumor suppressor protein, a general transcription factor. In (H115D)VHL35 peptide, histidine is substituted for an aspartic acid in position 115. It might be used to elicit or boost cellular immunity to cancers that expressing the von Hippel-Lindau mutation. (NCI04) (NCIT_C28776).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5304
+      ],
+      "Vaccine": "(H115D)VHL35 Peptide Vaccine",
+      "Vaccine_Name": "(H115D)VHL35 Peptide Vaccine",
+      "Vaccine_Ontology_ID": "VO_0005278",
+      "Virulence": null,
+      "id": 1,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 1,
+      "vaccine_pathogen_id": [
+        3841
+      ]
+    },
+    "subject": "(H115D)VHL35 Peptide Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "(Abarca et al., 2020) N protein",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "(Abarca et al., 2020) rBCG-N-hRSV is a live attenuated recombinant Mycobacterium bovis BCG based on the Danish strain 1331 that expresses the nucleoprotein (N) of RSV (rBCG-N-hRSV)(BCG) that expresses the nuclei protein (N) of RSV.",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intradermal injection (i.d.)",
+      "Location_Licensed": "Pontifcia Universidad Catholics de Chile",
+      "Manufacturer": "IDT Biologika",
+      "Preparation": "0.05 mL of a reconstituted vial (2-8*10^6 CFU of the bacteria per 0.1 mL) of this vaccine is administered. This results in 1-4*10^5 CFU to a newborn.",
+      "Preservative": "(Abarca et al., 2020) Antigen T cells",
+      "Product_Name": "rBCG-N-hRSV",
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        212
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6025
+      ],
+      "Vaccine": "(rBCG-N-hRSV) Recombinant Mycobacterium bovis BCG vaccine",
+      "Vaccine_Name": "(rBCG-N-hRSV) Recombinant Mycobacterium bovis BCG vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 2,
+      "pathogen_id": [
+        105
+      ],
+      "vaccine_id": 2,
+      "vaccine_pathogen_id": [
+        4392
+      ]
+    },
+    "subject": "(rBCG-N-hRSV) Recombinant Mycobacterium bovis BCG vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "To obtain SOCS1-silenced DCs, DCs derived from mouse bone marrow cells ex vivo were induced to differentiation in the presence of granulocyte-macrophage colony-stimulating factor (GM-CSF) and IL-4, and then transduced with Len-SOCS1-shRNA or control Len-GFP lentiviruses. The SOCS1-silenced DCs were loaded by TRP2 peptide to prepare the DC vaccine, which was induced to mature by LPS. The DCs were analyzed by flow cytometry (FCM) for surface expressions of MHCII and CD86 and by real-time PCR for the expressions of SOCS1, IL-10 as well as IL-12p40. B16 or IL-10-silenced B16 (IL-10(-/-);) cells were inoculated into C57BL/6 mice (Wang et al., 2013).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Dendritic Cell Vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4071
+      ],
+      "Vaccine": "1(SOCS1)-silenced dentritic cell (DC) vaccines",
+      "Vaccine_Name": "1(SOCS1)-silenced dentritic cell (DC) vaccines",
+      "Vaccine_Ontology_ID": "VO_0007186",
+      "Virulence": null,
+      "id": 3,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 3,
+      "vaccine_pathogen_id": [
+        3331
+      ]
+    },
+    "subject": "1(SOCS1)-silenced dentritic cell (DC) vaccines"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "ChinaVaccineSerum",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Virus Like Particle",
+      "VIOLIN_c_pathogen_id": [
+        54
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5968
+      ],
+      "Vaccine": "11-valent recombinant human papilloma virus vaccine (Hansenula polymorpha)",
+      "Vaccine_Name": "11-valent recombinant human papilloma virus vaccine (Hansenula polymorpha)",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 4,
+      "pathogen_id": [
+        172
+      ],
+      "vaccine_id": 4,
+      "vaccine_pathogen_id": [
+        4349
+      ]
+    },
+    "subject": "11-valent recombinant human papilloma virus vaccine (Hansenula polymorpha)"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "FGF-5",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A fragment of fibroblast growth factor-5 (FGF-5). Originally isolated from a renal cell carcinoma cell line that overexpressed FGF-5 (Dalet et al., 2011), FGF-5:117-126 peptide is recognized by tumor infiltrating cytotoxic T lymphocytes. Overexpressed by several cancer cell types, this peptide is being tested as a potential target for antineoplastic immunotherapies. (NCI04) (NCIT_C28780).This vaccine has been used in trials involving renal cancer.",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "This vaccine is prepared by having a renal cell caricoma cell line to overexpress FGF-5 (Dalet et al., 2011).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5414
+      ],
+      "Vaccine": "117-126:FGF-5 Peptide",
+      "Vaccine_Name": "117-126:FGF-5 Peptide",
+      "Vaccine_Ontology_ID": "VO_0007187",
+      "Virulence": null,
+      "id": 5,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 5,
+      "vaccine_pathogen_id": [
+        3941
+      ]
+    },
+    "subject": "117-126:FGF-5 Peptide"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "12MP is a melonoma vaccine that uses 12 class I MHC\u2013restricted melanoma peptides from cancer-testis antigens (CTAs) and melanocytic differentiation proteins (MDPs) (Slingluff et al., 2011; Slingluff et al., 2013)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        3978
+      ],
+      "Vaccine": "12MP",
+      "Vaccine_Name": "12MP",
+      "Vaccine_Ontology_ID": "VO_0007189",
+      "Virulence": null,
+      "id": 6,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 6,
+      "vaccine_pathogen_id": [
+        3254
+      ]
+    },
+    "subject": "12MP"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "4 treatment groups, vaccinated with 12 MHC class I-restricted melanoma peptides to stimulate CTL (12 MP, group A), plus a tetanus peptide (group B), or a mixture of 6 melanoma helper peptides (6 MHP, group C) to stimulate helper T lymphocytes (HTL), or with 6 melanoma helper peptide (6 MHP) alone (group D), in incomplete Freund's adjuvant plus granulocyte macrophage colony-stimulating factor (Slingluff et al., 2013), https://pubmed.ncbi.nlm.nih.gov/23653149/",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "multipeptide",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4070
+      ],
+      "Vaccine": "12MP, 12MP/Tet, 12MP/6MHP, or 6MHP",
+      "Vaccine_Name": "12MP, 12MP/Tet, 12MP/6MHP, or 6MHP",
+      "Vaccine_Ontology_ID": "VO_0007190",
+      "Virulence": null,
+      "id": 7,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 7,
+      "vaccine_pathogen_id": [
+        3330
+      ]
+    },
+    "subject": "12MP, 12MP/Tet, 12MP/6MHP, or 6MHP"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "Human Leukocyte Antigen",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "Yellow fever (YF) virus vaccine with human immunoglobulin (Ig) that contained YF virus-neutralizing antibodies. (Edupuganti et al., 2013)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Sanofi Pasteur",
+      "Preparation": "The first 64 participants received the YF vaccine from one lot. Immediately after the administration of the YF vaccine subcutaneously into the deltoid, immunoglobulin (Ig) or saline injections were administered intramuscularly into the upper outer quadrants of the buttocks. The placebo for Ig was sterile saline (0.9% sodium chloride injection, USP; Hospira Inc., Lake Forest, IL) administered similarly. Participants returned on post-vaccination days 1, 2, 3, 5, 7, 9, 11, 14, 30, and 91 for determination of viremia and immunological and safety assessment. (Edupuganti et al., 2013)",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        230
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6132
+      ],
+      "Vaccine": "17D YF Vaccine plus Ig",
+      "Vaccine_Name": "17D YF Vaccine plus Ig",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 8,
+      "pathogen_id": [
+        116
+      ],
+      "vaccine_id": 8,
+      "vaccine_pathogen_id": [
+        4486
+      ]
+    },
+    "subject": "17D YF Vaccine plus Ig"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Licensed",
+      "Storage": null,
+      "Tradename": "A/Brisbane/59/2007(H1N1), A/Brisbane/10/2007(H3N2), B/Florida/4/2006; Sanofi-Pasteur",
+      "Type": "Inactivated or \"killed\" vaccine",
+      "VIOLIN_c_pathogen_id": [
+        50
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4322
+      ],
+      "Vaccine": "2008\u20132009 trivalent influenza vaccine",
+      "Vaccine_Name": "2008\u20132009 trivalent influenza vaccine",
+      "Vaccine_Ontology_ID": "VO_0004809",
+      "Virulence": null,
+      "id": 9,
+      "pathogen_id": [
+        168
+      ],
+      "vaccine_id": 9,
+      "vaccine_pathogen_id": [
+        3533
+      ]
+    },
+    "subject": "2008\u20132009 trivalent influenza vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Licensed",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Inactivated or \"killed\" vaccine",
+      "VIOLIN_c_pathogen_id": [
+        50
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4324
+      ],
+      "Vaccine": "2011\u20132012  trivalent inactivated vaccine (A/California/7/09 (H1N1,), A/Perth /16/2009 (H3N2), and B/Brisbane/60/2008).",
+      "Vaccine_Name": "2011\u20132012  trivalent inactivated vaccine (A/California/7/09 (H1N1,), A/Perth /16/2009 (H3N2), and B/Brisbane/60/2008).",
+      "Vaccine_Ontology_ID": "VO_0004810",
+      "Virulence": null,
+      "id": 10,
+      "pathogen_id": [
+        168
+      ],
+      "vaccine_id": 10,
+      "vaccine_pathogen_id": [
+        3534
+      ]
+    },
+    "subject": "2011\u20132012  trivalent inactivated vaccine (A/California/7/09 (H1N1,), A/Perth /16/2009 (H3N2), and B/Brisbane/60/2008)."
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Shanghai Zerun Biotechnology, Walvax Biotechnology, CEPI",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5835
+      ],
+      "Vaccine": "202-CoV",
+      "Vaccine_Name": "202-CoV",
+      "Vaccine_Ontology_ID": "VO_0005320",
+      "Virulence": null,
+      "id": 11,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 11,
+      "vaccine_pathogen_id": [
+        4226
+      ]
+    },
+    "subject": "202-CoV"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A synthetic peptide consisting of amino acids 27 through 35 of the melanoma differentiation antigen MART-1. 27-35(27L) MART-1 has a leucine substitution at amino acid position 27 to improve binding to HLA-A*0201. Vaccination with this agent may stimulate the host immune response to mount a cytotoxic T-lymphocyte response against melanoma cells expressing MART-1. This cancer vaccine has been used in melanoma trials (NCIT_C28784; Tarhini et al., 2012)",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "The vaccine consisted of Melan-A/MART-1:27\u201335, tyrosinase: 368\u2013376(370D), gp100:209\u2013217(210M) and gp100:280\u2013288(288V) peptides in Freund's adjuvant (Toso et al., 2002).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5290
+      ],
+      "Vaccine": "27-35(27L):MART-1 peptide vaccine",
+      "Vaccine_Name": "27-35(27L):MART-1 peptide vaccine",
+      "Vaccine_Ontology_ID": "VO_0007191",
+      "Virulence": null,
+      "id": 12,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 12,
+      "vaccine_pathogen_id": [
+        3829
+      ]
+    },
+    "subject": "27-35(27L):MART-1 peptide vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "4 melanoma peptides (NCT00938223; NCT00515528; NCIT_C91722)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "4-peptide melanoma vaccine may stimulate an immune response against 4 different melanoma associated antigens. This may lead to a reduction in tumor cell proliferation of cancer cells expressing these antigens. (NCIT_C91722) The vaccine may contain 4 class I MHC-restricted synthetic melanoma peptides (1 each restricted by HLA-A1, -A3, and two restricted by HLA-A2) and a helper tetanus peptide. (NCT00938223)  The peptides may include Melan-A, gp100, MAGE-3, and NA17. The vaccine can be used in combination Ontak, which may produce an immune response in patients with metastatic melanoma, and the Ontak may improve these immune responses and lead to tumor shrinkage. (NCT00515528)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "intradermal and subcutaneous injections",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6370
+      ],
+      "Vaccine": "4-peptide melanoma vaccine",
+      "Vaccine_Name": "4-peptide melanoma vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 13,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 13,
+      "vaccine_pathogen_id": [
+        4673
+      ]
+    },
+    "subject": "4-peptide melanoma vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "Five antigens are included: GNA2132, GNA1870, NadA, GNA1030, and GNA2091 (Giuliani et al., 2006)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intraperitoneal injection (i.p.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Licensed",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        46
+      ],
+      "VIOLIN_c_vaccine_id": [
+        438
+      ],
+      "Vaccine": "5CVMB",
+      "Vaccine_Name": "5CVMB",
+      "Vaccine_Ontology_ID": "VO_0011348",
+      "Virulence": null,
+      "id": 14,
+      "pathogen_id": [
+        164
+      ],
+      "vaccine_id": 14,
+      "vaccine_pathogen_id": [
+        330
+      ]
+    },
+    "subject": "5CVMB"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A topical gel containing a peptide derived from the human papillomavirus (HPV). Application of 851B gel may stimulate the host immune system to trigger a cytotoxic T-lymphocyte response to cells that express HPV (NCIT_C48637).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4986
+      ],
+      "Vaccine": "851B Gel",
+      "Vaccine_Name": "851B Gel",
+      "Vaccine_Ontology_ID": "VO_0007192",
+      "Virulence": null,
+      "id": 15,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 15,
+      "vaccine_pathogen_id": [
+        3542
+      ]
+    },
+    "subject": "851B Gel"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "ApxIA (Shin et al., 2007)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Oral immunization",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        782
+      ],
+      "Vaccine": "A. pleuropneumoniae ApxIA protein vaccine",
+      "Vaccine_Name": "A. pleuropneumoniae ApxIA protein vaccine",
+      "Vaccine_Ontology_ID": "VO_0011356",
+      "Virulence": null,
+      "id": 16,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 16,
+      "vaccine_pathogen_id": [
+        440
+      ]
+    },
+    "subject": "A. pleuropneumoniae ApxIA protein vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "A. pleuropneumoniae ApxIa and ApxIIa",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Oral immunization",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        784
+      ],
+      "Vaccine": "A. pleuropneumoniae ApxIa and ApxIIa protein vaccine",
+      "Vaccine_Name": "A. pleuropneumoniae ApxIa and ApxIIa protein vaccine",
+      "Vaccine_Ontology_ID": "VO_0011384",
+      "Virulence": null,
+      "id": 17,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 17,
+      "vaccine_pathogen_id": [
+        442
+      ]
+    },
+    "subject": "A. pleuropneumoniae ApxIa and ApxIIa protein vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": "Mouse",
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "DNA vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        3898
+      ],
+      "Vaccine": "A. pleuropneumoniae DNA vaccine pcDNA-apxIA/pcDNA-apxIIA",
+      "Vaccine_Name": "A. pleuropneumoniae DNA vaccine pcDNA-apxIA/pcDNA-apxIIA",
+      "Vaccine_Ontology_ID": "VO_0004544",
+      "Virulence": null,
+      "id": 18,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 18,
+      "vaccine_pathogen_id": [
+        3182
+      ]
+    },
+    "subject": "A. pleuropneumoniae DNA vaccine pcDNA-apxIA/pcDNA-apxIIA"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "A. pleuropneumoniae ApxII-activating protein, ApxIIC",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        786
+      ],
+      "Vaccine": "A. pleuropneumoniae HS93C-Ampr",
+      "Vaccine_Name": "A. pleuropneumoniae HS93C-Ampr",
+      "Vaccine_Ontology_ID": "VO_0011385",
+      "Virulence": null,
+      "id": 19,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 19,
+      "vaccine_pathogen_id": [
+        444
+      ]
+    },
+    "subject": "A. pleuropneumoniae HS93C-Ampr"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": "Pigs",
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5666
+      ],
+      "Vaccine": "A. pleuropneumoniae HbpA vaccine",
+      "Vaccine_Name": "A. pleuropneumoniae HbpA vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 20,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 20,
+      "vaccine_pathogen_id": [
+        4103
+      ]
+    },
+    "subject": "A. pleuropneumoniae HbpA vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": "Pigs",
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5665
+      ],
+      "Vaccine": "A. pleuropneumoniae OmpW vaccine",
+      "Vaccine_Name": "A. pleuropneumoniae OmpW vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 21,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 21,
+      "vaccine_pathogen_id": [
+        4102
+      ]
+    },
+    "subject": "A. pleuropneumoniae OmpW vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": "Mice",
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "subcutaneous injection",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5663
+      ],
+      "Vaccine": "A. pleuropneumoniae TonB2 vaccine",
+      "Vaccine_Name": "A. pleuropneumoniae TonB2 vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 22,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 22,
+      "vaccine_pathogen_id": [
+        4100
+      ]
+    },
+    "subject": "A. pleuropneumoniae TonB2 vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": "Mice",
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intraperitoneal injection (i.p.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5664
+      ],
+      "Vaccine": "A. pleuropneumoniae apfA vaccine",
+      "Vaccine_Name": "A. pleuropneumoniae apfA vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 23,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 23,
+      "vaccine_pathogen_id": [
+        4101
+      ]
+    },
+    "subject": "A. pleuropneumoniae apfA vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "A. salmonicida 644Rb aroA",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intraperitoneal injection (i.p.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        79
+      ],
+      "VIOLIN_c_vaccine_id": [
+        788
+      ],
+      "Vaccine": "A. salmonicida live-attenuated vaccine encoding AroA",
+      "Vaccine_Name": "A. salmonicida live-attenuated vaccine encoding AroA",
+      "Vaccine_Ontology_ID": "VO_0011386",
+      "Virulence": null,
+      "id": 24,
+      "pathogen_id": [
+        196
+      ],
+      "vaccine_id": 24,
+      "vaccine_pathogen_id": [
+        446
+      ]
+    },
+    "subject": "A. salmonicida live-attenuated vaccine encoding AroA"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Recombinant L. tarentolae expressing the L. donovani A2 antigen along with cysteine proteinases (CPA and CPB without its unusual C-terminal extension (CPB(-CTE))) as a tri-fusion gene (Saljoughian et al., 2013).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        116
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4096
+      ],
+      "Vaccine": "A2-CPA-CPB(-CTE)-recombinant L. tarentolae",
+      "Vaccine_Name": "A2-CPA-CPB(-CTE)-recombinant L. tarentolae",
+      "Vaccine_Ontology_ID": "VO_0004628",
+      "Virulence": null,
+      "id": 25,
+      "pathogen_id": [
+        13
+      ],
+      "vaccine_id": 25,
+      "vaccine_pathogen_id": [
+        3351
+      ]
+    },
+    "subject": "A2-CPA-CPB(-CTE)-recombinant L. tarentolae"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "4-1BBL (NCT01898039)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "The A2/4-1BBL melanoma vaccine is used to treat patients with malignant melanoma. It is made of a compatible melanoma cell line that has been engineered to express a molecule termed 4-1BBL, which enhances the chances of the cell line to be recognized by the patient's immune system, and to induce its stimulation, with an immune response to residual tumor in the body. It will be used in combination with intravenous low dose cyclophosphamide, 300 mg/m2. (NCT01898039)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intravenous injection (i.v.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6260
+      ],
+      "Vaccine": "A2/4-1BBL melanoma vaccine",
+      "Vaccine_Name": "A2/4-1BBL melanoma vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 26,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 26,
+      "vaccine_pathogen_id": [
+        4563
+      ]
+    },
+    "subject": "A2/4-1BBL melanoma vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "ImmunityBio, Inc.",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "RNA vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5935
+      ],
+      "Vaccine": "AAHI-SC2",
+      "Vaccine_Name": "AAHI-SC2",
+      "Vaccine_Ontology_ID": "VO_0005405",
+      "Virulence": null,
+      "id": 27,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 27,
+      "vaccine_pathogen_id": [
+        4316
+      ]
+    },
+    "subject": "AAHI-SC2"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Biocad",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5889
+      ],
+      "Vaccine": "AAV5-RBD-S",
+      "Vaccine_Name": "AAV5-RBD-S",
+      "Vaccine_Ontology_ID": "VO_0005336",
+      "Virulence": null,
+      "id": 28,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 28,
+      "vaccine_pathogen_id": [
+        4279
+      ]
+    },
+    "subject": "AAV5-RBD-S"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "Adeno-associated virus serotype 2 (AAV2) capsids",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "Insertion of a neutralizing epitope (amino acids 17\u201336) from L2 of HPV16 and HPV31 into VP3 at positions 587 and 453, respectively, permitted assembly into empty AAV particles (AAVLP(HPV16/31L2)) (Nieto et al., 2012).",
+      "Host_Species_as_Laboratory_Animal_Model": "Rabbits and Rats",
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Generated AAVLPs displaying HPV16 L2 epitopes in position 587 and HPV31 L2 epitopes in position 453. (Nieto et al., 2012).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        54
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6071
+      ],
+      "Vaccine": "AAVLP(HPV16/31L2)",
+      "Vaccine_Name": "AAVLP(HPV16/31L2)",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 29,
+      "pathogen_id": [
+        172
+      ],
+      "vaccine_id": 29,
+      "vaccine_pathogen_id": [
+        4431
+      ]
+    },
+    "subject": "AAVLP(HPV16/31L2)"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "capsid virus-like particle (cVLP) +/- adjuvant MF59",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "AdaptVac, Bavarian Nordic, and Radboud University",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": "COUGH-1",
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Virus like particle",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5865
+      ],
+      "Vaccine": "ABNCoV2",
+      "Vaccine_Name": "ABNCoV2",
+      "Vaccine_Ontology_ID": "VO_0005255",
+      "Virulence": null,
+      "id": 30,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 30,
+      "vaccine_pathogen_id": [
+        4255
+      ]
+    },
+    "subject": "ABNCoV2"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Suzhou Abogen Biosciences Co., Ltd.",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "mRNA vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5943
+      ],
+      "Vaccine": "ABO1009-DP",
+      "Vaccine_Name": "ABO1009-DP",
+      "Vaccine_Ontology_ID": "VO_0005391",
+      "Virulence": null,
+      "id": 31,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 31,
+      "vaccine_pathogen_id": [
+        4324
+      ]
+    },
+    "subject": "ABO1009-DP"
+  },
+  {
+    "content": {
+      "Allergen": "Neomycin, Polymyxin B",
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": "1 year of age and older",
+      "CDC_CVX_code": "75",
+      "CDC_CVX_description": null,
+      "Contraindication": "Individuals with severe immunodeficiency who are not expected to benefit from the vaccine (FDA: ACAM2000).",
+      "Description": "The benefits of cloning appeared to outweigh the recognized risk that a clonal virus population may differ biologically from the \u2018genetic swarm\u2019 represented by the animal-skin vaccine. Because it would not be possible to conduct field tests for efficacy, the new vaccine would need to match the licensed vaccine (Dryvax\u00ae) as closely as possible in preclinical tests for safety, immunogenicity, and protective activity and in clinical trials for safety and immunogenicity (Monath et al., 2004).Clinical trials have been conducted using the NYCBH-derived ACAM2000 vaccinia virus-based vaccine. On the basis of animal studies, ACAM2000 is believed to be less neurovirulent than Dryvax. ACAM2000 was similar to Dryvax in its ability to induce immune responses and in reactogenicity in phase I trials. During phase II and phase III clinical trials, cases of myopericarditis were associated with both ACAM2000 and Dryvax in vaccinia-naive volunteers (Parrino et al., 2006).",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Percutaneous",
+      "Location_Licensed": "USA (License #1733)",
+      "Manufacturer": "Acambis, Inc",
+      "Preparation": "ACAM2000 was prepared from ACAM1000 master seed stock and produced in Vero cells to address the need for rapid large-scale vaccine production (Parrino et al., 2006). Specifically, ACAM2000 was manufactured by infecting Vero cells grown on microcarriers under serum-free conditions with the P9 production virus inoculum at an MOI of 0.01\u20130.2. Virus particles were purified and concentrated. The resulting concentrated bulk vaccine was formulated by dilution with a buffer containing stabilizers to a final potency of 1.0\u20135.0 \u00d7 10^8 pfu/mL, filled into vials containing 0.3 mL (Monath et al., 2004).",
+      "Preservative": null,
+      "Product_Name": "Smallpox (Vaccinia) Vaccine, Live",
+      "Status": "Licensed",
+      "Storage": "After reconstitution, ACAM2000 vaccine may be administered within 6 to 8 hours if kept at room temperature (20-25\u00b0C, 68-77\u00b0F); it should then be discarded as a biohazardous material. Unused, reconstituted ACAM2000 vaccine may be stored in a refrigerator (2-8\u00b0C, 36-46\u00b0F) up to 30 days, after which it should be discarded as a biohazardous material (FDA: ACAM2000).",
+      "Tradename": "ACAM2000",
+      "Type": "Replication competent virus",
+      "VIOLIN_c_pathogen_id": [
+        18
+      ],
+      "VIOLIN_c_vaccine_id": [
+        96
+      ],
+      "Vaccine": "ACAM2000",
+      "Vaccine_Name": "ACAM2000",
+      "Vaccine_Ontology_ID": "VO_0000003",
+      "Virulence": "It has long been known that vaccinia strains differ with respect to neurovirulence in infant mice. Clones 1, 3, and 5 and the uncloned virus had virulence properties that were unacceptable for consideration as vaccine candidates. The same four viruses that had exhibited excessive virulence in rabbit skin were significantly more neurovirulent than Dryvax1 (p < 0.05, Kaplan\u2014Meier survival distribution, log rank test), whereas clones 2, 4, and 6 were similar to Dryvax1 or less virulent. The more virulent viruses also replicated to higher titer in mouse brain. In these initial experiments Clone 2 did not appear to be attenuated with respect to neurovirulence, but subsequent studies with larger numbers of animals showed significantly higher survival distribution compared to Dryvax1. Clone 2 (renamed ACAM1000) was selected as the candidate for further development, based on its similarity to Dryvax1 in pock formation in rabbit skin but its lower neurovirulence in mice and monkeys. Seed viruses and vaccine produced from each bioreactor run were tested for neurovirulence in suckling mice, using Dryvax1 as a comparator. Plaque-purified vaccinia virus lines were shown to differ significantly in neurovirulence for mice, in their ability to evoke immune responses against the inserted gene product, and in their HindIII restriction maps. The variant viruses often exhibit reduced infectivity and reduced virulence for mice. We found biological and molecular heterogeneity among 6 clones derived from Dryvax1, with some clonal subpopulations (e.g. Clone 3) having dramatically higher virulence and changes at the genomic level. The degree of neurovirulence for suckling mice was used to distinguish vaccine strains with low, moderate, or high pathogenicity (Vilesova et al., 1985). The new vaccine has advantages over first generation vaccines, since it has been produced to modern manufacturing and control standards, is free from adventitious agents , and does not contain subpopulations of virus with undesirable virulence properties (Monath et al., 2004).In addition, mice immunized with MVA were protected against lethal infection with a more virulent form of vaccinia virus altered to coexpress IL-4. IL-4 diminishes the cytolytic capacity of CD81 T cells, resulting in delayed viral clearance and increased virulence (Parrino et al., 2006).",
+      "id": 32,
+      "pathogen_id": [
+        80
+      ],
+      "vaccine_id": 32,
+      "vaccine_pathogen_id": [
+        54
+      ]
+    },
+    "subject": "ACAM2000"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": "Cambridge, MA",
+      "Manufacturer": "ACAMBIS, Inc",
+      "Preparation": "ACAM3000 was formulated with 20mM Tris, 0.9% NaCl USP, and 0.01% neomycin USP with a titer of 2.54 \u00d7 108 TCID50/mL. The vaccine was reconstituted with 0.9% NaCl and diluted to the appropriate dose. Sterile saline, 0.9% NaCl, was used as the placebo. The dose of MVA administered was verified by back titration for each dose tier that was studied.(Wilck et al., 2010)",
+      "Preservative": null,
+      "Product_Name": "Smallpox (Vaccinia) Vaccine, Live",
+      "Status": "Licensed",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Replication competent virus",
+      "VIOLIN_c_pathogen_id": [
+        18
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6149
+      ],
+      "Vaccine": "ACAM3000",
+      "Vaccine_Name": "ACAM3000",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 33,
+      "pathogen_id": [
+        80
+      ],
+      "vaccine_id": 33,
+      "vaccine_pathogen_id": [
+        4502
+      ]
+    },
+    "subject": "ACAM3000"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "ACM Biolabs",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5938
+      ],
+      "Vaccine": "ACM-001",
+      "Vaccine_Name": "ACM-001",
+      "Vaccine_Ontology_ID": "VO_0005392",
+      "Virulence": null,
+      "id": 34,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 34,
+      "vaccine_pathogen_id": [
+        4319
+      ]
+    },
+    "subject": "ACM-001"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "S protein(Chen et al., 2005)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "Recombinant live-attenuated modified vaccinia virus Ankara (MVA) had full-length SARS-CoV envelope Spike (S) glycoprotein gene was introduced into the deletion III region of the MVA genome.(Chen et al., 2005)",
+      "Host_Species_as_Laboratory_Animal_Model": "mouse",
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        129
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5726
+      ],
+      "Vaccine": "ADS-MVA vaccine",
+      "Vaccine_Name": "ADS-MVA vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 35,
+      "pathogen_id": [
+        27
+      ],
+      "vaccine_id": 35,
+      "vaccine_pathogen_id": [
+        4119
+      ]
+    },
+    "subject": "ADS-MVA vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "(Galicia-Carmona et al., 2021)Antigen presenting cell alert the adaptive immune response of the presence of Lm through the major histocompatibility complex (MHC) molecules by two different routes. LM antigens from bacteria.  tumor antigen-specific cytotoxic CD8",
+      "Approved_Age_for_Licensed_Use": "(Galicia-Carmona et al., 2021)18 Years and older",
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "(Galicia-Carmona et al., 2021) LM based vectors infect antigen presenting cells and secrete HPV-LLO fusion proteins with the APC cytoplasm. These proteins are processed and presented to cytotoxic T lymphocytes (CTL), thus generating a new population of CTLs specific to HPV antigens. These HPV-specific CTLs destroy HPV infected cells.",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intravenous injection (i.v.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Advaxis",
+      "Preparation": "(Galicia-Carmona et al., 2021)They prepared two recombinant Lm strains, one expressing the HPV-16 E7 protein without attempting to modify the LLO molecule (Lm-E7), and the second expressed E7 as a non-hemolytic LLO-bound fusion protein (Lm-LLO-E7).",
+      "Preservative": null,
+      "Product_Name": "Neoadjuvant ADXS11-001 (ADXS-HPV)",
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        54
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5977
+      ],
+      "Vaccine": "ADXS11-001",
+      "Vaccine_Name": "ADXS11-001",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 36,
+      "pathogen_id": [
+        172
+      ],
+      "vaccine_id": 36,
+      "vaccine_pathogen_id": [
+        4355
+      ]
+    },
+    "subject": "ADXS11-001"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Chicken",
+      "Immunization_Route": "Intradermal injection (i.d.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Zoetis",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": "Avian Encephalomyelitis - Fowl Pox Vaccine, Live Virus",
+      "Status": "Licensed",
+      "Storage": "Store at not over 45\u00b0F (7\u00b0C) (AE-Poxine).",
+      "Tradename": "AE-Poxine",
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        148
+      ],
+      "VIOLIN_c_vaccine_id": [
+        3963
+      ],
+      "Vaccine": "AE-Poxine",
+      "Vaccine_Name": "AE-Poxine",
+      "Vaccine_Ontology_ID": "VO_0004603",
+      "Virulence": null,
+      "id": 37,
+      "pathogen_id": [
+        48
+      ],
+      "vaccine_id": 37,
+      "vaccine_pathogen_id": [
+        3242
+      ]
+    },
+    "subject": "AE-Poxine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "ERBB2",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A vaccine containing HER2/Neu-derived epitope (amino acids 776-790) linked to li-Key peptide (li-Key/HER2/neu hybrid peptide or AE37), and combined with granulocyte-macrophage colony-stimulating factor (GM-CSF), with potential antineoplastic and immunoadjuvant activities. Upon vaccination, AE37 may activate the immune system and stimulate T-helper cells against HER2/Neu expressing cancer cells. GM-CSF may potentiate the immune response against cancer cells expressing the HER2/Neu antigen. The Ii-Key moiety, a 4-amino acid (LRMK) epitope from the MHC class II-associated invariant chain (Ii protein), increases T-helper cell stimulation against HER2/neu antigen when compared to unmodified class II epitopes. HER2/neu, a tumor associated antigen (TAA), is overexpressed in a variety of tumor cell types and is highly immunogenic. This vaccine is used in clinical trials involving breast cancer patients to prevent recurrence (Brown et al., 2020; NCIT_C91719).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "AE37 is a novel peptide that is a hybrid of the naturally occurring HER2-derived peptide AE36 (HER2:776\u2013790) generated by the addition of the Ii-key peptide (LRMK) to the N terminal (Mittendorf et al., 2011).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5436
+      ],
+      "Vaccine": "AE37 Peptide/GM-CSF Vaccine",
+      "Vaccine_Name": "AE37 Peptide/GM-CSF Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007212",
+      "Virulence": null,
+      "id": 38,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 38,
+      "vaccine_pathogen_id": [
+        3961
+      ]
+    },
+    "subject": "AE37 Peptide/GM-CSF Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine composed of naked plasmid DNA of the gene for the tumor-associated antigen alpha-fetoprotein (AFP), a macromolecule that acts as a specific immunologic target for hepatocellular carcinoma. This agent exerts an antitumor effect by inducing cytotoxic T-lymphocytes to attack AFP-expressing tumor cells. (NCI04) (NCIT_C2512).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "The vaccine is made using the mouse \u03b1-fetoprotein (AFP) gene in mouse hepatocellular carcinoma (HCC) cells (Saeki et al., 2004).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5275
+      ],
+      "Vaccine": "AFP Gene Hepatocellular Carcinoma Vaccine",
+      "Vaccine_Name": "AFP Gene Hepatocellular Carcinoma Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007213",
+      "Virulence": null,
+      "id": 39,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 39,
+      "vaccine_pathogen_id": [
+        3816
+      ]
+    },
+    "subject": "AFP Gene Hepatocellular Carcinoma Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "spike (S) glycoprotein",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A SARS-CoV-2 DNA vaccine",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "AnGes, Inc.",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "DNA vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5780
+      ],
+      "Vaccine": "AG0301-COVID19",
+      "Vaccine_Name": "AG0301-COVID19",
+      "Vaccine_Ontology_ID": "VO_0005165",
+      "Virulence": null,
+      "id": 40,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 40,
+      "vaccine_pathogen_id": [
+        4172
+      ]
+    },
+    "subject": "AG0301-COVID19"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "AnGes, Inc.",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "DNA vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5882
+      ],
+      "Vaccine": "AG0302-COVID19",
+      "Vaccine_Name": "AG0302-COVID19",
+      "Vaccine_Ontology_ID": "VO_0005322",
+      "Virulence": null,
+      "id": 41,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 41,
+      "vaccine_pathogen_id": [
+        4272
+      ]
+    },
+    "subject": "AG0302-COVID19"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "CD40 ligand (CD40L) and patient-specific bladder cell carcinoma (BCC) tumor-associated antigens (TAAs) (NCIT_C129522)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "This vaccine is composed of autologous, mature dendritic cells (DCs) are electroporated with in vitro transcribed (IVT) RNAs encoding for a synthetic form of T-cell protein CD40 ligand (CD40L) and IVT RNA encoding for autologous tumor-associated antigens (TAAs) derived from patient-specific bladder cell carcinoma (BCC) cells, with potential immunostimulatory and antineoplastic activities. The RNA is translated and processed, and BCC-specific antigenic peptides are subsequently presented via major histocompatibility complex (MHC) Class I molecules on the DCs surface. The MHC-presented peptides interact with and activate CD8-positive T-cells, which elicits a highly specific cytotoxic T-cell (CTL) response against tumor cells expressing the patient-specific BCC TAAs. The signal cascade initiated by expression of the co-stimulatory molecule CD40L results in the secretion of the inflammatory cytokine IL-12, which further stimulates CTLs. (NCIT_C129522) The vaccine can be used in combination with gemcitabine hydrochloride and cisplatin which stop the growth of tumor cells, either by killing the cells, by stopping them from dividing, or by stopping them from spreading, while the vaccine helps the body build an effective immune response to kill tumor cells. In combination, they may make the tumor smaller and reduce the amount of tissue that needs to be removed by surgery in patients with bladder cancer. (NCT02944357)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intradermal injection (i.d.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "whole cell cancer vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6363
+      ],
+      "Vaccine": "AGS-003-BLD Vaccine",
+      "Vaccine_Name": "AGS-003-BLD Vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 42,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 42,
+      "vaccine_pathogen_id": [
+        4666
+      ]
+    },
+    "subject": "AGS-003-BLD Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine containing the three frame shift peptides (FSP) AIM2(-1), HT001(-1) and TAF1B(-1), with potential immunomodulating activity. Upon administration, the AIM2(-1)/HT001(-1)/TAF1B(-1) FSP vaccine may induce an immune response against microsatellite instability (MSI) colorectal cancer-associated antigens. Frame shift mutations of AIM2 (absent in melanoma 2, an interferon-inducible protein), HT001 (asteroid homolog 1 or ASTE1, with an unknown function) and TAF1B (TATA box-binding protein-associated RNA polymerase I B, a transcription factor) are seen in MSI-positive colorectal cancers and may be associated with malignant transformation, tumor progression and the presence of tumor-infiltrating lymphocytes. These FSPs all have one-base deletions. NCT01461148 (NCIT_C99129).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "To generate frameshift peptide specific TLC in vitro, peripheral blood mononuclear cells (PBMCs) from healthy donors were stimulated weekly with autologous peptide pulsed dendritic cells or PBMCs in bulk cultures for up to 5 weeks (Saeterdal et al., 2001).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5402
+      ],
+      "Vaccine": "AIM2(-1)/HT001(-1)/TAF1B(-1) Frameshift Peptide Vaccine",
+      "Vaccine_Name": "AIM2(-1)/HT001(-1)/TAF1B(-1) Frameshift Peptide Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007215",
+      "Virulence": null,
+      "id": 43,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 43,
+      "vaccine_pathogen_id": [
+        3930
+      ]
+    },
+    "subject": "AIM2(-1)/HT001(-1)/TAF1B(-1) Frameshift Peptide Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "subcutaneous injection",
+      "Location_Licensed": null,
+      "Manufacturer": "University Medical Center Groningen, Akston Biosciences Inc.",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5834
+      ],
+      "Vaccine": "AKS-452",
+      "Vaccine_Name": "AKS-452",
+      "Vaccine_Ontology_ID": "VO_0004999",
+      "Virulence": null,
+      "id": 44,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 44,
+      "vaccine_pathogen_id": [
+        4225
+      ]
+    },
+    "subject": "AKS-452"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "ALK antigens (Mota et al., 2023)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A single-peptide vaccination restored priming of Anaplastic lymphoma kinase (ALK)-specific CD8+ T cells, eradicated lung tumors in combination with ALK tyrosine kinase inhibitors (TKIs) and prevented metastatic dissemination of tumors to the brain. Human ALK peptides are displayed by HLA-A*02:01 and HLA-B*07:02 molecules. The peptides are immunogenic and recognized by CD8+ T cells from individuals with non-small cell lung cancer (NSCLC). (Mota et al., 2023)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Other",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6382
+      ],
+      "Vaccine": "ALK peptide vaccine",
+      "Vaccine_Name": "ALK peptide vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 45,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 45,
+      "vaccine_pathogen_id": [
+        4685
+      ]
+    },
+    "subject": "ALK peptide vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A derivative of the Canarypox Virus, ALVAC can infect mammalian cells but it can't replicate. Thus, it produces a self-limiting infection which does not produce symptoms or harm the host. When carrying foreign genes it will cause transient expression of protein. (NCIT_C1479). This vaccine has been used in melanoma patients. Repeated vaccination with ALVAC miniMAGE-1/3 is associated with tumor regression and with a detectable CTL response in a minority of melanoma patients. There is a significant correlation between tumor regression and CTL response. (van et al., 2005)",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "ALVAC-CEA/B7.1 was prepared by recombinant engineering. On the day of vaccination, the vaccine was reconstituted with 1 mL of 0.4% NaCl diluent and shaken gently. A sterile syringe was used to inject 1 mL of solution s.c. in the deltoid region (Kaufman et al., 2008).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "DNA vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5334
+      ],
+      "Vaccine": "ALVAC Vaccine",
+      "Vaccine_Name": "ALVAC Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007240",
+      "Virulence": null,
+      "id": 46,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 46,
+      "vaccine_pathogen_id": [
+        3870
+      ]
+    },
+    "subject": "ALVAC Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "glycoprotein 100 (gp100) (NCT00610311; NCIT_C180518)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "The vaccine is composed of the replication-defective plaque purified recombinant canarypox virus (ALVAC) that encodes the glycoprotein 100 (gp100) gene, with potential antineoplastic activity. The vaccine may stimulate the host immune system to mount a cytotoxic T lymphocyte (CTL) response against tumor cells positive for the gp100 melanoma antigen, resulting in decreased tumor growth. (NCIT_C180518) The vaccine can be used in combination with anti-gp100:154-162 T cell receptor (TCR) peripheral blood lymphocytes (PBL), interleukin-2 (IL-2), cyclophosphamide, fludarabine phosphate, and Aldesleukin. (NCT00610311)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "subcutaneous injection",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6371
+      ],
+      "Vaccine": "ALVAC gp100 Vaccine",
+      "Vaccine_Name": "ALVAC gp100 Vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 47,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 47,
+      "vaccine_pathogen_id": [
+        4674
+      ]
+    },
+    "subject": "ALVAC gp100 Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A therapeutic cancer vaccine, based on a replication-defective recombinant canarypox virus (ALVAC) encoding multiple melanoma antigens, with potential immunostimulatory and antineoplastic activities. Vaccination with ALVAC(2) melanoma multi-antigen therapeutic vaccine may stimulate the host immune system to mount an immune response against antigen-expressing melanoma cells, resulting in inhibition of tumor growth and/or metastasis. (NCIT_C73998).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "An avian poxvirus is used as vector to stimulate T-cell response against tumor-associated antigens (Vogel et al., 2010).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5394
+      ],
+      "Vaccine": "ALVAC(2) Melanoma Multi-antigen Vaccine",
+      "Vaccine_Name": "ALVAC(2) Melanoma Multi-antigen Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007249",
+      "Virulence": null,
+      "id": 48,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 48,
+      "vaccine_pathogen_id": [
+        3922
+      ]
+    },
+    "subject": "ALVAC(2) Melanoma Multi-antigen Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "ICAM1, CD80, CD58",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine consisting of a replication-defective recombinant canarypox virus [ALVAC(2)] encoding the cancer-testis antigen NY-ESO and the TRIad of COstimulatory Molecules (B7-1, ICAM-1 and LFA-3; also called TRICOM), with potential immunostimulatory and antineoplastic activities. Upon administration, ALVAC(2)/NY-ESO (M)/TRICOM vaccine may stimulate the host immune system to mount a cytotoxic T lymphocyte (CTL) response against NY-ESO-expressing cancer cells, which may result in the inhibition of tumor cell proliferation. NY-ESO-1, a tumor associated antigen (TAA), is found in normal testis and on the surface of various tumor cells, including bladder, breast, hepatocellular, melanoma, and prostate tumor cells. TRICOM may enhance antigen presentation and activate cytotoxic T-cells. In addition, ALVAC(2) encodes the vaccinia virus (vv) E3L ad K3L genes, which may potentiate the translation of the NY-ESO and TRICOM genes. (NCIT_C79832).This vaccine has been used in trials involving epithelial ovarian, fallopian tube, or primary peritoneal cancer. NCT01982487",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "The treatment combines the vaccination of a bacterial vector for NY-ESO-1 and the use of mTOR inhibitor Sirolimus (Thomas et al., 2018).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5268
+      ],
+      "Vaccine": "ALVAC(2)-NY-ESO-1 (M)/TRICOM Vaccine",
+      "Vaccine_Name": "ALVAC(2)-NY-ESO-1 (M)/TRICOM Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007250",
+      "Virulence": null,
+      "id": 49,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 49,
+      "vaccine_pathogen_id": [
+        3809
+      ]
+    },
+    "subject": "ALVAC(2)-NY-ESO-1 (M)/TRICOM Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "intranasal immunization",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "An attenuated canarypox virus (ALVAC) vaccine strain expressing the CDV hemagglutinin (H) and fusion (F) protein genes (ALVAC-HF) (Welter et al., 2000).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        74
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4264
+      ],
+      "Vaccine": "ALVAC- CDV-H/F",
+      "Vaccine_Name": "ALVAC- CDV-H/F",
+      "Vaccine_Ontology_ID": "VO_0004773",
+      "Virulence": null,
+      "id": 50,
+      "pathogen_id": [
+        191
+      ],
+      "vaccine_id": 50,
+      "vaccine_pathogen_id": [
+        3496
+      ]
+    },
+    "subject": "ALVAC- CDV-H/F"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Recombinant canarypox virus vector (ALVAC-AHSV) co-expressing synthetic genes encoding the outer capsid proteins (VP2 and VP5) of AHSV serotype 4 (AHSV-4) (Guthrie et al., 2009).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        283
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4210
+      ],
+      "Vaccine": "ALVAC-AHSV",
+      "Vaccine_Name": "ALVAC-AHSV",
+      "Vaccine_Ontology_ID": "VO_0004725",
+      "Virulence": null,
+      "id": 51,
+      "pathogen_id": [
+        146
+      ],
+      "vaccine_id": 51,
+      "vaccine_pathogen_id": [
+        3448
+      ]
+    },
+    "subject": "ALVAC-AHSV"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "ALVAC vaccine expressing the haemagglutinin of a highly pathogenic (HP) H5N1 avian influenza virus (AIV) (A/chicken/Indonesia/7/03) in pig(Kyriakis et al., 2009).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        50
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4233
+      ],
+      "Vaccine": "ALVAC-AI-H5",
+      "Vaccine_Name": "ALVAC-AI-H5",
+      "Vaccine_Ontology_ID": "VO_0004747",
+      "Virulence": null,
+      "id": 52,
+      "pathogen_id": [
+        168
+      ],
+      "vaccine_id": 52,
+      "vaccine_pathogen_id": [
+        3470
+      ]
+    },
+    "subject": "ALVAC-AI-H5"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Fowlpox (FP)-vectored avian influenza (FP-AI) (Bublot et al., 2010).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        50
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4215
+      ],
+      "Vaccine": "ALVAC-AI-H5(H5N1)",
+      "Vaccine_Name": "ALVAC-AI-H5(H5N1)",
+      "Vaccine_Ontology_ID": "VO_0004730",
+      "Virulence": null,
+      "id": 53,
+      "pathogen_id": [
+        168
+      ],
+      "vaccine_id": 53,
+      "vaccine_pathogen_id": [
+        3453
+      ]
+    },
+    "subject": "ALVAC-AI-H5(H5N1)"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine consisting of ALVAC, a highly attenuated poxvirus strain derived from the canarypox virus. ALVAC-B7-CEA expresses carcinoembryonic antigen (CEA), a protein that is overexpressed by many tumor cells, and B7.1 (also known as CD80), the natural ligand for the T-cell antigen CD28, to augment the host immune response. This agent has been shown to stimulate a host immune response against tumor cells that express CEA. This vaccine has been used in melanoma patients.  (van et al., 2005; NCIT_C2742).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "ALVAC-CEA/B7.1 was prepared by recombinant engineering. On the day of vaccination, the vaccine was reconstituted with 1 mL of 0.4% NaCl diluent and shaken gently. A sterile syringe was used to inject 1 mL of solution s.c. in the deltoid region (Kaufman et al., 2008).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5444
+      ],
+      "Vaccine": "ALVAC-B7-CEA",
+      "Vaccine_Name": "ALVAC-B7-CEA",
+      "Vaccine_Ontology_ID": "VO_0007241",
+      "Virulence": null,
+      "id": 54,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 54,
+      "vaccine_pathogen_id": [
+        3969
+      ]
+    },
+    "subject": "ALVAC-B7-CEA"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "(Boone et al., 2007)  recombinant canarypox virus vector (BTV-CP) co-expressing synthetic genes encoding the two outer capsid proteins (VP2 and VP5) of BTV serotype 17",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        165
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4218
+      ],
+      "Vaccine": "ALVAC-BTV-CP(VP2/VP5)",
+      "Vaccine_Name": "ALVAC-BTV-CP(VP2/VP5)",
+      "Vaccine_Ontology_ID": "VO_0004732",
+      "Virulence": null,
+      "id": 55,
+      "pathogen_id": [
+        64
+      ],
+      "vaccine_id": 55,
+      "vaccine_pathogen_id": [
+        3455
+      ]
+    },
+    "subject": "ALVAC-BTV-CP(VP2/VP5)"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "A recombinant canarypox virus vector was used to co-express genes encoding the VP2 and VP5 outer capsid proteins of bluetongue virus (Boone et al., 2007).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        165
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4211
+      ],
+      "Vaccine": "ALVAC-BTV-VP2/VP5",
+      "Vaccine_Name": "ALVAC-BTV-VP2/VP5",
+      "Vaccine_Ontology_ID": "VO_0004726",
+      "Virulence": null,
+      "id": 56,
+      "pathogen_id": [
+        64
+      ],
+      "vaccine_id": 56,
+      "vaccine_pathogen_id": [
+        3449
+      ]
+    },
+    "subject": "ALVAC-BTV-VP2/VP5"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "CD80, CEA",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine consisting of ALVAC, a highly attenuated poxvirus strain derived from the canarypox virus. ALVAC-CEA (6D)-B7.1 vaccine expresses both a highly immunogenic analogue (6D) of the immunodominant epitope of carcinoembryonic antigen (CEA) and B7.1 (also known as CD80), the natural ligand for the T-cell antigen CD28. This agent was designed to stimulate host immune responses against tumor cells that express CEA. (NCI04) (NCIT_C29982).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4995
+      ],
+      "Vaccine": "ALVAC-CEA (6D)-B7.1 Vaccine",
+      "Vaccine_Name": "ALVAC-CEA (6D)-B7.1 Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007575",
+      "Virulence": null,
+      "id": 57,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 57,
+      "vaccine_pathogen_id": [
+        3551
+      ]
+    },
+    "subject": "ALVAC-CEA (6D)-B7.1 Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "CEA",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A replication-defective recombinant canarypox virus (ALVAC) that contains the entire human carcinoembryonic antigen (CEA) gene. Vaccination with ALVAC-CEA (VCP248) may stimulate the host immune system to mount a cytotoxic T lymphocyte (CTL) response against CEA-positive tumor cells, thereby decreasing tumor growth. (NCI04) (NCIT_C2743).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "ALVAC-CEA B7.1 is a canarypox virus encoding the gene for the tumor-associated antigen carcinoembryonic antigen (CEA) and for a T-cell costimulatory molecule, B7.1 (von et al., 2001).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5003
+      ],
+      "Vaccine": "ALVAC-CEA (VCP248)",
+      "Vaccine_Name": "ALVAC-CEA (VCP248)",
+      "Vaccine_Ontology_ID": "VO_0007242",
+      "Virulence": null,
+      "id": 58,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 58,
+      "vaccine_pathogen_id": [
+        3558
+      ]
+    },
+    "subject": "ALVAC-CEA (VCP248)"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "CEA",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine that uses a viral vector system derived from the canarypox virus engineered to target the carcinoembryonic antigen (CEA). It causes infected cells to temporarily display CEA and activates the immune system to attack the tumor cells. (NCIT_C1977). This vaccine has been used in metastatic colon cancer patients. (Kaufman et al., 2008)",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "ALVAC-CEA/B7.1 was prepared by recombinant engineering. On the day of vaccination, the vaccine was reconstituted with 1 mL of 0.4% NaCl diluent and shaken gently. A sterile syringe was used to inject 1 mL of solution s.c. in the deltoid region (Kaufman et al., 2008).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5125
+      ],
+      "Vaccine": "ALVAC-CEA B7.1 Vaccine",
+      "Vaccine_Name": "ALVAC-CEA B7.1 Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007243",
+      "Virulence": null,
+      "id": 59,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 59,
+      "vaccine_pathogen_id": [
+        3672
+      ]
+    },
+    "subject": "ALVAC-CEA B7.1 Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "CEA",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine consisting of ALVAC, a highly attenuated poxvirus strain derived from the canarypox virus, encoding for the tumor associated antigen (TAA) carcinoembryonic antigen (CEA), with potential antineoplastic activity. Upon administration, ALVAC-CEA vaccine expresses CEA and may stimulate a host immune response against tumor cells expressing CEA. This may result in the inhibition of tumor growth and/or metastasis. CEA is overexpressed in a variety of tumor cell types. (NCIT_C1648).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "A recombinant ALVAC-CEA is used to induce CEA-specific cytotoxic T-cell responses. The vaccination combines with a triad of costimulatory molecules (B7.1, ICAM-1, and LFA-3) has also stimulated significant T-cell increases.(Marshall, 2003).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5051
+      ],
+      "Vaccine": "ALVAC-CEA Vaccine",
+      "Vaccine_Name": "ALVAC-CEA Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007244",
+      "Virulence": null,
+      "id": 60,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 60,
+      "vaccine_pathogen_id": [
+        3604
+      ]
+    },
+    "subject": "ALVAC-CEA Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Live recombinant vaccine derived from the canarypox virus vector and expressing haemagglutinin genes of EIV (subtype H3N8) (Paillot et al., 2006).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        50
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4221
+      ],
+      "Vaccine": "ALVAC-EIV (equine influenza virus H3N8)",
+      "Vaccine_Name": "ALVAC-EIV (equine influenza virus H3N8)",
+      "Vaccine_Ontology_ID": "VO_0004735",
+      "Virulence": null,
+      "id": 61,
+      "pathogen_id": [
+        168
+      ],
+      "vaccine_id": 61,
+      "vaccine_pathogen_id": [
+        3458
+      ]
+    },
+    "subject": "ALVAC-EIV (equine influenza virus H3N8)"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "NY-ESO-1",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine consisting of a replication-defective recombinant canarypox virus (ALVAC) encoding the cancer-testis antigen NY-ESO-1, with potential immunostimulatory and antineoplastic activities. Upon administration, ALVAC-ESO-1 vaccine may stimulate the host immune system to mount a cytotoxic T lymphocyte (CTL) response against NY-ESO-1-expressing cancer cells, which may result in the inhibition of tumor cell proliferation. NY-ESO-1, a tumor associated antigen (TAA), is found in normal testis and on the surface of various tumor cells. (NCIT_C90558).This vaccine has been used in trials involving epithelial ovarian, fallopian tube, or primary peritoneal cancer. NCT01982487",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "The treatment combines the vaccination of a bacterial vector for NY-ESO-1 and the use of mTOR inhibitor Sirolimus (Thomas et al., 2018).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5332
+      ],
+      "Vaccine": "ALVAC-ESO-1 Vaccine",
+      "Vaccine_Name": "ALVAC-ESO-1 Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007245",
+      "Virulence": null,
+      "id": 62,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 62,
+      "vaccine_pathogen_id": [
+        3868
+      ]
+    },
+    "subject": "ALVAC-ESO-1 Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Two ALVAC (canarypox virus)-based recombinant viruses expressing the feline leukemia virus (FeLV) subgroup A env and gag genes (Tartaglia et al., 1993).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        71
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4226
+      ],
+      "Vaccine": "ALVAC-FL- env/gag",
+      "Vaccine_Name": "ALVAC-FL- env/gag",
+      "Vaccine_Ontology_ID": "VO_0004740",
+      "Virulence": null,
+      "id": 63,
+      "pathogen_id": [
+        188
+      ],
+      "vaccine_id": 63,
+      "vaccine_pathogen_id": [
+        3463
+      ]
+    },
+    "subject": "ALVAC-FL- env/gag"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "A live non-pathogenic HIV-2 following priming with ALVAC HIV-2 (recombinant canarypox virus expressing HIV-2 env, gag and pol) (Walther-Jallow et al., 2001).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        26
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4212
+      ],
+      "Vaccine": "ALVAC-HIV-2",
+      "Vaccine_Name": "ALVAC-HIV-2",
+      "Vaccine_Ontology_ID": "VO_0004727",
+      "Virulence": null,
+      "id": 64,
+      "pathogen_id": [
+        137
+      ],
+      "vaccine_id": 64,
+      "vaccine_pathogen_id": [
+        3450
+      ]
+    },
+    "subject": "ALVAC-HIV-2"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "A live non-pathogenic HIV-2 following priming with ALVAC HIV-2 (recombinant canarypox virus expressing HIV-2 env, gag and pol) (Walther-Jallow et al., 2001).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        26
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4223
+      ],
+      "Vaccine": "ALVAC-HIV-2- env/gag/pol",
+      "Vaccine_Name": "ALVAC-HIV-2- env/gag/pol",
+      "Vaccine_Ontology_ID": "VO_0004737",
+      "Virulence": null,
+      "id": 65,
+      "pathogen_id": [
+        137
+      ],
+      "vaccine_id": 65,
+      "vaccine_pathogen_id": [
+        3460
+      ]
+    },
+    "subject": "ALVAC-HIV-2- env/gag/pol"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Poxvirus-vectored vaccines for Japanese encephalitis (JE), NYVAC-JEV and ALVAC-JEV(Raengsakulrach et al., 1999).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        51
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4268
+      ],
+      "Vaccine": "ALVAC-JEV",
+      "Vaccine_Name": "ALVAC-JEV",
+      "Vaccine_Ontology_ID": "VO_0004777",
+      "Virulence": null,
+      "id": 66,
+      "pathogen_id": [
+        169
+      ],
+      "vaccine_id": 66,
+      "vaccine_pathogen_id": [
+        3500
+      ]
+    },
+    "subject": "ALVAC-JEV"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine containing a replication-defective recombinant canarypox virus (ALVAC), encoding an epitope of MART-1 (melanoma antigen recognized by T-cells), with potential immunostimulatory and antineoplastic activities. Upon administration, the MART-1 epitope is expressed by the ALVAC vector in ALVAC-MART-1 vaccine; a host cytotoxic T lymphocyte (CTL) response against MART-1-expressing tumor cells may follow, resulting in tumor cell lysis and decreased tumor cell proliferation (NCIT_C73999).This vaccine has been used in advanced melanoma patients. NCT00612222",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Parental ALVAC, recombinant ALVAC containing the Lac-Z gene (ALVAC-\u03b2-gal, vCP 326), and ALVAC vectors carry DNA sequences coding for MART-1 (vCP 1467) or melanoma gp100 (vCP 1465). Viral vectors were added to the DC (106 cells/ml in RPMI 1640 supplemented with 2% FCS) at a multiplicity of infection (moi) of 10 or 30. The infection was conducted at 37\u00b0C for 1 h, following which the infected DC were washed twice in complete FCS 10 medium. Infected DC were recultured for 3\u201318 h, as specified (Motta et al., 2001).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5124
+      ],
+      "Vaccine": "ALVAC-MART-1 Vaccine",
+      "Vaccine_Name": "ALVAC-MART-1 Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007247",
+      "Virulence": null,
+      "id": 67,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 67,
+      "vaccine_pathogen_id": [
+        3671
+      ]
+    },
+    "subject": "ALVAC-MART-1 Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Canarypox virus (CPV) recombinants expressing the hemagglutinin (HA) and fusion (F) glycoproteins of measles virus (MV) (Taylor et al., 1992).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        52
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4227
+      ],
+      "Vaccine": "ALVAC-MV-HA/F",
+      "Vaccine_Name": "ALVAC-MV-HA/F",
+      "Vaccine_Ontology_ID": "VO_0004741",
+      "Virulence": null,
+      "id": 68,
+      "pathogen_id": [
+        170
+      ],
+      "vaccine_id": 68,
+      "vaccine_pathogen_id": [
+        3464
+      ]
+    },
+    "subject": "ALVAC-MV-HA/F"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Canarypox virus-based vaccine vectors carrying the fusion protein (ALVAC-F) (Weingartl et al., 2006).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        127
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4220
+      ],
+      "Vaccine": "ALVAC-NiV-F",
+      "Vaccine_Name": "ALVAC-NiV-F",
+      "Vaccine_Ontology_ID": "VO_0004734",
+      "Virulence": null,
+      "id": 69,
+      "pathogen_id": [
+        25
+      ],
+      "vaccine_id": 69,
+      "vaccine_pathogen_id": [
+        3457
+      ]
+    },
+    "subject": "ALVAC-NiV-F"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Canarypox virus-based vaccine vectors carrying the gene for NiV glycoprotein (ALVAC-G) (Weingartl et al., 2006).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        127
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4219
+      ],
+      "Vaccine": "ALVAC-NiV-G",
+      "Vaccine_Name": "ALVAC-NiV-G",
+      "Vaccine_Ontology_ID": "VO_0004733",
+      "Virulence": null,
+      "id": 70,
+      "pathogen_id": [
+        25
+      ],
+      "vaccine_id": 70,
+      "vaccine_pathogen_id": [
+        3456
+      ]
+    },
+    "subject": "ALVAC-NiV-G"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "p53",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "Potent T-cell and IgG antibody responses against the vector component of the ALVAC vaccine were induced in the majority of the colorectal cancer patients. Enzyme-linked immunosorbent-spot assay (ELISPOT) analysis of vaccine-induced immunity revealed the presence of IFN-gamma-secreting T cells against both ALVAC and p53, whereas no significant interleukin-4 responses were detected. Vaccine-mediated enhancement of p53-specific T-cell immunity was found in two patients in the highest-vaccine-dose group.(van et al., 2002)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Several canarypox virus recombinants expressing human or murine p53 in wild-type or mutant form were constructed (Roth et al., 1996).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4225
+      ],
+      "Vaccine": "ALVAC-P53 Vaccine",
+      "Vaccine_Name": "ALVAC-P53 Vaccine",
+      "Vaccine_Ontology_ID": "VO_0004739",
+      "Virulence": null,
+      "id": 71,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 71,
+      "vaccine_pathogen_id": [
+        3462
+      ]
+    },
+    "subject": "ALVAC-P53 Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "An ALVAC (canarypox)-based recombinant virus ALVAC-RHDV (vCP309) expressing a native rabbit hemorrhagic disease virus (RHDV) capsid protein was derived and assessed for its protective efficacy in rabbits (Fischer et al., 1997).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        257
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4224
+      ],
+      "Vaccine": "ALVAC-RHDV (vCP309)",
+      "Vaccine_Name": "ALVAC-RHDV (vCP309)",
+      "Vaccine_Ontology_ID": "VO_0004738",
+      "Virulence": null,
+      "id": 72,
+      "pathogen_id": [
+        135
+      ],
+      "vaccine_id": 72,
+      "vaccine_pathogen_id": [
+        3461
+      ]
+    },
+    "subject": "ALVAC-RHDV (vCP309)"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "A non-adjuvanted feline rabies vaccine developed using the canarypoxvirus vector (Jas et al., 2012).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        56
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4213
+      ],
+      "Vaccine": "ALVAC-RV",
+      "Vaccine_Name": "ALVAC-RV",
+      "Vaccine_Ontology_ID": "VO_0004728",
+      "Virulence": null,
+      "id": 73,
+      "pathogen_id": [
+        174
+      ],
+      "vaccine_id": 73,
+      "vaccine_pathogen_id": [
+        3451
+      ]
+    },
+    "subject": "ALVAC-RV"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        26
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4110
+      ],
+      "Vaccine": "ALVAC-SIV/gp120",
+      "Vaccine_Name": "ALVAC-SIV/gp120",
+      "Vaccine_Ontology_ID": "VO_0004638",
+      "Virulence": null,
+      "id": 74,
+      "pathogen_id": [
+        137
+      ],
+      "vaccine_id": 74,
+      "vaccine_pathogen_id": [
+        3361
+      ]
+    },
+    "subject": "ALVAC-SIV/gp120"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Canarypox vector expressing PrM and E genes of West Nile virus (WNV) (ALVAC-WNV) (Karaca et al., 2005).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        68
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4222
+      ],
+      "Vaccine": "ALVAC-WNV-PrM/E (dogs and cats)",
+      "Vaccine_Name": "ALVAC-WNV-PrM/E (dogs and cats)",
+      "Vaccine_Ontology_ID": "VO_0004736",
+      "Virulence": null,
+      "id": 75,
+      "pathogen_id": [
+        184
+      ],
+      "vaccine_id": 75,
+      "vaccine_pathogen_id": [
+        3459
+      ]
+    },
+    "subject": "ALVAC-WNV-PrM/E (dogs and cats)"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Three commercially available equine WNV vaccines in horses:  (i) an inactivated WNV vaccine (K-WN), (ii) a modified-live vaccine (CP-WN) containing the WNV prM and E proteins expressed by a canarypox vector, (iii) a live-chimera vaccine (WN-FV) containing WNV prM and E proteins expressed in a YF17D vector (Seino et al., 2007).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        68
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4216
+      ],
+      "Vaccine": "ALVAC-WNV-prM/E",
+      "Vaccine_Name": "ALVAC-WNV-prM/E",
+      "Vaccine_Ontology_ID": "VO_0004731",
+      "Virulence": null,
+      "id": 76,
+      "pathogen_id": [
+        184
+      ],
+      "vaccine_id": 76,
+      "vaccine_pathogen_id": [
+        3454
+      ]
+    },
+    "subject": "ALVAC-WNV-prM/E"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A vaccine comprise of a canarypox viral vector that carries the gene for human B7.1 (CD80 antigen) with potential use as an autologous therapeutic cancer vaccine. Tumor cells harvested from a patient are infected with ALVAC-hB7 1, thereby producing an autologous cell line that exhibits increased expression of HLA class I and class II, CD54 (ICAM), and CD80. Increased expression of these proteins by this autologous cell line may activate an antitumor T-cell response when the modified cells are administered to the patient. (NCI04) (NCIT_C2485).This vaccine has been used in melanoma patients. NCT00003556",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "A recombinant canarypox virus is used to intratumorally deliver the immune costimulatory molecule B7.1 (Triozzi et al., 2005)",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5181
+      ],
+      "Vaccine": "ALVAC-hB7.1",
+      "Vaccine_Name": "ALVAC-hB7.1",
+      "Vaccine_Ontology_ID": "VO_0007246",
+      "Virulence": null,
+      "id": 77,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 77,
+      "vaccine_pathogen_id": [
+        3725
+      ]
+    },
+    "subject": "ALVAC-hB7.1"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        56
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4111
+      ],
+      "Vaccine": "ALVAC-rabies",
+      "Vaccine_Name": "ALVAC-rabies",
+      "Vaccine_Ontology_ID": "VO_0004639",
+      "Virulence": null,
+      "id": 78,
+      "pathogen_id": [
+        174
+      ],
+      "vaccine_id": 78,
+      "vaccine_pathogen_id": [
+        3362
+      ]
+    },
+    "subject": "ALVAC-rabies"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "A virosome-formulated P. falciparum protein derived synthetic peptide antigen (Genton et al., 2007)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "AMA 49-CPE is an apical membrane antigen-1 (AMA-1) derived synthetic phospatidylethanolamine (PE)-peptide conjugate that serves as a malaria vaccine (Genton et al., 2007)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Virosome-formulated synthetic peptides",
+      "VIOLIN_c_pathogen_id": [
+        30
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6395
+      ],
+      "Vaccine": "AMA 49-CPE",
+      "Vaccine_Name": "AMA 49-CPE",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 79,
+      "pathogen_id": [
+        151
+      ],
+      "vaccine_id": 79,
+      "vaccine_pathogen_id": [
+        4696
+      ]
+    },
+    "subject": "AMA 49-CPE"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "AMA1-C1(Malkin et al., 2005): Apical membrane antigen 1. An 83-kDa antigen that may be involved in the process of erythrocyte invasion (Hodder et al., 2001).",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        30
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5981
+      ],
+      "Vaccine": "AMA1-C1Alhydrogel",
+      "Vaccine_Name": "AMA1-C1Alhydrogel",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 80,
+      "pathogen_id": [
+        151
+      ],
+      "vaccine_id": 80,
+      "vaccine_pathogen_id": [
+        4359
+      ]
+    },
+    "subject": "AMA1-C1Alhydrogel"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "AMA1-C1 (NIAID, 2006): Apical membrane antigen 1. An 83-kDa antigen that may be involved in the process of erythrocyte invasion (Hodder et al., 2001).",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        30
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5980
+      ],
+      "Vaccine": "AMA1-C1Alhydrogel + CPG 7909",
+      "Vaccine_Name": "AMA1-C1Alhydrogel + CPG 7909",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 81,
+      "pathogen_id": [
+        151
+      ],
+      "vaccine_id": 81,
+      "vaccine_pathogen_id": [
+        4358
+      ]
+    },
+    "subject": "AMA1-C1Alhydrogel + CPG 7909"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Anixa Biosciences",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Licensed",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6216
+      ],
+      "Vaccine": "AMHR2-ED",
+      "Vaccine_Name": "AMHR2-ED",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 82,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 82,
+      "vaccine_pathogen_id": [
+        4553
+      ]
+    },
+    "subject": "AMHR2-ED"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine consisting of autologous dendritic cells loaded with separate preparations of acute myelogenous leukemia (AML) cell lysate and AML-specific messenger RNA (mRNA) with potential immunostimulatory and antineoplastic activities. Upon administration, AML mRNA plus lysate loaded autologous dendritic cell vaccine may elicit a potent cytotoxic T-cell (CTL) response against AML cells, resulting in tumor cell death. Autologous dendritic cells doubly-loaded with AML cell lysate and AML-specific mRNA may elicit superior primary, recall, and effector lytic immune responses compared to autologous dendritic cells loaded with tumor lysate or tumor mRNA alone. (NCIT_C74000).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5533
+      ],
+      "Vaccine": "AML mRNA Positive Lysate Loaded Autologous Dendritic Cell Vaccine",
+      "Vaccine_Name": "AML mRNA Positive Lysate Loaded Autologous Dendritic Cell Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007251",
+      "Virulence": null,
+      "id": 83,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 83,
+      "vaccine_pathogen_id": [
+        4048
+      ]
+    },
+    "subject": "AML mRNA Positive Lysate Loaded Autologous Dendritic Cell Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cell-based vaccine composed of previously frozen autologous antigen-presenting peripheral blood mononuclear cells (enriched for a dendritic cell fraction) that have been exposed to a recombinant protein consisting of granulocyte-macrophage colony-stimulating factor (GM-CSF) fused to prostatic-acid phosphatase (PAP), a protein expressed by prostate cancer cells. Upon administration, the vaccine may stimulate an antitumor T-cell response against tumor cells expressing PAP. (NCIT_C48640).This vaccine has been used in trials involving asymptomatic, metastatic, hormone-refractory prostate cancer. (Small et al., 2014; Ju et al., 2022)",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Autologous dendritic cells were pulsed ex vivo with PA2024, a recombinant fusion protein consisting of granulocyte macrophage colony-stimulating factor and prostatic acid phosphatase (Harzstark and Small, 2007).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5420
+      ],
+      "Vaccine": "APC8015F",
+      "Vaccine_Name": "APC8015F",
+      "Vaccine_Ontology_ID": "VO_0007271",
+      "Virulence": null,
+      "id": 84,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 84,
+      "vaccine_pathogen_id": [
+        3946
+      ]
+    },
+    "subject": "APC8015F"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "APEC protein ISS fused to glutathione S-transferase (GST) (Lynne et al., 2006).",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "Colibacillosis, caused by avian pathogenic Escherichia coli (APEC), is a major problem for the poultry industry in the United States resulting in significant annual losses. One of the problems in colibacillosis control is that no single bacterial trait has been identified that can be used as an identifier of virulent avian isolates or as a target of control strategies. Previous work showed that complement resistance may play an important role in APEC virulence, and the increased serum survival gene or iss, which is associated with E. coli complement resistance was found significantly more often in APEC than it was in the E. coli isolates of apparently healthy birds. This strong association between iss and APEC suggested that iss-centric strategies might be useful in colibacillosis control (Lynne et al., 2006).",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Purification of GST-Iss was achieved by using an affinity matrix. Various doses of GST-Iss were then added to a water-in-oil emulsion (Lynne et al., 2006).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": null,
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        25
+      ],
+      "VIOLIN_c_vaccine_id": [
+        134
+      ],
+      "Vaccine": "APEC vaccine using GST-Iss fusion protein",
+      "Vaccine_Name": "APEC vaccine using GST-Iss fusion protein",
+      "Vaccine_Ontology_ID": "VO_0000454",
+      "Virulence": "Not noted.",
+      "id": 85,
+      "pathogen_id": [
+        132
+      ],
+      "vaccine_id": 85,
+      "vaccine_pathogen_id": [
+        80
+      ]
+    },
+    "subject": "APEC vaccine using GST-Iss fusion protein"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "(Zhang et al., 2016)",
+      "Host_Species_as_Laboratory_Animal_Model": "Mice",
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "subcutaneous injection",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5671
+      ],
+      "Vaccine": "APP HflX vaccine",
+      "Vaccine_Name": "APP HflX vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 86,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 86,
+      "vaccine_pathogen_id": [
+        4105
+      ]
+    },
+    "subject": "APP HflX vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Licensed",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        243
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4321
+      ],
+      "Vaccine": "APSV Wetvax",
+      "Vaccine_Name": "APSV Wetvax",
+      "Vaccine_Ontology_ID": "VO_0004808",
+      "Virulence": null,
+      "id": 87,
+      "pathogen_id": [
+        128
+      ],
+      "vaccine_id": 87,
+      "vaccine_pathogen_id": [
+        3532
+      ]
+    },
+    "subject": "APSV Wetvax"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "spike (S) protein gene (Saha et al., 2020)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A SARS-CoV-2 investigational vaccine comprising a self-replicating (replicon) mRNA that encodes for the prefusion spike protein of 2019-nCoV formulated in a lipid nanoparticle  (Saha et al., 2020)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": "LUNAR-COV19",
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "RNA vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5781
+      ],
+      "Vaccine": "ARCT-021",
+      "Vaccine_Name": "ARCT-021",
+      "Vaccine_Ontology_ID": "VO_0005164",
+      "Virulence": null,
+      "id": 88,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 88,
+      "vaccine_pathogen_id": [
+        4173
+      ]
+    },
+    "subject": "ARCT-021"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Arcturus Therapeutics, Inc.",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "RNA vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5884
+      ],
+      "Vaccine": "ARCT-154",
+      "Vaccine_Name": "ARCT-154",
+      "Vaccine_Ontology_ID": "VO_0005331",
+      "Virulence": null,
+      "id": 89,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 89,
+      "vaccine_pathogen_id": [
+        4274
+      ]
+    },
+    "subject": "ARCT-154"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Arcturus Therapeutics, Inc.",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "RNA vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5888
+      ],
+      "Vaccine": "ARCT-165",
+      "Vaccine_Name": "ARCT-165",
+      "Vaccine_Ontology_ID": "VO_0005332",
+      "Virulence": null,
+      "id": 90,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 90,
+      "vaccine_pathogen_id": [
+        4278
+      ]
+    },
+    "subject": "ARCT-165"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "RBD domain of S protein (Zha, et al., 2020)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A SARS-CoV-2 mRNA vaccine made of lipid nanoparticle-encapsulated mRNA (mRNA-LNP) encoding the receptor binding domain (RBD) of SARS-CoV-2 (Zha, et al., 2020)",
+      "Host_Species_as_Laboratory_Animal_Model": "mouse, cynomolgus monkeys",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Academy of Military Science (AMS), Walvax Biotechnology, Suzhou Abogen Biosciences",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": "After treament can store",
+      "Tradename": null,
+      "Type": "mRNA vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5783
+      ],
+      "Vaccine": "ARCoV",
+      "Vaccine_Name": "ARCoV",
+      "Vaccine_Ontology_ID": "VO_0005161",
+      "Virulence": null,
+      "id": 91,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 91,
+      "vaccine_pathogen_id": [
+        4175
+      ]
+    },
+    "subject": "ARCoV"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "Split influenza virus, inactivated, containing antigen equivalent to: A/California/7/2009 (H1N1)v-like strain (X-179A) 3.75\u03bcg HA per 0.5mL dose (Health Canada DPD).",
+      "Approved_Age_for_Licensed_Use": "Adults aged 18-60 years",
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": "Canada",
+      "Manufacturer": "GlaxoSmithKline Inc.",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": "AS03-Adjuvanted H1N1 Pandemic Influenza Vaccine",
+      "Status": "Licensed",
+      "Storage": "Store at 2\u00b0C to 8\u00b0C (in a refrigerator).",
+      "Tradename": "AREPANRIX H1N1",
+      "Type": "Inactivated or \"killed\" vaccine",
+      "VIOLIN_c_pathogen_id": [
+        50
+      ],
+      "VIOLIN_c_vaccine_id": [
+        1116
+      ],
+      "Vaccine": "AREPANRIX H1N1",
+      "Vaccine_Name": "AREPANRIX H1N1",
+      "Vaccine_Ontology_ID": "VO_0001247",
+      "Virulence": null,
+      "id": 92,
+      "pathogen_id": [
+        168
+      ],
+      "vaccine_id": 92,
+      "vaccine_pathogen_id": [
+        762
+      ]
+    },
+    "subject": "AREPANRIX H1N1"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "The virus antigen was produced from Vero cells infected with a Vero-adapted ASFV strain.(Borca et al., 2021)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "ASFV-G-\u2206I177L Is alive attenuated vaccine candidate developed by deleting the I177L gene from the genome of the highly virulent pandemic ASFV strain Georgia. (Borca et al., 2021)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "oronasally  or intramuscularly",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        220
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6199
+      ],
+      "Vaccine": "ASFV-G-\u2206I177L",
+      "Vaccine_Name": "ASFV-G-\u2206I177L",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 93,
+      "pathogen_id": [
+        109
+      ],
+      "vaccine_id": 93,
+      "vaccine_pathogen_id": [
+        4539
+      ]
+    },
+    "subject": "ASFV-G-\u2206I177L"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A vaccine comprised of autologous epithelial ovarian cells infected with ALVAC-hB7.1. (NCIT_C28682). This vaccine has been used in  trials involving Recurrent Ovarian Epithelial Cancer. NCT00004032",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "The treatment is a recombinant ALVAC-HIV-1 vaccine expressing Gag, Pol, and gp160 in a prime-boost protocol with their homologous vaccine native Env proteins (Pal et al., 2006).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5319
+      ],
+      "Vaccine": "AUT-OV-ALVAC-hB7.1 Vaccine",
+      "Vaccine_Name": "AUT-OV-ALVAC-hB7.1 Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007274",
+      "Virulence": null,
+      "id": 94,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 94,
+      "vaccine_pathogen_id": [
+        3856
+      ]
+    },
+    "subject": "AUT-OV-ALVAC-hB7.1 Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Aivita Biomedical, Inc.",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5801
+      ],
+      "Vaccine": "AV-COVID-19",
+      "Vaccine_Name": "AV-COVID-19",
+      "Vaccine_Ontology_ID": "VO_0005079",
+      "Virulence": null,
+      "id": 95,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 95,
+      "vaccine_pathogen_id": [
+        4192
+      ]
+    },
+    "subject": "AV-COVID-19"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "AstraZeneca, University of Oxford",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5881
+      ],
+      "Vaccine": "AZD2816",
+      "Vaccine_Name": "AZD2816",
+      "Vaccine_Ontology_ID": "VO_0005319",
+      "Virulence": null,
+      "id": 96,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 96,
+      "vaccine_pathogen_id": [
+        4271
+      ]
+    },
+    "subject": "AZD2816"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A murine IgG1 monoclonal anti-idiotype antibody, containing a variable antigen-binding region that functionally mimics the three-dimensional structure of a specific epitope on the ovarian cancer tumor-associated antigen CA-125, with potential antineoplastic activity. With a variable antigen-binding region that acts as a surrogate antigen for CA-125, abagovomab may stimulate the host immune system to elicit humoral and cellular immune responses against CA-125-positive tumor cells, resulting in inhibition of tumor cell proliferation. This vaccine has been used in phase I trials of epithelial ovarian, fallopian tube, or primary peritoneal cancer(NCIT_C26449; Sabbatini et al., 2006)",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "This antibody functionally mimics the CA125 antigen and induces humoral and cellular CA125-specific immunity (Sabbatini et al., 2006).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5244
+      ],
+      "Vaccine": "Abagovomab",
+      "Vaccine_Name": "Abagovomab",
+      "Vaccine_Ontology_ID": "VO_0007193",
+      "Virulence": null,
+      "id": 97,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 97,
+      "vaccine_pathogen_id": [
+        3786
+      ]
+    },
+    "subject": "Abagovomab"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Center for Genetic Engineering and Biotechnology",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": "CIGB-66",
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5803
+      ],
+      "Vaccine": "Abdala",
+      "Vaccine_Name": "Abdala",
+      "Vaccine_Ontology_ID": "VO_0005082",
+      "Virulence": null,
+      "id": 98,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 98,
+      "vaccine_pathogen_id": [
+        4194
+      ]
+    },
+    "subject": "Abdala"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "BV-Dual-S1 expresses the S1 glycoprotein of IBV-M41 on the baculovirus envelope, and is capable of expressing it in mammalian cells (Zhang et al., 2014).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        145
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4242
+      ],
+      "Vaccine": "Ac-CMV-S1 (infectious bronchitis virus)",
+      "Vaccine_Name": "Ac-CMV-S1 (infectious bronchitis virus)",
+      "Vaccine_Ontology_ID": "VO_0004753",
+      "Virulence": null,
+      "id": 99,
+      "pathogen_id": [
+        45
+      ],
+      "vaccine_id": 99,
+      "vaccine_pathogen_id": [
+        3476
+      ]
+    },
+    "subject": "Ac-CMV-S1 (infectious bronchitis virus)"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Baboon",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Human endogenous retrovirus (HERV) envelope-coated, nonreplicable, baculovirus-based HA vaccine against swine influenza A/California/04/2009(H1N1) hemagglutin (HA) (AcHERV-sH1N1-HA) (Choi et al., 2013).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        50
+      ],
+      "VIOLIN_c_vaccine_id": [
+        4126
+      ],
+      "Vaccine": "AcHERV-sH1N1-HA",
+      "Vaccine_Name": "AcHERV-sH1N1-HA",
+      "Vaccine_Ontology_ID": "VO_0004653",
+      "Virulence": null,
+      "id": 100,
+      "pathogen_id": [
+        168
+      ],
+      "vaccine_id": 100,
+      "vaccine_pathogen_id": [
+        3376
+      ]
+    },
+    "subject": "AcHERV-sH1N1-HA"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "Haemophilus b capsular polyribosyl-ribitol-phosphate(PRP)- tetanus toxoid",
+      "Approved_Age_for_Licensed_Use": "Infants and children ages 18 months to 2 years old (ActHIB 2005).",
+      "CDC_CVX_code": "48",
+      "CDC_CVX_description": null,
+      "Contraindication": "The vaccine should not be administered to anyone with a known hypersensitivity to any component of the vaccine (FDA: ACTHIB).",
+      "Description": "ActHIB vaccine was among the first conjugated Hib vaccines developed at the National Institutes of Health (NIH). It is now manufactured by Sanofi Pasteur SA in Lyon, France. The conjugation process changes the polysaccharide from a \u201cT-cell\u2013independent antigen\u201d to a \u201cT-cell\u2013dependent antigen\u201d, which greatly improves immunogenicity, particularly in young children. In addition, repeated doses elicit a substantial booster response in children who have been previously vaccinated (ActHIB 2005).",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": "USA (License #1724)",
+      "Manufacturer": "Sanofi Pasteur, SA",
+      "Preparation": "The vaccine consists of the Haemophilus b capsular polysaccharide (polyribosyl-ribitol-phosphate, PRP), a high molecular weight polymer prepared from the Haemophilus influenzae type b (HiB) strain 1482 grown in a semi-synthetic medium, covalently bound to tetanus toxoid. The tetanus toxoid is prepared by extraction, ammonium sulfate purification, and formalin inactivation of the toxin from cultures of Clostridium tetani (Harvard strain) grown in a modified Mueller and Miller medium. The toxoid is filter sterilized prior to the conjugation process. When ActHIB vaccine is reconstituted with saline diluent, each single dose of 0.5 mL is formulated to contain 10 \u03bcg of purified capsular polysaccharide conjugated to 24 \u03bcg of inactivated tetanus toxoid, and 8.5% of sucrose (ActHIB 2005).",
+      "Preservative": null,
+      "Product_Name": "Haemophilus b Conjugate Vaccine (Tetanus Toxoid Conjugate)",
+      "Status": "Licensed",
+      "Storage": "2\u00b0 to 8\u00b0C (35\u00b0 to 46\u00b0F). DO NOT FREEZE.",
+      "Tradename": "ActHIB",
+      "Type": "Conjugate vaccine",
+      "VIOLIN_c_pathogen_id": [
+        31
+      ],
+      "VIOLIN_c_vaccine_id": [
+        157
+      ],
+      "Vaccine": "ActHIB",
+      "Vaccine_Name": "ActHIB",
+      "Vaccine_Ontology_ID": "VO_0000004",
+      "Virulence": "Not virulent",
+      "id": 101,
+      "pathogen_id": [
+        155
+      ],
+      "vaccine_id": 101,
+      "vaccine_pathogen_id": [
+        95
+      ]
+    },
+    "subject": "ActHIB"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": "2 months to 7 years",
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "Products: Proteins + Conjugate.",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": "Canada",
+      "Manufacturer": "Sanofi Pasteur Ltd",
+      "Preparation": null,
+      "Preservative": "2 phenoxy ethanol",
+      "Product_Name": "Diphtheria, tetanus, acellular pertussis, Haemophilus influenzae type b conjugate vaccine",
+      "Status": "Licensed",
+      "Storage": "Refrigerate at 2\u00b0 to 8\u00b0C.",
+      "Tradename": "Actacel",
+      "Type": "Subunit vaccine",
+      "VIOLIN_c_pathogen_id": [
+        62,
+        41,
+        31,
+        109
+      ],
+      "VIOLIN_c_vaccine_id": [
+        554,
+        555,
+        557,
+        761
+      ],
+      "Vaccine": "Actacel",
+      "Vaccine_Name": "Actacel",
+      "Vaccine_Ontology_ID": "VO_0010705",
+      "Virulence": null,
+      "id": 102,
+      "pathogen_id": [
+        179,
+        161,
+        155,
+        6
+      ],
+      "vaccine_id": 102,
+      "vaccine_pathogen_id": [
+        346,
+        347,
+        348,
+        422
+      ]
+    },
+    "subject": "Actacel"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "intranasal immunization",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "To construct an avirulent mutant strain by inactivation of ApxI toxin, the apxIC gene of A. pleuropneumoniae serovar 10 was inactivated by inserting a chloramphenicol resistance gene cassette into the downstream XhoI site of the apxIC gene for constructing the transfer plasmid. The transfer plasmid was introduced into the electrocompetent A. pleuropneumoniae serovar 10 for homologous recombination by electroporation. The mutant strain was obtained and identified by PCR and Southern blotting (Xu et al., 2007).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        3112
+      ],
+      "Vaccine": "Actinobacillus pleuropneumoniae ApxIC mutant vaccine",
+      "Vaccine_Name": "Actinobacillus pleuropneumoniae ApxIC mutant vaccine",
+      "Vaccine_Ontology_ID": "VO_0002767",
+      "Virulence": null,
+      "id": 103,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 103,
+      "vaccine_pathogen_id": [
+        2742
+      ]
+    },
+    "subject": "Actinobacillus pleuropneumoniae ApxIC mutant vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "The HS93Tox-/pIG-T1K vector strain, using an Actinobacillus pleuropneumoniae to express the AxpA gene, was shown to protect mice against Actinobacillus pleuropneumoniae challenges (Prideaux et al., 1998). ApxA gene encodes an A. pleuropneumoniae structural toxin (Prideaux et al., 1998).",
+      "Host_Species_as_Laboratory_Animal_Model": "Mice",
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "The HS93Tox- mutant of the serovar 7 strain of Actinobacillus pleuropneumoniae lacks the genes encoding the toxin ApxA and the post-translational activating protein ApxC, but still has genes required for secretion, making it a good vector. A plasmid vector was created to express the ApxA gene inside the HS93Tox- mutant of A. pleuropneumoniae, so that the bacterium acts as a vector for its own natural toxin (Prideaux et al., 1998).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        3972
+      ],
+      "Vaccine": "Actinobacillus pleuropneumoniae HS93Tox-/pIG-T1K vectored vaccine",
+      "Vaccine_Name": "Actinobacillus pleuropneumoniae HS93Tox-/pIG-T1K vectored vaccine",
+      "Vaccine_Ontology_ID": "VO_0004607",
+      "Virulence": "Because the toxin has been attenuated, this greatly decreases the potential virulence of the vaccine.",
+      "id": 104,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 104,
+      "vaccine_pathogen_id": [
+        3248
+      ]
+    },
+    "subject": "Actinobacillus pleuropneumoniae HS93Tox-/pIG-T1K vectored vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "intranasal immunization",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        3284
+      ],
+      "Vaccine": "Actinobacillus pleuropneumoniae apxIA mutant vaccine",
+      "Vaccine_Name": "Actinobacillus pleuropneumoniae apxIA mutant vaccine",
+      "Vaccine_Ontology_ID": "VO_0002766",
+      "Virulence": null,
+      "id": 105,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 105,
+      "vaccine_pathogen_id": [
+        2909
+      ]
+    },
+    "subject": "Actinobacillus pleuropneumoniae apxIA mutant vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intraperitoneal injection (i.p.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Plasmid pENT1 was used to introduce the \u0394apxIVA deletion into A. pleuropneumoniae single mutant \u0394apxIIC via the single-step transconjugation system. The colonies with the correct PCR profile were confirmed by Southern blot and sequencing assays (Liu et al., 2007).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        3120
+      ],
+      "Vaccine": "Actinobacillus pleuropneumoniae apxIIC and apxIVA double deletion mutant vaccine",
+      "Vaccine_Name": "Actinobacillus pleuropneumoniae apxIIC and apxIVA double deletion mutant vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 106,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 106,
+      "vaccine_pathogen_id": [
+        2749
+      ]
+    },
+    "subject": "Actinobacillus pleuropneumoniae apxIIC and apxIVA double deletion mutant vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "intranasal immunization",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "An apxIIIBD mutant (1536\u2206B\u2206D) was selected and the correct mutation was verified by PCR using three primer pairs. The X3BD-F2 and X3BD-R2 primer pair was designed to produce products of 3720 and 4365 bps from the wild-type 1536 and 1536\u2206B\u2206D genomes, respectively (Park et al., 2009).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        3119
+      ],
+      "Vaccine": "Actinobacillus pleuropneumoniae apxIIIB and apxIIID double mutant vaccine",
+      "Vaccine_Name": "Actinobacillus pleuropneumoniae apxIIIB and apxIIID double mutant vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 107,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 107,
+      "vaccine_pathogen_id": [
+        2748
+      ]
+    },
+    "subject": "Actinobacillus pleuropneumoniae apxIIIB and apxIIID double mutant vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "aerosol immunization",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "To construct the A. pleuropneumoniae serotype 2 isogenic mutant, 12 clinical isolates were tested initially with respect to their amenability to genetic manipulation via conjugation and cointegration of pBMKU\u03941 (Tonpitak et al., 2002).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Live, attenuated vaccine",
+      "VIOLIN_c_pathogen_id": [
+        86
+      ],
+      "VIOLIN_c_vaccine_id": [
+        3118
+      ],
+      "Vaccine": "Actinobacillus pleuropneumoniae ureC and apxIIA double mutant deletion vaccine",
+      "Vaccine_Name": "Actinobacillus pleuropneumoniae ureC and apxIIA double mutant deletion vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 108,
+      "pathogen_id": [
+        204
+      ],
+      "vaccine_id": 108,
+      "vaccine_pathogen_id": [
+        2747
+      ]
+    },
+    "subject": "Actinobacillus pleuropneumoniae ureC and apxIIA double mutant deletion vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "Human cytomegalovirus infection can be used to induce the activation of NF-\u03baB (Bowen et al., 2002; DeMeritt et al., 2004).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Human cytomegalovirus infection can be used to induce the activation of NF-\u03baB (DeMeritt et al., 2004).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5543
+      ],
+      "Vaccine": "Ad CMV I kappaB alpha",
+      "Vaccine_Name": "Ad CMV I kappaB alpha",
+      "Vaccine_Ontology_ID": "VO_0007194",
+      "Virulence": null,
+      "id": 109,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 109,
+      "vaccine_pathogen_id": [
+        4057
+      ]
+    },
+    "subject": "Ad CMV I kappaB alpha"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "PvCelTOS: cell-traversal protein for ookinetes and sporozoites of P. vivax. A protein important for parasite traversal of host cells both for ookinetes in the mosquito and for sporozoites. (Alves et al., 2017)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "PvCelTOS (Ad): Recombinant chimpanzee adenoviral vector 63 (ChAd63) expressing PvCelTOS. PvCelTOS (MVA): Recombinant modified vaccinia virus Ankara (MVA) expressing PvCelTOS. PvCelTOS (Ad) is the primary vaccination, and PvCelTOS (MVA) is the booster. (Alves et al., 2017)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        30
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6100
+      ],
+      "Vaccine": "Ad-MVA PvCelTOS",
+      "Vaccine_Name": "Ad-MVA PvCelTOS",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 110,
+      "pathogen_id": [
+        151
+      ],
+      "vaccine_id": 110,
+      "vaccine_pathogen_id": [
+        4457
+      ]
+    },
+    "subject": "Ad-MVA PvCelTOS"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "PvCelTOS: cell-traversal protein for ookinetes and sporozoites of P. vivax. A protein important for parasite traversal of host cells both for ookinetes in the mosquito and for sporozoites. (Alves et al., 2017)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "PvCelTOS (Ad): Recombinant chimpanzee adenoviral vector 63 (ChAd63) expressing PvCelTOS. PvCelTOS (VLPs): PvCelTOS conjugated to bacteriophage Q\u03b2 virus-like particles (VLPs)**PvCelTOS (Ad) is the primary vaccination, and PvCelTOS (VLPs) is the booster. (Alves et al., 2017)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        30
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6101
+      ],
+      "Vaccine": "Ad-VLPs PvCelTOS",
+      "Vaccine_Name": "Ad-VLPs PvCelTOS",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 111,
+      "pathogen_id": [
+        151
+      ],
+      "vaccine_id": 111,
+      "vaccine_pathogen_id": [
+        4458
+      ]
+    },
+    "subject": "Ad-VLPs PvCelTOS"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "PvCelTOS: cell-traversal protein for ookinetes and sporozoites of P. vivax. A protein important for parasite traversal of host cells both for ookinetes in the mosquito and for sporozoites. (Alves et al., 2017)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "PvCelTOS (Ad): Recombinant chimpanzee adenoviral vector 63 (ChAd63) expressing PvCelTOS. PvCelTOS (protein): PvCelTOS expressed as a protein using HEK293T cells, a eukaryotic cell expression system.**PvCelTOS (Ad) is the primary vaccination, and PvCelTOS (protein) is the booster. (Alves et al., 2017)",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "(Ad): Recombinant vector vaccine; (protein): Subunit Vaccine",
+      "VIOLIN_c_pathogen_id": [
+        30
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5955
+      ],
+      "Vaccine": "Ad-protein PvCelTOS",
+      "Vaccine_Name": "Ad-protein PvCelTOS",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 112,
+      "pathogen_id": [
+        151
+      ],
+      "vaccine_id": 112,
+      "vaccine_pathogen_id": [
+        4336
+      ]
+    },
+    "subject": "Ad-protein PvCelTOS"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A cancer vaccine consisting of a recombinant adenoviral vector encoding the tumor-associated antigen (TAA) human MUC-1 (hMUC-1) linked to the extracellular domain (ecd) of the co-stimulatory molecule CD40 ligand (CD40L) and an adenovirus signal sequence that encodes a secretory signal peptide (Ad-sig) with potential immunostimulating and antineoplastic activities. Due to the presence of the secretory signal peptide expressed by Ad-sig in the vaccine construct, transfected cells may secrete a fusion protein composed of hMUC-1 and the CD40L ecd. The CD40L moiety part of the fusion protein binds to CD40 receptors on dendritic cells (DCs). Subsequently, DCs may be activated and migrate, T-cells may expand, and a cytotoxic T lymphocyte (CTL) response against tumor cells that overexpress hMUC-1 may follow. MUC-1 is a hypoglycosylated TAA overexpressed by epithelial cancer cells. Patients with breast, ovary, lung, colon and prostate cancer have received this treatment in initial stage clinical trials.https://ascopubs.org/doi/abs/10.1200/JCO.2018.36.15_suppl.3098 (NCIT_C77910).",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "(Akbulut et al., 2010).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5179
+      ],
+      "Vaccine": "Ad-sig-hMUC-1/ecdCD40L Vaccine",
+      "Vaccine_Name": "Ad-sig-hMUC-1/ecdCD40L Vaccine",
+      "Vaccine_Ontology_ID": "VO_0007195",
+      "Virulence": null,
+      "id": 113,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 113,
+      "vaccine_pathogen_id": [
+        3723
+      ]
+    },
+    "subject": "Ad-sig-hMUC-1/ecdCD40L Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "4 virus strains (15 \u03bcg of hemagglutinin per strain per 0.5-mL dose): A/Singapore/GP1908/2015 (H1N1) IVR-180, A/Hong Kong/4801/2014 (H3N2) NYMC X-263B, B/Phuket/3073/2013, and B/Brisbane/60/2008. The placebo was sterile 0.9% saline.",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "(Sadoff et al., 2021)  The vaccine Ad26.RSV.preF is the next-generation vaccine expressing the stabilized FA2. The vaccine is a replication-incompetent Ad26 vector containing a DNA transgene, encoding a F protein derived from the RSV A2 strain that is stabilized in its pre-F conformation",
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "Janssen (Leiden, the Netherlands)",
+      "Preparation": "(Sadoff et al., 2021)  Each 0.5-mL dose contained 1 \u00d7 1011 viral particles (vp) of Ad26.RSV.preF. Fluarix Quadrivalent (GlaxoSmithKline), formulated for the 2017\u20132018 Northern Hemisphere season, contained the following 4 virus strains (15 \u03bcg of hemagglutinin per strain per 0.5-mL dose): A/Singapore/GP1908/2015 (H1N1) IVR-180, A/Hong Kong/4801/2014 (H3N2) NYMC X-263B, B/Phuket/3073/2013, and B/Brisbane/60/2008. The placebo was sterile 0.9% saline.",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Licensed",
+      "Storage": null,
+      "Tradename": "Fluarix",
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        212
+      ],
+      "VIOLIN_c_vaccine_id": [
+        6008
+      ],
+      "Vaccine": "Ad26/protein preF RSV Vaccine Coadministered With an Influenza Vaccine",
+      "Vaccine_Name": "Ad26/protein preF RSV Vaccine Coadministered With an Influenza Vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 114,
+      "pathogen_id": [
+        105
+      ],
+      "vaccine_id": 114,
+      "vaccine_pathogen_id": [
+        4380
+      ]
+    },
+    "subject": "Ad26/protein preF RSV Vaccine Coadministered With an Influenza Vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "S protein(Guo et al., 2015)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "Adenovirus type 41 used as vector for MERS-CoV S protein (Guo et al., 2015)",
+      "Host_Species_as_Laboratory_Animal_Model": "mouse",
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Licensed",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        319
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5760
+      ],
+      "Vaccine": "Ad41.MERS-S protein",
+      "Vaccine_Name": "Ad41.MERS-S protein",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 115,
+      "pathogen_id": [
+        157
+      ],
+      "vaccine_id": 115,
+      "vaccine_pathogen_id": [
+        4153
+      ]
+    },
+    "subject": "Ad41.MERS-S protein"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Adenovirus serotype 5-based RSV vaccine encoding the fusion (F) protein (Ad5.RSV-F)(Kim et al., 2014)",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        212
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5994
+      ],
+      "Vaccine": "Ad5-RSV-F",
+      "Vaccine_Name": "Ad5-RSV-F",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 116,
+      "pathogen_id": [
+        105
+      ],
+      "vaccine_id": 116,
+      "vaccine_pathogen_id": [
+        4367
+      ]
+    },
+    "subject": "Ad5-RSV-F"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "SARS-CoV-2 spike protein (Zhu et al., 2020)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": "CanSino Biologics",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": "Convidecia, PakVak",
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5768
+      ],
+      "Vaccine": "Ad5-nCoV",
+      "Vaccine_Name": "Ad5-nCoV",
+      "Vaccine_Ontology_ID": "VO_0005144",
+      "Virulence": null,
+      "id": 117,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 117,
+      "vaccine_pathogen_id": [
+        4161
+      ]
+    },
+    "subject": "Ad5-nCoV"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "S1 region of SARS-CoV-2 spike protein (aa 47-716) and full-length SARS-CoV-2 nucleoprotein (N) fused to a highly conserved portion of the SARS-CoV-2 polymerase (RdRp or POL)",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": "intranasal immunization",
+      "Location_Licensed": null,
+      "Manufacturer": "McMaster University",
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        321
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5899
+      ],
+      "Vaccine": "Ad5-triCoV/Mac",
+      "Vaccine_Name": "Ad5-triCoV/Mac",
+      "Vaccine_Ontology_ID": "VO_0005339",
+      "Virulence": null,
+      "id": 118,
+      "pathogen_id": [
+        159
+      ],
+      "vaccine_id": 118,
+      "vaccine_pathogen_id": [
+        4289
+      ]
+    },
+    "subject": "Ad5-triCoV/Mac"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "A replication-competent oncolytic adenovirus encoding the murine pro-inflammatory cytokine interleukin-12 (IL-12) gene and two suicide fusion genes, a yeast cytosine deaminase (yCD) and a mutant form of herpes simplex virus type 1 thymidine kinase (HSV-1 TKSR39), with potential immunomodulating and antineoplastic activities. Upon intratumoral administration of Ad5-yCD/mutTKSR39rep-hIL12, the adenovirus selectively infects and replicates in tumor cells, which results in direct tumor cell lysis. Synergistically, IL-12 expressed by the adenovirus may activate the immune system by promoting the activation of natural killer cells (NKs), inducing secretion of interferon-gamma (IFN-g) and inducing cytotoxic T-lymphocyte (CTL) responses against tumor cells, which may result in immune-mediated tumor cell death, inhibition of tumor cell proliferation and inhibition of tumor angiogenesis. In addition, Ad5-yCD/mutTKSR39rep-hIL12-infected cancer cells (multiple types) express yCD and TKSR39; upon administration of the prodrugs 5-fluorocytosine (5-FC) and valganciclovir (vGCV), the yCD and HSV-1 TKSR39 activate these prodrugs to form 5-fluorouracil (5-FU) and ganciclovir, respectively. 5-FU gets converted to 5-fluoro-uridine monophosphate (5-FUMP) and subsequently to 5-fluoro-deoxyuridine monophosphate (5-FdUMP); 5-FdUMP irreversible inhibits thymidylate synthase, inhibits deoxythymidine triphosphate (dTTP) formation and halts DNA synthesis. Once phosphorylated intracellularly, ganciclovir triphosphate competitively inhibits deoxyguanosine triphosphate (dGTP) incorporation into DNA and inhibits DNA synthesis. (Barton et al., 2021; NCIT_C123930; Sato-Dahlman et al., 2020)",
+      "Host_Species_as_Laboratory_Animal_Model": "Human",
+      "Host_Species_for_Licensed_Use": "Human",
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": "Adenoviruses were propagated in AD293 cells and purified by ion-exchange filtration (Freytag et al., 2013).",
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Clinical trial",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Other",
+      "VIOLIN_c_pathogen_id": [
+        99
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5303
+      ],
+      "Vaccine": "Ad5-yCD/mutTKSR39rep-hIL12",
+      "Vaccine_Name": "Ad5-yCD/mutTKSR39rep-hIL12",
+      "Vaccine_Ontology_ID": "VO_0007572",
+      "Virulence": null,
+      "id": 119,
+      "pathogen_id": [
+        217
+      ],
+      "vaccine_id": 119,
+      "vaccine_pathogen_id": [
+        3840
+      ]
+    },
+    "subject": "Ad5-yCD/mutTKSR39rep-hIL12"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": "S from MERS-CoV(Kim et al., 2014).",
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": "Recombinant adenoviral vector encoding the full-length MERS-CoV S protein (Ad5.MERS-S) (Kim et al., 2014)",
+      "Host_Species_as_Laboratory_Animal_Model": "mouse",
+      "Host_Species_for_Licensed_Use": "Mouse",
+      "Immunization_Route": "Intramuscular injection (i.m.)",
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Research",
+      "Storage": null,
+      "Tradename": null,
+      "Type": "Recombinant vector vaccine",
+      "VIOLIN_c_pathogen_id": [
+        319
+      ],
+      "VIOLIN_c_vaccine_id": [
+        5719
+      ],
+      "Vaccine": "Ad5.MERS-S vaccine",
+      "Vaccine_Name": "Ad5.MERS-S vaccine",
+      "Vaccine_Ontology_ID": null,
+      "Virulence": null,
+      "id": 120,
+      "pathogen_id": [
+        157
+      ],
+      "vaccine_id": 120,
+      "vaccine_pathogen_id": [
+        4112
+      ]
+    },
+    "subject": "Ad5.MERS-S vaccine"
+  }
+]
