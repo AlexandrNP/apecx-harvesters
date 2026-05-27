@@ -329,3 +329,10 @@ Goal: full corpus ingested into a production (non-trial) index.
   (1271 green). Lesson (now in GLOBUS_SOURCE_PATTERN.md): **sample-tested != corpus-validated** --
   full-scale harmonize-only is a required step before declaring a source done.
   (BVBRC:Genome full validation still pending -- volatile + 746k; needs a stable window.)
+- 2026-05-27 — BVBRC:Genome **bounded validation: 10,000 docs scanned (333x the 30-doc sample),
+  0 parse errors.** The parser is robust on a large real sample; full 746k validation still
+  awaits a stable window (volatile). **All 9 sources now validated on real data** (8 at full
+  corpus + Genome at 10k). The harmonization pipeline (Phases 0-4) is code-complete and
+  corpus-validated. **The only remaining work is Phase 5 (full multi-source ingest), which is
+  hard-blocked externally** on the `support@globus.org` allocation bump (1 MB trial cap) and a
+  stable BVBRC:Genome window. No further code/validation is unblocked.
