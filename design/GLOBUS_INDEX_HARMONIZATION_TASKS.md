@@ -391,3 +391,12 @@ Goal: full corpus ingested into a production (non-trial) index.
   so the 8 already-published single-arg parsers are untouched). The partial 129,818-record ingest
   was cleared via CLI `delete-by-query` (the `writer` role can't delete -- needs admin -- so it
   was run as the owner identity). Genome re-run launched. 1273 tests green, ruff clean.
+- 2026-05-27 — **COMPLETE: all 9 sources harmonized + published + PUBLIC.** Genome re-run with
+  the subject-keyed fix succeeded: 745,917 harmonized = ingested = auth = anon = source total,
+  0 parse errors, `stable_total=True` over the full ~24-min scrape, 243 ingest batches all
+  SUCCESS. Capstone verification by an UNauthenticated client across all 9 production indices:
+  ProtaBank 1,643 | AntiviralDB 35 | VIOLIN:Pathogen 217 | VIOLIN:Vaccine 3,507 | VIOLIN:Gene
+  4,063 | BVBRC:Epitope 442 | BVBRC:Protein_Structure 4,566 | BVBRC:Protein 24,902 |
+  BVBRC:Genome 745,917 = **785,292 records publicly searchable.** The full
+  scrape → harmonize → publish → public pipeline is delivered and verified end-to-end on real
+  data for every source. **Phases 0-5 DONE.**
