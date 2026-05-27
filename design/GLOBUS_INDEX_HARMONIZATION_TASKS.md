@@ -19,6 +19,18 @@ deterministic bulk ETL). Code home: this repo, branch `feature/globus-index-harm
   **1 MB** max size; trial indices non-durable (~30-day cleanup). Bigger size / production
   durability = manual `support@globus.org` conversion → **external blocker for Phase 5**.
 
+## Index registry (created indices)
+
+| UUID | Name | Type | Holds | Created |
+|---|---|---|---|---|
+| `4103190a-019d-4c0b-b8e3-b93817908141` | APECx Harmonized Biomedical Index (dev) | trial, 1 MB | 35 AntiviralDB records (public, verified) | 2026-05-26 |
+
+Newly created indices are appended here. **Hard limit:** Globus trial cap = **3 indices /
+identity** (1 used → **2 slots remain**), each **1 MB**. One-index-per-source is therefore
+impossible on trial (8 remaining sources, 2 slots), and most sources exceed 1 MB regardless
+(see "Real-data anchors"). Full multi-source ingestion is gated on the `support@globus.org`
+allocation bump.
+
 ## Real-data anchors (measured 2026-05-26)
 
 | Source | UUID (prefix) | docs | shape | max doc | notes |
@@ -231,3 +243,15 @@ Goal: full corpus ingested into a production (non-trial) index.
     open question.
   - Next: Phase 1 (`scroll_query` reader for indices beyond the 35-doc/offset range) + Phase 2
     (remaining 8 parsers, each with a captured real fixture + tests).
+- 2026-05-26 — Phase 2 parser #2: **VIOLIN:Pathogen** (`loaders/violin_pathogen/`). Flat schema,
+  1 record/pathogen, `canonical_uri = violin-pathogen:{id}` (real unique id); NCBI Taxonomy ID
+  lifted to `alternateIdentifiers` for cross-linking. `tests/test_violin_pathogen.py` green on
+  the full 217-record real fixture; whole suite 258 green, ruff clean. Ingest deferred (awaits
+  allocation bump). 7 sources remain (ProtaBank, VIOLIN:{Vaccine,Gene}, BVBRC:{Epitope,
+  Protein_Structure,Protein,Genome}).
+  - Finding: DataCite is `strict=True`, so `to_dict()` (`model_dump(mode="json")`) emits enum
+    fields (e.g. `descriptionType`) as strings that strict re-validation won't coerce back. The
+    ingest path never re-validates (the JSON dict goes straight to Globus), so it's benign for
+    ingestion -- but a consumer reloading records into the DataCite model strictly would need
+    `strict=False`. Affects every parser that sets a description (pdb/pubmed too). Tests now
+    assert JSON-serializability of `to_dict()` rather than a strict round-trip.

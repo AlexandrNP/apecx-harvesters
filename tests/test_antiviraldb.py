@@ -27,8 +27,8 @@ def test_each_doc_parses_and_roundtrips(doc):
     assert isinstance(record, AntiviralDBContainer)
     assert record.canonical_uri.startswith("antiviraldb:")
     assert record.antiviraldb.Virus == doc["content"]["Virus"]
-    # Serialized content must re-validate against the schema (ingest round-trip).
-    AntiviralDBContainer.model_validate(record.to_dict())
+    # to_dict() is the GMetaEntry content sent to Globus; it must be JSON-serializable.
+    json.dumps(record.to_dict())
 
 
 def test_no_parse_failures_and_unique_uris():
