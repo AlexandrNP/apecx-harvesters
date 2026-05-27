@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, PrivateAttr
 
 from ..base import DataCite
 from ..base.registry import SchemaRegistry
@@ -68,8 +68,12 @@ class BVBRCGenomeContainer(DataCite):
     """DataCite record for one BV-BRC organism's genome set."""
 
     bvbrc_genome: BVBRCGenomeFields
+    # Genome_Name is NOT unique at full scale: BV-BRC shards high-volume organisms across
+    # docs that share a name but have distinct subjects (e.g. "Hepacivirus C (4)" .. "(13)",
+    # 14 docs all named "Hepacivirus C"). The source subject is the unique key; the parser
+    # sets it. PrivateAttr -> not serialized into the indexed content.
+    _source_subject: str = PrivateAttr(default="")
 
     @property
     def canonical_uri(self) -> str:
-        # Genome_Name == the source subject (Globus-unique per index).
-        return f"bvbrc-genome:{self.bvbrc_genome.Genome_Name}"
+        return f"bvbrc-genome:{self._source_subject or self.bvbrc_genome.Genome_Name}"

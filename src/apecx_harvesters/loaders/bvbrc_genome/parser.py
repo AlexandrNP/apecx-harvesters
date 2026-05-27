@@ -12,7 +12,7 @@ from ..base import AlternateIdentifier, Publisher
 from .model import BVBRCGenomeContainer, BVBRCGenomeFields
 
 
-def parse_bvbrc_genome(content: dict[str, Any]) -> BVBRCGenomeContainer:
+def parse_bvbrc_genome(content: dict[str, Any], subject: str | None = None) -> BVBRCGenomeContainer:
     fields = BVBRCGenomeFields.model_validate(content)
 
     alt_ids: list[AlternateIdentifier] = []
@@ -27,10 +27,13 @@ def parse_bvbrc_genome(content: dict[str, Any]) -> BVBRCGenomeContainer:
                 seen.add((value, id_type))
                 alt_ids.append(AlternateIdentifier(alternateIdentifier=value, alternateIdentifierType=id_type))
 
-    return BVBRCGenomeContainer.new(
+    record = BVBRCGenomeContainer.new(
         title=fields.Genome_Name,
         creators=[],
         publisher=Publisher(name="BV-BRC"),
         alternateIdentifiers=alt_ids,
         bvbrc_genome=fields,
     )
+    if subject:
+        record._source_subject = subject
+    return record

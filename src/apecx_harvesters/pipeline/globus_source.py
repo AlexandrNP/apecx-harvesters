@@ -15,6 +15,7 @@ The synchronous Globus SDK calls are off-loaded via ``asyncio.to_thread``.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import os
 from collections.abc import AsyncIterator, Callable
 from typing import Any
@@ -88,10 +89,14 @@ async def globus_index_source(
     carrying the error string (never a silently dropped record); downstream sinks
     log and skip failed results.
     """
+    # Parsers are normally `parse(content)`; sources whose unique key is the Globus
+    # subject (not a content field) accept `parse(content, subject)`. Detect by arity so
+    # adding the subject never disturbs the single-arg parsers.
+    takes_subject = len(inspect.signature(parser).parameters) >= 2
     async for rec in scroll_index_records(index_uuid, client=client, query=query, page_size=page_size):
         subject = rec["subject"]
         try:
-            record = parser(rec["content"])
+            record = parser(rec["content"], subject) if takes_subject else parser(rec["content"])
             yield RetrievalResult(id=subject, record=record)
         except Exception as exc:  # noqa: BLE001 - report, never drop
             yield RetrievalResult(id=subject, error=f"{type(exc).__name__}: {exc}")

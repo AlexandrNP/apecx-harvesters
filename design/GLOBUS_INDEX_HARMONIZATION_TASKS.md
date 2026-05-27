@@ -379,3 +379,15 @@ Goal: full corpus ingested into a production (non-trial) index.
     `--publish auto` (DEST_REGISTRY) + `--streaming`. 1272 tests green, ruff clean.
   - BVBRC:Genome (the 9th) stabilized at 745,917; streaming publish to `dfefcd85-...` LAUNCHED
     (in progress). On success → all 9 sources public (~785k records total).
+- 2026-05-27 — **Genome canonical COLLISION — caught by the guard, root-caused, fixed.** The
+  streaming Genome publish FAILED LOUD at `CanonicalCollisionError: bvbrc-genome:Hepacivirus C`
+  after ingesting 129,818 records -- the guard prevented a silent overwrite (its exact purpose).
+  Root cause: BV-BRC **shards** high-volume organisms across docs that share `Genome_Name` but
+  have distinct subjects (14 docs named "Hepacivirus C", subjects "Hepacivirus C (2)".."(13)",
+  ~6k genomes each). `Genome_Name` is NOT unique at full scale -- the {organism field}==subject
+  assumption held on 30 samples but failed at 746k (the recurring sample != corpus lesson, now
+  with teeth). Fix: Genome `canonical_uri` keys on the SOURCE SUBJECT (unique) via a `PrivateAttr`
+  the parser sets; `globus_source` passes the subject to parsers that accept it (arity-detected,
+  so the 8 already-published single-arg parsers are untouched). The partial 129,818-record ingest
+  was cleared via CLI `delete-by-query` (the `writer` role can't delete -- needs admin -- so it
+  was run as the owner identity). Genome re-run launched. 1273 tests green, ruff clean.
