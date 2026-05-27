@@ -5,10 +5,11 @@ existing ``pipeline.run()`` / sinks can consume index data exactly as they
 consume API-harvested data. This is the inverse of ``sinks.to_gmetalist``
 (which writes to an index).
 
-Phase 0 uses offset paging (``post_search``); Phase 1 will switch to the
-marker-based ``scroll_query`` for full extraction beyond the ~10k offset cap.
-The synchronous Globus SDK calls are off-loaded via ``asyncio.to_thread`` so the
-async pipeline is not blocked.
+Full extraction uses the marker-based ``scroll`` API, NOT ``post_search``
+offsets: offset paging is capped (~10k) by Globus Search, so an offset reader
+would be unable to extract the larger indices (BVBRC:Protein ~25k, Genome
+~750k). Scroll walks the whole index page by page via an opaque marker.
+The synchronous Globus SDK calls are off-loaded via ``asyncio.to_thread``.
 """
 
 from __future__ import annotations
@@ -43,42 +44,54 @@ def build_search_client() -> globus_sdk.SearchClient:
     return globus_sdk.SearchClient(authorizer=authorizer)
 
 
+async def index_total(client: globus_sdk.SearchClient, index_uuid: str, query: str = "*") -> int:
+    """Return the index's document count for *query* (the scrape-completeness anchor)."""
+    resp = await asyncio.to_thread(client.search, index_uuid, query, limit=0)
+    return int(resp.get("total", 0))
+
+
+async def scroll_index_records(
+    index_uuid: str,
+    *,
+    client: globus_sdk.SearchClient,
+    query: str = "*",
+    page_size: int = 1000,
+) -> AsyncIterator[dict[str, Any]]:
+    """Yield ``{"subject", "content"}`` for EVERY document in *index_uuid*.
+
+    Marker-paginated (no offset cap), so this extracts indices of any size.
+    """
+    data = {"q": query, "limit": page_size}
+    marker: Any = globus_sdk.MISSING
+    while True:
+        resp = await asyncio.to_thread(client.scroll, index_uuid, data, marker=marker)
+        for g in resp.get("gmeta", []) or []:
+            subject = g.get("subject") or ""
+            for entry in (g.get("entries") or []):
+                yield {"subject": subject, "content": entry.get("content") or {}}
+        if not resp.get("has_next_page"):
+            break
+        marker = resp["marker"]
+
+
 async def globus_index_source(
     index_uuid: str,
     parser: Callable[[dict[str, Any]], DataCite],
     *,
     client: globus_sdk.SearchClient,
     query: str = "*",
-    page_size: int = 100,
+    page_size: int = 1000,
 ) -> AsyncIterator[RetrievalResult[Any]]:
     """Yield one ``RetrievalResult`` per document in *index_uuid*, parsed by *parser*.
 
-    A parse failure becomes a ``RetrievalResult`` carrying the error string (never
-    a silently dropped record); downstream sinks log and skip failed results.
+    Full extraction via scroll. A parse failure becomes a ``RetrievalResult``
+    carrying the error string (never a silently dropped record); downstream sinks
+    log and skip failed results.
     """
-    offset = 0
-    while True:
-        resp = await asyncio.to_thread(
-            client.post_search, index_uuid, {"q": query, "limit": page_size, "offset": offset}
-        )
-        gmeta = resp.get("gmeta", []) or []
-        if not gmeta:
-            break
-        for g in gmeta:
-            subject = g.get("subject") or ""
-            for entry in (g.get("entries") or []):
-                content = entry.get("content") or {}
-                try:
-                    record = parser(content)
-                    yield RetrievalResult(id=subject, record=record)
-                except Exception as exc:  # noqa: BLE001 - report, never drop
-                    yield RetrievalResult(id=subject, error=f"{type(exc).__name__}: {exc}")
-        offset += page_size
-        if offset >= int(resp.get("total", 0)):
-            break
-
-
-async def index_total(client: globus_sdk.SearchClient, index_uuid: str, query: str = "*") -> int:
-    """Return the index's document count for *query* (the scrape-completeness anchor)."""
-    resp = await asyncio.to_thread(client.search, index_uuid, query, limit=0)
-    return int(resp.get("total", 0))
+    async for rec in scroll_index_records(index_uuid, client=client, query=query, page_size=page_size):
+        subject = rec["subject"]
+        try:
+            record = parser(rec["content"])
+            yield RetrievalResult(id=subject, record=record)
+        except Exception as exc:  # noqa: BLE001 - report, never drop
+            yield RetrievalResult(id=subject, error=f"{type(exc).__name__}: {exc}")

@@ -298,3 +298,21 @@ Goal: full corpus ingested into a production (non-trial) index.
   work is Phases 3-5 (provenance wiring, the publish/ingest layer with the fail-loud collision
   guard, and the full-scale ingest) -- the latter two gated on the `support@globus.org`
   allocation bump. Only AntiviralDB is currently live in the dev index (Phase 0).
+- 2026-05-27 — **Phases 1, 3, 4 (code) DONE + verified on real data.**
+  - Phase 1: scroll-based full extraction (`globus_source.scroll_index_records`) replaces
+    offset paging (~10k cap). PROVEN: scrolled BVBRC:Protein **24,902/24,902** (95s) and
+    VIOLIN:Pathogen 217/217 -- exact, beyond the offset cap.
+  - Phase 3: `pipeline/harmonize.py` -- `SOURCE_REGISTRY` (all 9), `harmonize_index()` with
+    a provenance record (source/timestamp/counts + `stable_total` drift guard for torn
+    snapshots) and the FAIL-LOUD `assert_unique_canonical` collision guard (runs before any
+    ingest). Provenance is a sidecar manifest; DataCite records stay pure.
+  - Phase 4 (code): `publish_records` + `wait_for_ingest` (fail-loud on non-SUCCESS state);
+    generalized CLI `scripts/harmonize_and_publish.py` (any registered source; harmonize-only
+    or `--publish` + public verification; refuses torn snapshots). PROVEN end-to-end:
+    AntiviralDB harmonize->publish->dev index, **idempotent** (re-ingest stayed 35 not 70),
+    auth=35 / anon=35 (public).
+  - `tests/test_harmonize.py`: collision-guard fail-loud + registry + unregistered-index units
+    (4 pass; 1 network-gated skip). Full suite **1268 green**, ruff clean.
+  - `design/GLOBUS_SOURCE_PATTERN.md`: concise add-a-source recipe (LLM-guiding).
+  - REMAINING: only **Phase 5** (full multi-source ingest) -- hard-blocked on the
+    `support@globus.org` allocation (1 MB cap) + BVBRC:Genome volatility. All code paths built + tested.
