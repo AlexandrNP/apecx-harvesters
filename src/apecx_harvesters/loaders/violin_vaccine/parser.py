@@ -24,8 +24,9 @@ def parse_violin_vaccine(content: dict[str, Any]) -> VIOLINVaccineContainer:
             )
         )
 
+    title = fields.Vaccine_Name or fields.Vaccine or f"VIOLIN vaccine {fields.id}"
     return VIOLINVaccineContainer.new(
-        title=fields.Vaccine_Name,
+        title=title,
         description=fields.Description,
         creators=[],
         publisher=Publisher(name="VIOLIN"),

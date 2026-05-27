@@ -37,8 +37,9 @@ def parse_violin_gene(content: dict[str, Any]) -> VIOLINGeneContainer:
         if value:
             alt_ids.append(AlternateIdentifier(alternateIdentifier=value, alternateIdentifierType=id_type))
 
+    title = fields.Gene_Name or fields.Protein_Name or f"VIOLIN gene {fields.id}"
     return VIOLINGeneContainer.new(
-        title=fields.Gene_Name,
+        title=title,
         creators=[],
         publisher=Publisher(name="VIOLIN"),
         alternateIdentifiers=alt_ids,

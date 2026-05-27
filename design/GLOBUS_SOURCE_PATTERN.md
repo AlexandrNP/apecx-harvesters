@@ -35,6 +35,11 @@ CLI: `uv run python -m apecx_harvesters.scripts.harmonize_and_publish <src-uuid>
 6. **Test** `tests/test_<source>.py`: parametrize over the real fixture; assert every doc
    parses, `canonical_uri` is as expected + unique, and `json.dumps(record.to_dict())`
    succeeds (the real ingest payload). Run `uv run pytest`.
+7. **Validate at full scale** (read-only, REQUIRED before "done"): run `harmonize_index(<uuid>)`
+   over the WHOLE source, not the sample, and confirm `parse_error_count == 0` + the collision
+   guard passes. **Sample-tested != corpus-validated:** a 38% null-`Alignments` rate in
+   BVBRC:Protein_Structure passed the 8-doc sample yet failed 1740 real docs. Capture any real
+   null-bearing doc the run exposes back into the fixture so pytest covers the nullable path.
 
 ## Invariants (non-negotiable -- reliability)
 

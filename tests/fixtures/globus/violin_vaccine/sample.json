@@ -5050,5 +5050,55 @@
       ]
     },
     "subject": "Ad5.MERS-S vaccine"
+  },
+  {
+    "content": {
+      "Allergen": null,
+      "Antigen": null,
+      "Approved_Age_for_Licensed_Use": null,
+      "CDC_CVX_code": null,
+      "CDC_CVX_description": null,
+      "Contraindication": null,
+      "Description": null,
+      "Host_Species_as_Laboratory_Animal_Model": null,
+      "Host_Species_for_Licensed_Use": null,
+      "Immunization_Route": null,
+      "Location_Licensed": null,
+      "Manufacturer": null,
+      "Preparation": null,
+      "Preservative": null,
+      "Product_Name": null,
+      "Status": "Licensed",
+      "Storage": null,
+      "Tradename": null,
+      "Type": null,
+      "VIOLIN_c_pathogen_id": [
+        148,
+        176,
+        84
+      ],
+      "VIOLIN_c_vaccine_id": [
+        1143,
+        1144,
+        1145
+      ],
+      "Vaccine": "Avian Encephalomyelitis-Fowl Pox-Mycoplasma Gallisepticum  Live Fowl Pox Vector, Live Virus Vaccine (USDA: )",
+      "Vaccine_Name": null,
+      "Vaccine_Ontology_ID": "VO_0004205",
+      "Virulence": null,
+      "id": 301,
+      "pathogen_id": [
+        48,
+        76,
+        202
+      ],
+      "vaccine_id": 301,
+      "vaccine_pathogen_id": [
+        789,
+        790,
+        791
+      ]
+    },
+    "subject": "Avian Encephalomyelitis-Fowl Pox-Mycoplasma Gallisepticum  Live Fowl Pox Vector, Live Virus Vaccine (USDA: )"
   }
 ]

@@ -20,9 +20,12 @@ class ViolinVaccineFields(BaseModel):
 
     id: Annotated[int, Field(description="VIOLIN row id (unique per record)")]
     vaccine_id: int
-    Vaccine: str
-    Vaccine_Name: str
-    Type: str
+    # Name/type fields are nullable in the full corpus (verified by full-scale
+    # harmonize: 47/3507 docs have null Vaccine_Name/Type). Only the int id is
+    # guaranteed; the parser falls back for the DataCite title.
+    Vaccine: Optional[str] = None
+    Vaccine_Name: Optional[str] = None
+    Type: Optional[str] = None
     Vaccine_Ontology_ID: Optional[str] = None
     Status: Optional[str] = None
     Description: Optional[str] = None

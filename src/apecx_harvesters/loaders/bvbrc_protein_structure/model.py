@@ -31,7 +31,10 @@ class StructureEntry(BaseModel):
     BRC_ID: Optional[str] = None
     Institution: Optional[str] = None
     UniProtKB_Accession: Optional[str] = None
-    Alignments: list[str] = Field(default_factory=list)
+    # Alignments is null in ~38% of the full corpus (verified by full-scale
+    # harmonize: 1740/4566 docs) -- Optional, not a defaulted empty list, because
+    # the source sends an explicit null that strict list[str] would reject.
+    Alignments: Optional[list[str]] = None
 
 
 class PublicationStructureGroup(BaseModel):

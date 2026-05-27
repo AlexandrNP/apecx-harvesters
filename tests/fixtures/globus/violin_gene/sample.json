@@ -2758,5 +2758,28 @@
       "vaccine_pathogen_id": 210
     },
     "subject": "VjbR [Brucella melitensis 16M] [ID: 120]"
+  },
+  {
+    "content": {
+      "Genbank_Accession": null,
+      "Gene_Name": null,
+      "Locus_Tag": null,
+      "Molecule_Role": "Protective antigen",
+      "NCBI_Gene_ID": null,
+      "NCBI_Nucleotide_GI": null,
+      "NCBI_Protein_GI": "291359313",
+      "Organism": "Influenza A virus (A/Viet Nam/1203/2004(H5N1))",
+      "Other_Database_IDs": "CDD:271235",
+      "PDB_ID": null,
+      "Protein_Accession": null,
+      "Protein_Name": "neuraminidase",
+      "VIOLIN_c_gene_id": 1722,
+      "VIOLIN_c_vaccine_id": 3840,
+      "Vaccine_Ontology_ID": null,
+      "gene_id": 1401,
+      "id": 1401,
+      "vaccine_pathogen_id": 3136
+    },
+    "subject": "[ID: 1401]"
   }
 ]

@@ -316,3 +316,16 @@ Goal: full corpus ingested into a production (non-trial) index.
   - `design/GLOBUS_SOURCE_PATTERN.md`: concise add-a-source recipe (LLM-guiding).
   - REMAINING: only **Phase 5** (full multi-source ingest) -- hard-blocked on the
     `support@globus.org` allocation (1 MB cap) + BVBRC:Genome volatility. All code paths built + tested.
+- 2026-05-27 — **Full-scale harmonize validation (read-only, all 8 stable sources) caught + fixed
+  a real reliability defect the samples hid.** Running `harmonize_index` over EVERY doc (not the
+  30-120-doc test samples) surfaced fields typed as required that are nullable in the full corpus:
+  - **BVBRC:Protein_Structure**: `Alignments` null in **1740/4566 (38%)** docs -> Optional.
+  - **VIOLIN:Vaccine**: `Vaccine_Name`/`Type`/`Vaccine` null in 47/3507 -> Optional + parser title fallback.
+  - **VIOLIN:Gene**: `Gene_Name` null in 4/4063 -> Optional + title fallback.
+  After the fix, all 8 stable sources harmonize at full scale with **0 parse errors** (AntiviralDB 35,
+  VIOLIN:Pathogen 217, VIOLIN:Vaccine 3507, VIOLIN:Gene 4063, ProtaBank 1643, BVBRC:Epitope 442,
+  BVBRC:Protein_Structure 4566, BVBRC:Protein 24902); the collision guard held on every source.
+  Real null-bearing docs were captured into the 3 fixtures for permanent pytest regression
+  (1271 green). Lesson (now in GLOBUS_SOURCE_PATTERN.md): **sample-tested != corpus-validated** --
+  full-scale harmonize-only is a required step before declaring a source done.
+  (BVBRC:Genome full validation still pending -- volatile + 746k; needs a stable window.)

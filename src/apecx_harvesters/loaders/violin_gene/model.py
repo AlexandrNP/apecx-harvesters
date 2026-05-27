@@ -21,7 +21,8 @@ class ViolinGeneFields(BaseModel):
 
     id: Annotated[int, Field(description="VIOLIN row id (unique per record)")]
     VIOLIN_c_gene_id: int
-    Gene_Name: str
+    # Gene_Name is nullable in the full corpus (4/4063 docs); parser falls back.
+    Gene_Name: Optional[str] = None
     Organism: Optional[str] = None
     Protein_Name: Optional[str] = None
     Molecule_Role: Optional[str] = None
