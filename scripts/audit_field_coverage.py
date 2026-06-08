@@ -36,8 +36,28 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
+import os
+
+import globus_sdk
+
 from apecx_harvesters.pipeline.globus_source import build_search_client, scroll_index_records
 from apecx_harvesters.pipeline.harmonize import DEST_REGISTRY, SOURCE_REGISTRY
+
+
+def _build_client() -> globus_sdk.SearchClient:
+    """Build a SearchClient.
+
+    Two auth modes, in priority order:
+    1. ``GLOBUS_SEARCH_ACCESS_TOKEN`` — raw access token (e.g. extracted from the
+       ``globus`` CLI's storage). Useful for one-off operator-driven runs where
+       the confidential client isn't available.
+    2. ``GLOBUS_CLIENT_ID`` / ``GLOBUS_CLIENT_SECRET`` (the publish path's default).
+    """
+    token = os.environ.get("GLOBUS_SEARCH_ACCESS_TOKEN")
+    if token:
+        authorizer = globus_sdk.AccessTokenAuthorizer(token)
+        return globus_sdk.SearchClient(authorizer=authorizer)
+    return build_search_client()
 
 logger = logging.getLogger("audit_field_coverage")
 
@@ -180,7 +200,7 @@ async def audit_index(
 
 async def main_async(args: argparse.Namespace) -> int:
     only = {s.strip() for s in args.only.split(",")} if args.only else None
-    client = build_search_client()
+    client = _build_client()
 
     # Pick the registry to walk.
     if args.side == "source":
