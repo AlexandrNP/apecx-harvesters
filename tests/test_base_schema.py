@@ -26,6 +26,7 @@ from apecx_harvesters.loaders.base import (
     RelatedIdentifier,
     RelatedIdentifierType,
     RelationType,
+    Subject,
     Title,
     TitleType,
 )
@@ -443,4 +444,67 @@ class TestNameIdentifier:
             description="d",
             publisher=Publisher(name="pub"),
         )
+        jsonschema.validate(instance=record.to_dict(), schema=DataCite.json_schema())
+
+
+# ---------------------------------------------------------------------------
+# Subject ontology fields (subjectScheme / schemeUri / valueUri)
+# ---------------------------------------------------------------------------
+
+class TestSubjectOntologyFields:
+    """Subject extends DataCite-4.x's full subject property: a keyword-only
+    Subject continues to round-trip byte-for-byte (the 785k already-published
+    records), and a resolved ontology entry carries IRI + scheme + scheme URI."""
+
+    def test_legacy_keyword_only_round_trip(self):
+        s = Subject(subject="Hepacivirus C")
+        assert s.model_dump(exclude_none=True, mode="json") == {"subject": "Hepacivirus C"}
+
+    def test_full_ontology_round_trip(self):
+        s = Subject(
+            subject="Hepacivirus C",
+            subjectScheme="NCBI Taxonomy",
+            schemeUri="https://www.ncbi.nlm.nih.gov/taxonomy",
+            valueUri="https://www.ncbi.nlm.nih.gov/taxonomy/?term=11103",
+        )
+        dumped = s.model_dump(exclude_none=True, mode="json")
+        assert dumped == {
+            "subject": "Hepacivirus C",
+            "subjectScheme": "NCBI Taxonomy",
+            "schemeUri": "https://www.ncbi.nlm.nih.gov/taxonomy",
+            "valueUri": "https://www.ncbi.nlm.nih.gov/taxonomy/?term=11103",
+        }
+        assert Subject.model_validate(dumped) == s
+
+    def test_extra_forbid_still_rejects_unknown(self):
+        with pytest.raises(ValidationError):
+            Subject(subject="X", canonicalIri="bad")  # type: ignore[call-arg]
+
+    def test_partial_resolution_round_trip(self):
+        s = Subject(subject="Hepacivirus C", subjectScheme="NCBI Taxonomy")
+        assert s.model_dump(exclude_none=True, mode="json") == {
+            "subject": "Hepacivirus C",
+            "subjectScheme": "NCBI Taxonomy",
+        }
+
+    def test_record_with_mixed_subjects_serialises_per_entry(self):
+        record = DataCite.new(
+            creators=[Creator(name="x")],
+            title="t",
+            description="d",
+            publisher=Publisher(name="pub"),
+        )
+        record.subjects = [
+            Subject(subject="virology"),
+            Subject(
+                subject="Hepacivirus C",
+                subjectScheme="NCBI Taxonomy",
+                schemeUri="https://www.ncbi.nlm.nih.gov/taxonomy",
+                valueUri="https://www.ncbi.nlm.nih.gov/taxonomy/?term=11103",
+            ),
+        ]
+        dumped = record.to_dict()["subjects"]
+        assert dumped[0] == {"subject": "virology"}
+        assert dumped[1]["valueUri"].endswith("term=11103")
+        assert "subjectScheme" not in dumped[0]
         jsonschema.validate(instance=record.to_dict(), schema=DataCite.json_schema())

@@ -7,7 +7,7 @@ import json
 from collections.abc import AsyncIterator
 
 from apecx_harvesters.loaders.base import DataCite, RetrievalResult
-from apecx_harvesters.loaders.base.model import Identifier, Publisher
+from apecx_harvesters.loaders.base.model import Identifier, Publisher, Subject
 from apecx_harvesters.pipeline import (
     PipelineSpec,
     ReportResult,
@@ -337,3 +337,80 @@ class TestCsvIds:
             return [x async for x in csv_ids(csv_file, col="pmid")]
 
         assert _run(_collect()) == ["12345", "67890"]
+
+
+# ---------------------------------------------------------------------------
+# End-to-end shape: ontology-resolved Subject reaches Globus Search payload.
+#
+# Exercises the integration seam pipeline.run.run(transforms=[adapter])
+# -> to_gmetalist that the canonical-IRI republish work will use. A real
+# resolver isn't wired (Phase F), so the transform here is a deterministic
+# stand-in that does what the real apecx-mcp-integration adapter would do:
+# attach a structured ontology Subject to the harmonized record.
+# ---------------------------------------------------------------------------
+
+class TestSubjectOntologyPublishShape:
+
+    def test_resolution_transform_then_to_gmetalist_carries_ontology_fields(self):
+        async def resolve_pathogen(record: DataCite) -> DataCite:
+            record.subjects = [
+                Subject(
+                    subject="Hepacivirus C",
+                    subjectScheme="NCBI Taxonomy",
+                    schemeUri="https://www.ncbi.nlm.nih.gov/taxonomy",
+                    valueUri="https://www.ncbi.nlm.nih.gov/taxonomy/?term=11103",
+                ),
+            ]
+            return record
+
+        async def _drive() -> list[dict]:
+            captured: list[dict] = []
+
+            async def _sink(stream: AsyncIterator[RetrievalResult]) -> None:
+                async for doc in to_gmetalist(stream):
+                    captured.append(doc)
+
+            await run(_stream(_ok(title="Hepacivirus C genome", id_="bvbrc:genome:11103", identifier="bvbrc:genome:11103")),
+                     _sink, transforms=[resolve_pathogen])
+            return captured
+
+        docs = _run(_drive())
+        assert len(docs) == 1, "expected one GMetaList batch"
+        gmeta = docs[0]["ingest_data"]["gmeta"]
+        assert len(gmeta) == 1
+        subjects = gmeta[0]["content"]["subjects"]
+        assert subjects == [{
+            "subject": "Hepacivirus C",
+            "subjectScheme": "NCBI Taxonomy",
+            "schemeUri": "https://www.ncbi.nlm.nih.gov/taxonomy",
+            "valueUri": "https://www.ncbi.nlm.nih.gov/taxonomy/?term=11103",
+        }]
+        # The fields survive the json round-trip that the Globus SDK performs
+        # before POSTing the ingest body.
+        roundtripped = json.loads(json.dumps(docs[0]))
+        assert roundtripped["ingest_data"]["gmeta"][0]["content"]["subjects"][0]["valueUri"].endswith("term=11103")
+
+    def test_legacy_keyword_subject_unchanged_in_gmetalist(self):
+        """Records published without a resolver continue to ship the
+        keyword-only Subject shape — no schema-level regression for the
+        785k records currently in the indices."""
+        async def attach_keyword(record: DataCite) -> DataCite:
+            record.subjects = [Subject(subject="virology")]
+            return record
+
+        async def _drive() -> list[dict]:
+            captured: list[dict] = []
+
+            async def _sink(stream: AsyncIterator[RetrievalResult]) -> None:
+                async for doc in to_gmetalist(stream):
+                    captured.append(doc)
+
+            await run(_stream(_ok(id_="x", identifier="x")), _sink, transforms=[attach_keyword])
+            return captured
+
+        docs = _run(_drive())
+        subjects = docs[0]["ingest_data"]["gmeta"][0]["content"]["subjects"]
+        assert subjects == [{"subject": "virology"}]
+        # exclude_none means no surprise null keys appear in published JSON
+        for key in ("subjectScheme", "schemeUri", "valueUri"):
+            assert key not in subjects[0]

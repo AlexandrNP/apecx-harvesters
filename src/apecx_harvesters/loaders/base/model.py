@@ -307,16 +307,31 @@ class Subject(BaseModel):
     """
     A subject, keyword, or classification code describing the dataset.
 
-    This is a simplified subset of the DataCite subject property — only the
-    free-text `subject` value is captured.  The full spec also supports
-    `subjectScheme`, `schemeUri`, and `valueUri` for structured ontology terms,
-    but most sources provide plain keywords rather than formal ontology entries.
-    Harvesters should map keyword lists (e.g. PDB `struct_keywords`) to this field,
-        or harmonize records using unspecified custom logic.
+    Mirrors the DataCite 4.x ``subject`` property. ``subject`` carries the
+    human-readable label (free-text keyword OR ontology preferred term);
+    the three optional URI/scheme fields carry structured ontology linkage
+    when a canonical resolver has run. ``valueUri`` is the canonical IRI for
+    the term; ``schemeUri`` is the ontology's namespace URI; ``subjectScheme``
+    is the ontology's short name (e.g. ``"NCBI Taxonomy"``, ``"Vaccine Ontology"``).
+    Records without resolution leave the URI/scheme fields ``None`` and
+    serialize identically to legacy keyword-only entries (``to_dict`` excludes
+    None).
     """
     model_config = ConfigDict(strict=True, extra="forbid")
 
-    subject: Annotated[str, Field(title="Subject", description="Keywords")]
+    subject: Annotated[str, Field(title="Subject", description="Keywords or ontology preferred term")]
+    subjectScheme: Annotated[Optional[str], Field(
+        title="Subject Scheme",
+        description="Short name of the ontology / classification scheme (e.g. 'NCBI Taxonomy')",
+    )] = None
+    schemeUri: Annotated[Optional[str], Field(
+        title="Scheme URI",
+        description="URI of the scheme's namespace",
+    )] = None
+    valueUri: Annotated[Optional[str], Field(
+        title="Value URI",
+        description="Canonical IRI of this subject within its scheme",
+    )] = None
 
 
 class RelatedIdentifier(BaseModel):
