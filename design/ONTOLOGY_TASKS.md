@@ -84,20 +84,16 @@ section noting the unknown.**
 
 ## Phase B — Resolution-surface definition
 
-### OE-B1 — Decide `CanonicalExtension` shape
+### OE-B1 — Decide canonical surface shape — RESOLVED 2026-06-08
 
-**Output:** decision recorded in `ONTOLOGY_ENRICHMENT_PLAN.md` "Open
-decisions" table; rationale in 3-5 sentences in the same file.
-
-**Acceptance:**
-- Option chosen (flat vs. role-keyed).
-- Rationale references which sources need multi-role support
-  (AntiviralDB, VIOLIN:Vaccine, VIOLIN:Gene per `RESOLUTION_SURFACE.md`).
-
-**Depends on:** nothing (decision-only, blocks OE-E1).
-
-**Caveat:** **this is a user/architect decision, not a coding task.**
-Until OE-B1 lands, OE-E1 and OE-F1 are blocked.
+**Outcome:** the resolver writes to DataCite's existing `subjects[]` slot.
+The local `Subject` class was extended with the DataCite-4.x spec fields
+`subjectScheme`, `schemeUri`, `valueUri` (commit `f722389`). Multi-entity
+records become multiple Subject entries differentiated by `subjectScheme`.
+Confidence and dictionary_version are sidecar (`provenance.json`), not
+on the record. **No new container; no `canonical:` extension.** See
+`ONTOLOGY_ENRICHMENT_PLAN.md` integration architecture #5 and the
+Open Decisions table for the production-Globus verification record.
 
 ### OE-B2 … OE-B10 — Per-source resolution-surface ratification
 
@@ -283,74 +279,43 @@ source flagged in OE-A11 as needing a parser amendment.
 
 ---
 
-## Phase E — Schema change
+## Phase E — Schema change — SHIPPED 2026-06-08 (commit `f722389`)
 
-### OE-E1 — Add `CanonicalExtension` model
+The original 5 subtasks (OE-E1 .. OE-E5) collapsed when the surface
+flipped to "complete `Subject`" instead of "add `CanonicalExtension`."
+What landed:
 
-**Output:** new model under `apecx_harvesters/loaders/base/canonical.py`
-(name confirmed in OE-B1).
+**OE-E1 (Subject extension).** `loaders/base/model.py::Subject`
+gains three `Optional[str] = None` fields (`subjectScheme`, `schemeUri`,
+`valueUri`). `extra='forbid'` preserved. All 5 existing
+`Subject(subject=...)` construction sites unchanged.
 
-**Acceptance:**
-- `extra='forbid'` per workspace rule (CLAUDE.md Pydantic
-  `extra='forbid'` rule, ratified in workspace memory).
-- Shape matches OE-B1 decision (flat or role-keyed).
-- All sub-models are Optional with sensible defaults; `dictionary_version`
-  always populated when ANY resolution result is set.
-- Unit test fixture round-trips: `CanonicalExtension(**{}).model_dump()`
-  produces the documented "empty" shape.
+**OE-E2 (per-container additions).** **OBVIATED.** Every
+`*Container(DataCite)` already has `subjects: list[Subject]` via
+inheritance. Zero per-container edits.
 
-**Depends on:** OE-B1.
+**OE-E3 (fixtures).** **OBVIATED.** Existing fixtures use
+`Subject(subject=...)` which serialize byte-for-byte identically under
+`to_dict(exclude_none=True)`.
 
-### OE-E2 — Add `canonical: CanonicalExtension | None = None` to all 9 containers
+**OE-E4 (round-trip tests).** Replaced by 5 unit tests in
+`tests/test_base_schema.py::TestSubjectOntologyFields` and 2 end-to-end
+shape tests in `tests/test_pipeline.py::TestSubjectOntologyPublishShape`.
 
-**Output:** edits to 9 container classes (AntiviralDBContainer through
-BVBRCGenomeContainer).
+**OE-E5 (full suite + headroom).** Suite: 1,280 passed, 1 pre-existing
+skip. Headroom: ~80–150 bytes per record per resolved Subject; full
+9-source republish stays well within dest allocations.
 
-**Acceptance:**
-- All 9 containers declare the field with the same name and default.
-- `Container.model_validate({...without canonical...})` succeeds and
-  produces `canonical=None`.
-- Existing per-container tests still green (the field is Optional).
+**Production smoke verification (2026-06-08).** One synthetic record
+ingested into the AntiviralDB dest (`23a7bffd-...`) with all four
+Subject fields populated. Three retrievals succeeded:
+1. `globus search subject show` returned all 4 fields verbatim.
+2. `globus search query -q 'subjects.subjectScheme:"NCBI Taxonomy"' --advanced` returned 1 hit.
+3. `globus search query -q 'subjects.valueUri:"https*"' --advanced` returned 1 hit.
 
-**Depends on:** OE-E1.
-
-### OE-E3 — Update fixtures + tests for `canonical=None` round-trip
-
-**Output:** changes to per-source test fixtures or test assertions where
-the fixture would otherwise enforce `canonical:` absence.
-
-**Acceptance:**
-- 1273-test suite (or current count) stays green.
-- No new test added EXCEPT the round-trip assertions in OE-E4.
-
-**Depends on:** OE-E2.
-
-### OE-E4 — Round-trip test per source
-
-**Output:** new tests
-`tests/test_canonical_roundtrip_<source>.py` (or one consolidated
-parametrized file).
-
-**Acceptance:**
-- For each of 9 containers: build a sample record WITH a populated
-  `canonical` field; `model_dump_json()` → `model_validate_json()`
-  round-trips losslessly.
-- Read-from-published simulation: a JSON dict WITHOUT a `canonical` key
-  validates as a container with `canonical=None`.
-
-**Depends on:** OE-E2.
-
-### OE-E5 — Full test suite + per-source-allocation headroom check
-
-**Output:** test-run log captured to `design/oe_e5_test_run.txt`; size
-estimate per-source dest index in `design/canonical_size_estimate.md`.
-
-**Acceptance:**
-- `scripts/run_tests.sh` (or canonical-runner equivalent) green.
-- Per-source estimated growth (bytes per record × source record count)
-  is < dest allocation - current_size. Genome especially.
-
-**Depends on:** OE-E4.
+Record then deleted; index restored to baseline 35 entries.
+**Globus Search auto-indexes the new fields as facets — no separate
+mapping/schema step needed at the Search-service layer.**
 
 ---
 
@@ -364,11 +329,13 @@ when invoked with a built dictionary from OE-C0.
 
 **Acceptance:**
 - Adapter constructed against AntiviralDBContainer; round-trips a
-  single sample record with a non-None `canonical.pathogen.iri`.
+  single sample record whose `record.subjects` now contains at least
+  one Subject with `subjectScheme="NCBI Taxonomy"` and a non-None
+  `valueUri`.
 - The session log records `dictionary_version` and confirms it matches
   OE-C0's pin.
 
-**Depends on:** OE-C0, OE-E2.
+**Depends on:** OE-C0. (Was OE-E2; obviated — see Phase E header.)
 
 ### OE-F1 — Author `pipeline/republish_with_canonical.py`
 
@@ -426,8 +393,10 @@ docstring; format spec in `design/oe_f3_skipped_record_log.md`.
 
 **Acceptance (real data, AntiviralDB dest `23a7bffd-…`, 35 records):**
 - Republish completes with 0 abort + 0 ingest task FAILED states.
-- Anonymous query for `canonical.pathogen.iri` exists on ≥ 1 record:
-  returns ≥ 1 hit.
+- Anonymous query for `subjects.subjectScheme:"NCBI Taxonomy"` exists on
+  ≥ 1 record: returns ≥ 1 hit. **(Already proven shape-wise by the
+  2026-06-08 smoke probe on this same dest index; OE-F4 must prove it
+  end-to-end with the real resolver, not a stand-in.)**
 - Anonymous total = 35 (no record loss).
 - Record subjects + canonical_uris are bit-identical to pre-republish
   state (idempotency proof).
@@ -461,8 +430,8 @@ docstring; format spec in `design/oe_f3_skipped_record_log.md`.
   spot-checked).
 - `coverage_pct_by_record` on the primary slot ≥ OE-C projection minus 2pp.
 - Skipped-record log < 1% of corpus.
-- Spot-check 5 records: every `canonical.<slot>.iri` resolves to a live
-  OLS term.
+- Spot-check 5 records: every `subjects[].valueUri` on the resolved
+  Subjects resolves to a live OLS term.
 
 **Stop conditions (any source):**
 - Actual coverage < OE-C projection minus 5pp → STOP, audit dictionary
@@ -485,8 +454,8 @@ docstring; format spec in `design/oe_f3_skipped_record_log.md`.
 - Pick 3 well-known canonical IRIs (recommendation: `NCBITaxon:11320`
   Influenza A virus, `NCBITaxon:11103` Hepacivirus C, `NCBITaxon:2697049`
   SARS-CoV-2).
-- For each, query each of 9 dest indices anonymously for
-  `canonical.pathogen.iri == <IRI>`.
+- For each, query each of 9 dest indices anonymously with
+  `--advanced 'subjects.valueUri:"<IRI-URL>" AND subjects.subjectScheme:"NCBI Taxonomy"'`.
 - Report per-source hit counts. **Expectation:** non-zero in sources
   with this organism present per the OE-C projection.
 - The cross-source value-delivery claim is "for each IRI, ≥ 2 sources

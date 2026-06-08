@@ -45,23 +45,32 @@ the "Lessons" section at the end of this file).
 4. **Read-from-published, not re-scrape-from-source.** Per directive #2
    from the 2026-05-28 thread. Cheaper, freezes Phase-2 parser variance
    at its tested state, idempotent on `canonical_uri`.
-5. **`canonical: CanonicalExtension` field on every DataCite container.**
-   Per directive #1. Shape (single-slot vs. role-keyed nested) is a
-   deferred decision — see "Open decisions" below.
+5. **Canonical resolution lands in DataCite's existing `subjects[]` slot.**
+   Originally directive #1 said "new `canonical:` field"; on 2026-06-08
+   re-examination the project decided to use the DataCite-4.x-spec
+   `Subject` instead. The local `Subject` was a documented sub-spec
+   (free-text label only); the DataCite spec also defines
+   `subjectScheme`, `schemeUri`, `valueUri`. Completing the local `Subject`
+   to the full spec ships the canonical IRI without inventing a new
+   container. **Shipped 2026-06-08, commit `f722389`** —
+   see `src/apecx_harvesters/loaders/base/model.py` (Subject class) +
+   `tests/test_base_schema.py::TestSubjectOntologyFields`. No per-container
+   change needed: every `*Container(DataCite)` inherits `subjects`.
 
 ## Open decisions (block downstream work)
 
 Track each decision's resolution in this section as it happens.
 
-| Decision | Blocks | Status | Recommendation |
+| Decision | Blocks | Status | Notes |
 |---|---|---|---|
-| **CanonicalExtension shape** — flat single-slot vs. role-keyed nested (per-record may have pathogen + vaccine + drug roles) | OE-E1 schema add | OPEN | role-keyed nested; AntiviralDB carries virus + drug, VIOLIN:Vaccine carries pathogen + vaccine, others may need it |
+| **Canonical surface shape** (originally CanonicalExtension flat-vs-nested) | OE-E1 schema add | **RESOLVED 2026-06-08** (commit `f722389`) | DataCite Subject.subjectScheme/schemeUri/valueUri populated per role. Multi-entity records (AntiviralDB virus+drug, VIOLIN:Vaccine pathogen+vaccine) become multiple Subject entries distinguished by subjectScheme. No new container. |
+| **Subject extension required vs. optional** | OE-E1 | **RESOLVED 2026-06-08** | Optional. Three new fields default `None`, excluded by `to_dict(exclude_none=True)`. Existing 785k records serialize byte-for-byte identically. |
+| **Globus Search auto-indexes the new fields as facets** | OE-F1, OE-G1..G9 | **VERIFIED 2026-06-08** in production AntiviralDB dest | Smoke ingest + advanced filter `subjects.subjectScheme:"NCBI Taxonomy"` and `subjects.valueUri:"https*"` both returned the test record. No index-side schema work needed. Record was deleted after the probe; index restored to 35 entries. |
 | **Ontology scope for Phase 0 republish** — NCBI Taxonomy only vs. wider (VO, ChEBI, PRO) | OE-B11, OE-G1 | OPEN | NCBI Taxonomy only for Phase 0; covers primary slot on 8 of 9 sources; defer wider to a Phase G2 after measured experience |
 | **Per-source republish go/no-go** — based on Phase C coverage projection | OE-G1..G9 | OPEN — pending Phase C | decide per source at the OE-D1 gate |
 | **Parser fixes before republish** — based on Phase A information-drop audit | OE-G1..G9 | OPEN — pending Phase A | decide at OE-D2 gate |
 | **Phase A scope** — committed fixtures only vs. wider sample (re-pull from source) | OE-A2..A10 | OPEN | committed fixtures first; widen only if Phase A surfaces specific suspicion |
 | **Resolver dictionary version pinning** — single version across Phase C + F + G, or evolve | OE-C0, OE-F1 | OPEN | single version pinned across all three phases; bump is a separate planned activity |
-| **CanonicalExtension required vs. optional** — required = resolver is hard dependency; optional = fail-soft | OE-E1 | OPEN | optional with default `None`; publish-side coverage threshold check is the fail-loud equivalent |
 
 ## Phases (compact reference; OE-* task IDs in `ONTOLOGY_TASKS.md`)
 
@@ -86,8 +95,9 @@ This artifact does not currently exist. Output: `RESOLUTION_SURFACE.md`,
 ratified. Includes per-source normalization rules (e.g., strip BV-BRC
 Genome shard suffixes like " (7)" from organism names before resolution).
 
-**Decision driven by output:** `CanonicalExtension` shape (single vs.
-role-keyed), ontology scope freeze (NCBI Taxonomy only or wider).
+**Decision driven by output:** ontology scope freeze (NCBI Taxonomy only
+or wider). The shape decision was settled 2026-06-08 (DataCite Subject;
+see Open Decisions table) and no longer blocks Phase B.
 
 ### Phase C — Coverage projection (dry-run, per source × 9)
 
@@ -108,19 +118,35 @@ failed at 746k).
 Three decisions: per-source republish, parser-fix tickets,
 ontology-scope freeze.
 
-### Phase E — Schema change (all 9 containers)
+### Phase E — Schema change
 
-Add `canonical: CanonicalExtension | None = None` to every DataCite
-subclass under `loaders/<source>/`. Update fixtures + tests for the
-None default round-trip. Run the existing 1273-test suite.
+**Shipped 2026-06-08 (commit `f722389`).** Three Optional fields
+(`subjectScheme`, `schemeUri`, `valueUri`) added to
+`loaders/base/model.py::Subject`. Backwards compatible: existing
+parsers (`biorxiv`, `datacite`, `pdb`, `emdb`, `base/parser.deduplicate_subjects`)
+construct `Subject(subject=...)` and serialize identically.
+No per-container change: all 9 `*Container(DataCite)` inherit `subjects`.
+5 unit tests in `tests/test_base_schema.py::TestSubjectOntologyFields`;
+2 end-to-end shape tests in
+`tests/test_pipeline.py::TestSubjectOntologyPublishShape`. Full suite
+1,280 passed, 1 pre-existing skip. Production Globus Search ingest
+verified on AntiviralDB (see "Open decisions" table row).
 
 ### Phase F — Republish pipeline
 
 New file `pipeline/republish_with_canonical.py`. Reads from a dest index
 via `globus_index_records`, deserializes to the registered DataCite
 subclass, applies the adapter as a `pipeline.run.run` transform,
-re-ingests with `to_gmetalist`. Integration-spike validated on
-AntiviralDB (35 records).
+re-ingests with `to_gmetalist`. The adapter writes one `Subject` per
+resolved entity into `record.subjects` (multi-entity records get
+multiple Subject entries differentiated by `subjectScheme`).
+Integration-spike validated on AntiviralDB (35 records).
+
+**End-to-end shape contract already proven** by
+`tests/test_pipeline.py::TestSubjectOntologyPublishShape` (the test
+runs the real `pipeline.run.run(transforms=[stand-in-resolver]) -> to_gmetalist`
+chain) and by the 2026-06-08 production smoke probe (real ingest +
+advanced-filter query + delete; see "Open decisions" table).
 
 ### Phase G — Per-source republish + verification
 
@@ -153,10 +179,13 @@ across the eligible sources.
 **No, not on first run. Schema change is low risk; republish pipeline
 has 6 known risk areas plus unknowns.**
 
-### Low risk (Phase E — schema change)
+### Eliminated (was Low risk, Phase E)
 
-- Optional field with `None` default. Existing records validate
-  unchanged. Existing 1273 tests should stay green. Likely smooth.
+- ~~Optional field with `None` default. Existing records validate
+  unchanged.~~ **Shipped 2026-06-08, commit `f722389`.** 1280/1280
+  tests green (was 1273; +5 unit + 2 end-to-end). Production AntiviralDB
+  smoke probe confirmed Globus Search auto-indexes the new fields as
+  query facets. No risk remaining on Phase E.
 
 ### Medium risk (Phase F — republish pipeline)
 
@@ -246,3 +275,13 @@ not silently added by this plan file.**
   alongside. **Phase 6 of the original
   `GLOBUS_INDEX_HARMONIZATION_TASKS.md` is the umbrella; this plan
   decomposes it.**
+- 2026-06-08 — Surface decision flipped from `canonical: CanonicalExtension`
+  to "complete `Subject` with the DataCite-4.x-spec
+  `subjectScheme`/`schemeUri`/`valueUri` fields." Phase E shipped
+  (commit `f722389`). Production smoke ingest on AntiviralDB confirmed
+  Globus Search auto-indexes the new fields as facets and that
+  `--advanced 'subjects.subjectScheme:"NCBI Taxonomy"'`/
+  `'subjects.valueUri:"https*"'` filters work. Test record cleanly
+  removed (index restored to 35 records). Companion docs
+  `RESOLUTION_SURFACE.md` and `ONTOLOGY_TASKS.md` re-edited to drop
+  the canonical-extension framing in the same session.

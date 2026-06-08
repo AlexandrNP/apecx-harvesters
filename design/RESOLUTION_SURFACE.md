@@ -1,72 +1,72 @@
 # Resolution Surface — per-source entity → ontology mapping
 
-Status: **DRAFT — NEEDS RATIFICATION (OE-B11).** This is my initial read
-from the parsers and source schemas; it has NOT been reviewed against
-domain expectations. Do not ship Phase E or Phase F against this file
-until OE-B11 lands.
+Status: **DRAFT — NEEDS RATIFICATION (OE-B11).** Domain review of the
+per-source rows below is still required. The surface SHAPE was settled
+2026-06-08 (see below); only the per-source ROW CONTENT is still open.
 
 ## What this file is
 
 The decision artifact for **which fields on each harmonized DataCite
 record feed which ontology resolver**, per source. Without this, Phase C
 coverage measurement is undefined and Phase F adapter wiring is
-under-specified. The `harvester_adapter.adapt_to_harvester_transform`
-expects exactly this kind of mapping at its `extension_field` arg.
+under-specified.
 
-## Shape decision (OPEN — see ONTOLOGY_ENRICHMENT_PLAN.md "Open decisions")
+## Surface — DataCite Subject (RESOLVED 2026-06-08, commit `f722389`)
 
-Per-record `canonical:` field is either:
+Each resolved entity becomes one `Subject` entry on the harmonized
+record. The local `Subject` was extended to the DataCite-4.x spec:
 
-### Option A — flat single-slot (simpler)
-
-```
-canonical: {
-  iri: str | None,
-  label: str | None,
-  ontology: str | None,
-  status: ResolutionStatus | None,
-  confidence: float,
-  dictionary_version: str | None,
-}
+```python
+class Subject(BaseModel):
+    subject: str                       # human-readable label
+    subjectScheme: Optional[str] = None  # e.g. "NCBI Taxonomy"
+    schemeUri: Optional[str] = None      # e.g. "https://www.ncbi.nlm.nih.gov/taxonomy"
+    valueUri: Optional[str] = None       # canonical IRI for the term
 ```
 
-Works for single-entity records (BVBRC:Genome → one organism).
-**Breaks for multi-entity records**: AntiviralDB (Virus + Drug),
-VIOLIN:Vaccine (Pathogen + Vaccine), VIOLIN:Gene (Pathogen + Gene).
+Multi-entity records (AntiviralDB virus + drug, VIOLIN:Vaccine pathogen
++ vaccine, VIOLIN:Gene pathogen + gene) become multiple Subject entries
+on the same record, distinguished at query time by `subjectScheme`.
 
-### Option B — role-keyed nested (more honest)
+**No new container.** No `canonical:` extension on any `*Container(DataCite)`
+subclass. The resolver writes directly to `record.subjects`. Confidence
++ dictionary_version are NOT in DataCite's Subject spec and live in a
+sibling `provenance.json` per-run, keyed by canonical_uri + scheme.
 
-```
-canonical: {
-  pathogen: { iri, label, ontology, status, confidence } | None,
-  vaccine:  { iri, label, ontology, status, confidence } | None,
-  gene:     { iri, label, ontology, status, confidence } | None,
-  drugs:    [ { iri, label, ontology, status, confidence } ],
-  proteins: [ { iri, label, ontology, status, confidence } ],
-  dictionary_version: str | None,
-}
-```
-
-Role keys are the slot names in the tables below. List for slots that
-are 1:N per record (e.g., drugs in AntiviralDB).
-
-**Recommendation: Option B.** Three sources (AntiviralDB, VIOLIN:Vaccine,
-VIOLIN:Gene) need multiple roles; designing for the simpler case forces
-rework. The adapter contract (`RESOLUTION_OUTPUT_KEYS`) needs a thin
-wrapper to write into role-keyed slots — small, mechanical change.
+**Verified end-to-end** on production AntiviralDB dest (`23a7bffd-...`)
+on 2026-06-08: ingest → `--advanced 'subjects.subjectScheme:"NCBI Taxonomy"'`
+returns the record with all four fields → `subject delete` cleanly
+removes it. Globus Search auto-indexes the new fields as facets.
 
 ## Per-source mapping (DRAFT)
 
 Columns:
-- **Slot** — role name in `canonical:` extension.
+- **subjectScheme** — value to write into `Subject.subjectScheme`
+  (the role this Subject plays on the record; queries filter by it).
 - **Source field on harmonized record** — where the surface form lives.
   Paths use dot notation into the container's nested structure.
-- **Ontology** — target ontology / cross-ref source.
+- **schemeUri** — value to write into `Subject.schemeUri` (ontology namespace).
+- **valueUri ontology** — what populates `Subject.valueUri` (NCBI Taxonomy IRI,
+  VO term, ChEBI ID, etc.).
 - **Match mode** — expected dominant outcome.
 - **Normalization** — pre-resolution string transformation; "none" means
   trim + case-fold only.
 - **Already canonical?** — true if the source itself carries an ontology
   ID we can short-circuit to (e.g., VIOLIN's `NCBI_Taxonomy_ID`).
+
+**Column legacy note (2026-06-08):** the per-source rows below carry the
+pre-rename column names ("Slot" = role key, "Ontology" = subjectScheme).
+The OE-B11 ratification pass will rewrite each row with the explicit
+`subjectScheme` / `schemeUri` strings the resolver will write. The
+mapping is mechanical:
+
+| Old role-key (Slot) | New subjectScheme | New schemeUri |
+|---|---|---|
+| pathogen | "NCBI Taxonomy" | "https://www.ncbi.nlm.nih.gov/taxonomy" |
+| vaccine  | "Vaccine Ontology" | "http://purl.obolibrary.org/obo/vo.owl" |
+| gene     | "NCBI Gene" | "https://www.ncbi.nlm.nih.gov/gene" |
+| drugs[]  | "ChEBI" | "http://purl.obolibrary.org/obo/chebi.owl" |
+| proteins[] | "UniProt" | "https://www.uniprot.org" |
 
 ### AntiviralDB (35 records, dest `23a7bffd-…`)
 
@@ -210,9 +210,13 @@ here for the implementer:
 
 ## Ratification checklist (OE-B11 gate)
 
-- [ ] Shape decision: Option A (flat) or Option B (role-keyed).
+- [x] Shape decision — RESOLVED 2026-06-08: DataCite Subject + the three
+      extended fields. Per-role distinction via `subjectScheme`.
 - [ ] Ontology scope: NCBI-Taxonomy-only Phase 0, or wider.
 - [ ] Per-source normalization rules locked or punted to Phase C data.
 - [ ] VIOLIN:Gene slot deferred to Phase G2 (recommendation) or in scope.
 - [ ] ProtaBank slot in scope (cross-ref only) or skip-with-rationale.
-- [ ] All decisions recorded in `ONTOLOGY_ENRICHMENT_PLAN.md` "Open decisions" table.
+- [ ] Per-source rows below converted from legacy "Slot/Ontology"
+      column shape to explicit `subjectScheme`/`schemeUri` strings.
+- [ ] All open decisions recorded in `ONTOLOGY_ENRICHMENT_PLAN.md`
+      "Open decisions" table.
