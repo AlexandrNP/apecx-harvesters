@@ -272,6 +272,32 @@ def test_dual_stamp_no_duplicate_when_resolved_equals_stamped():
     assert iris == ["http://purl.obolibrary.org/obo/NCBITaxon_11320"]
 
 
+def test_dual_stamp_vo_alt_id_anchors_vaccine():
+    """A VIOLIN:Vaccine-style record whose Vaccine name doesn't resolve as an
+    NCBI pathogen still gets a Vaccine Ontology Subject from its VO alt-id."""
+    from apecx_harvesters.loaders.base import AlternateIdentifier
+
+    fields = ViolinPathogenFields(
+        id=1, VIOLIN_c_pathogen_id=1, Pathogen="RSV vaccine candidate", NCBI_Taxonomy_ID=1
+    )
+    record = VIOLINPathogenContainer.new(
+        title="RSV vaccine candidate",
+        description=None,
+        creators=[],
+        publisher=Publisher(name="VIOLIN"),
+        alternateIdentifiers=[
+            AlternateIdentifier(alternateIdentifier="VO_0005278", alternateIdentifierType="VO")
+        ],
+        violin_pathogen=fields,
+    )
+    from apecx_harvesters.pipeline.canonical_resolver_adapter import _dual_stamp_subjects
+
+    subs = _dual_stamp_subjects(record)
+    assert len(subs) == 1
+    assert subs[0].subjectScheme == "Vaccine Ontology"
+    assert subs[0].valueUri == "http://purl.obolibrary.org/obo/VO_0005278"
+
+
 def test_dual_stamp_only_when_resolver_misses():
     """Even if the Species doesn't resolve, the stamped alt-id is still carried."""
     record = _make_violin_record_with_altid(

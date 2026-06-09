@@ -71,22 +71,33 @@ def _scheme_for(ontology: str | None) -> tuple[str, str] | None:
 
 
 # DataCite alternateIdentifierType → ontology code for the dual-stamp pass.
-# A harmonized record carries the source-stamped taxon id here (e.g. BVBRC
-# stamps NCBITaxon 11320 on Influenza A genomes even though their Species
-# was renamed to "Alphainfluenzavirus influenzae", which the dict resolves
-# to 2955291). Stamping BOTH ids as subjects.valueUri keeps the eventual
-# single-clause subjects.valueUri filter as broad as the Pass 1 union.
+# A harmonized record carries source-stamped ids here that anchor it to an
+# ontology even when the dictionary lookup doesn't resolve the surface form:
+#   - NCBI-Taxonomy: BVBRC stamps 11320 on Influenza A genomes even though
+#     their renamed Species resolves to 2955291 — stamping both keeps the
+#     eventual subjects.valueUri filter as broad as the Pass 1 union.
+#   - VO (Vaccine Ontology): VIOLIN:Vaccine records carry a VO_xxxxxxx id but
+#     the vaccine NAME does not resolve as an NCBI pathogen, so the dict-side
+#     resolver returns nothing — the VO alt-id is the only clean anchor.
 _ALTID_TYPE_TO_ONTOLOGY: dict[str, str] = {
     "NCBI-Taxonomy": "ncbitaxon",
+    "VO": "vo",
 }
 
-_NCBITAXON_IRI_PREFIX = "http://purl.obolibrary.org/obo/NCBITaxon_"
+_OBO_BASE = "http://purl.obolibrary.org/obo/"
 
 
 def _altid_to_iri(ontology: str, value: str) -> str | None:
-    """Build the canonical IRI for a source-stamped alternate identifier."""
+    """Build the canonical IRI for a source-stamped alternate identifier.
+
+    NCBI-Taxonomy values are bare numbers ("11320"); VO values already carry
+    their prefix ("VO_0005278"). Returns None for anything that doesn't match
+    the expected shape.
+    """
     if ontology == "ncbitaxon" and value.isdigit():
-        return f"{_NCBITAXON_IRI_PREFIX}{value}"
+        return f"{_OBO_BASE}NCBITaxon_{value}"
+    if ontology == "vo" and value.upper().startswith("VO_"):
+        return f"{_OBO_BASE}{value}"
     return None
 
 

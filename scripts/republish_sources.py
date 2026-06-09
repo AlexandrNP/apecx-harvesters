@@ -38,8 +38,18 @@ from apecx_harvesters.pipeline.republish_with_canonical import (
 )
 
 # Minimum fraction of records that must gain a subject for a write to proceed.
-# ProtaBank (no NCBI-Taxonomy slot) lands below this and is skipped.
-_MIN_SUBJECTS_FRACTION = 0.5
+# The republish is idempotent + additive, so a PARTIAL-coverage source (e.g.
+# violin_gene at 22% — virus genes resolve, out-of-subtree bacterial genes
+# don't) is still worth writing: it harmonizes the records that resolve and
+# leaves the rest untouched. So the floor is low — it exists only to hard-skip
+# a GENUINE 0% (a non-anchored source like ProtaBank, or a systematic bug the
+# pre-flight should surface), not to demand majority coverage.
+_MIN_SUBJECTS_FRACTION = 0.02
+
+# Sample size for the pre-flight gate. A few hundred records is enough to
+# distinguish a systematic zero-subject failure (0%) from a healthy source
+# (~90%+); resolving the full index just to gate would double the work.
+_PREFLIGHT_SAMPLE = 300
 
 
 def _write_json(path: Path, payload: dict) -> None:
@@ -68,8 +78,10 @@ async def _run(sources: list[str], out_dir: Path, dry_run: bool) -> int:
         dst = dest_uuid_for_source(name)
         print(f"\n=== {name}  (dst={dst[:8]}..) ===")
 
-        # 1. Read-only pre-flight (the gate).
-        pf = await preflight_index(dest_uuid=dst, source_uuid=src, client=client)
+        # 1. Read-only pre-flight on a SAMPLE (the gate).
+        pf = await preflight_index(
+            dest_uuid=dst, source_uuid=src, client=client, max_records=_PREFLIGHT_SAMPLE
+        )
         _write_json(out_dir / f"{name}_preflight.json", asdict(pf))
         print(
             f"  pre-flight: read={pf.records_read} would_add={pf.records_would_add_subjects} "
