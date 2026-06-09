@@ -30,16 +30,24 @@ apecx-dict-update
 
 # 4. Verify the install
 apecx-lookup CHIKV --json
-apecx-mcp-reader --help 2>/dev/null  # stdio transport, no --help; just verifies the binary exists
 ```
 
-For MCP usage from Claude Desktop, add this to your client config:
+**MCP access**: the harmonization layer is reached through the canonical
+`apecx-mcp` server in `apecx-mcp-integration` (tools:
+`resolve_canonical_entity`, `query_globus_search`,
+`list_workflows`/`describe_workflow`, `start_workflow`/`show_diff`/
+`execute_workflow`). The previous standalone `apecx-mcp-reader` from
+this repo was retired 2026-06-09 because it duplicated
+`resolve_canonical_entity` + `query_globus_search`. For installing the
+canonical MCP server, see `apecx-mcp-integration/docs/mcp_integration.md`.
+
+For Claude Desktop, add the canonical server to your client config:
 
 ```json
 {
   "mcpServers": {
-    "apecx-discovery": {
-      "command": "apecx-mcp-reader",
+    "apecx-mcp": {
+      "command": "apecx-mcp",
       "env": {
         "APECX_DICT_PUBLIC_BASE_URL": "https://g-958ce2.fd635.8443.data.globus.org/apecx-ramanathan-anl/public/synonyms_dictionary"
       }

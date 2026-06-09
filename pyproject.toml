@@ -19,23 +19,18 @@ search-topic = "apecx_harvesters.scripts.search_topic:main"
 # dict_reader CLIs (user-facing arm; only deps are pydantic + stdlib).
 apecx-lookup = "apecx_harvesters.dict_reader.cli:lookup_main"
 apecx-dict-update = "apecx_harvesters.dict_reader.cli:update_main"
-# MCP server (requires `pip install apecx-harvesters[mcp]`).
-apecx-mcp-reader = "apecx_harvesters.mcp_surface.server:main"
 
 [project.optional-dependencies]
 # Thin extra for the user-facing arm. Installing apecx-harvesters[reader]
 # pulls only the dict_reader + bootstrap path with no harvester deps —
 # the lookup CLI and Globus-published-dict bootstrap work standalone.
+#
+# MCP access to the harmonization layer goes through apecx-mcp-integration
+# (canonical MCP surface). The previous standalone apecx-mcp-reader was
+# removed 2026-06-09 because it duplicated apecx_integration's
+# resolve_canonical_entity + globus_search tools.
 reader = [
     "pydantic>=2.12.5",
-]
-# MCP server extra. Bundles the reader plus FastMCP for stdio transport.
-# Used by `apecx-mcp-reader` console script — exposes the dict_reader
-# + harmonized_search functionality as MCP tools that ANY MCP client
-# (Claude Desktop, mcp-cli, custom Python clients) can call.
-mcp = [
-    "pydantic>=2.12.5",
-    "mcp>=1.0",
 ]
 
 [build-system]
@@ -45,13 +40,11 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/apecx_harvesters"]
 
-# Bundle the agent-skill assets into the wheel so the apecx-mcp-reader
-# `inspect(skill, harmonized-discovery)` tool can serve SKILL.md +
-# references regardless of where the user installs the wheel. Source
-# location stays at search_demo/agent-skill-harmonized/ (canonical for
-# Claude Code skill discovery); the wheel copy is read-only data.
-[tool.hatch.build.targets.wheel.force-include]
-"search_demo/agent-skill-harmonized" = "apecx_harvesters/_skill_assets/agent-skill-harmonized"
+# NOTE 2026-06-09: the force-include of search_demo/agent-skill-harmonized
+# into the wheel was removed alongside the apecx-mcp-reader deletion.
+# Wheel users don't reference those assets — Claude Code reads them from
+# the source-checkout location directly. If a wheel consumer needs the
+# skill bundle programmatically again, re-enable the force-include here.
 
 [tool.uv]
 package = true

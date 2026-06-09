@@ -197,13 +197,20 @@ the stdlib. That's it.
 Install URL while the harmonization PR is unmerged upstream:
 
 ```bash
-pip install 'apecx-harvesters[mcp] @ git+https://github.com/AlexandrNP/apecx-harvesters.git@main'
+pip install 'apecx-harvesters[reader] @ git+https://github.com/AlexandrNP/apecx-harvesters.git@main'
 ```
 
 The fork at `AlexandrNP/apecx-harvesters` carries the dict_reader +
-mcp_surface + corpus mining + agent-skill that this contract documents.
-Once `abought/apecx-harvesters` merges, the install simplifies to
-`pip install 'apecx-harvesters[mcp]'`.
+corpus mining + agent-skill that this contract documents. Once
+`abought/apecx-harvesters` merges, the install simplifies to
+`pip install 'apecx-harvesters[reader]'`.
+
+**Note 2026-06-09**: the previous `[mcp]` extra and the standalone
+`apecx-mcp-reader` server were removed because they duplicated tools
+already exposed by the canonical `apecx-mcp` server in
+`apecx-mcp-integration` (`resolve_canonical_entity`,
+`query_globus_search`, etc.). MCP access to the harmonization layer
+now goes through that canonical server.
 
 ## Tests pinning the contract
 

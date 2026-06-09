@@ -97,56 +97,35 @@ Read these before constructing a query:
 - `references/harmonization-wins.md` — concrete before/after examples
   with brutal-truth caveats
 
-## Available over MCP (recommended)
+## Available over MCP
 
-Every capability this skill documents is also exposed via the
-**apecx-mcp-reader** server, which implements the §4 tiered-MCP
-architecture from `apecx-mcp-integration/docs/external_orchestration_design.md`:
-**five generic primitives**, not N capability-specific tools.
+The canonical MCP surface is **`apecx-mcp`** (from
+`apecx-mcp-integration`), which already exposes a workflow-as-object
+surface per the §4/§5 design — `WorkflowResult` envelope, `HandleStore`,
+`run_workflow_observed`, recursive workflow inspection, decomposition
+(KeywordWorkflowMatcher / RunWorkflowDispatcher / LLMTaskDecomposer),
+and the scientist-facing `start_workflow / show_diff /
+execute_workflow / list_workflows / describe_workflow` tools.
 
-```bash
-# Until the upstream PR merges, install from the fork:
-pip install 'apecx-harvesters[mcp] @ git+https://github.com/AlexandrNP/apecx-harvesters.git@main'
-apecx-mcp-reader   # stdio; register in your MCP client config
-```
+Relevant existing tools that cover this skill's lookup needs:
 
-The five primitives:
-
-| Primitive | Purpose |
+| Skill capability | Existing apecx-mcp tool |
 |---|---|
-| `discover(category, query)` | Catalog search — operations, object_types, indices, skills, synonyms, candidate_iris |
-| `inspect(object_type, id, depth?)` | Typed inspection — canonical_iri, dictionary, index, skill, operation |
-| `run(operation, params)` | Execute a verb (returns `WorkflowResult` envelope) |
-| `inspect_run(run_id)` | Retrieve a prior run's payload by run_id |
-| `apecx_context(limit?)` | Session re-orientation (recent runs, pending HITL, primitives available) |
+| Resolve term → canonical IRI | `resolve_canonical_entity(name, entity_type?)` |
+| Free-text Globus search | `query_globus_search(query, max_results, offset)` |
+| List composed workflows | `list_workflows()` |
+| Inspect a workflow | `describe_workflow(name)` |
+| Compose + run a workflow | `start_workflow / show_diff / execute_workflow` |
+| Approval/HITL gates | `list_pending_approvals / approve / reject / correct` |
 
-Skill capability → primitive call:
-
-| Skill scripts | Primitive call |
-|---|---|
-| `harmonized_query.py --resolve-only` | `run("resolve", {"term": ...})` |
-| `harmonized_query.py --compare` | `run("harmonized_search", {"term": ..., "index": ...})` |
-| describe a canonical IRI's synonyms | `inspect("canonical_iri", <iri>, depth=1)` |
-| check dict version | `inspect("dictionary", "local")` + `inspect("dictionary", "published")` |
-| bootstrap dict | `run("update_dictionary")` |
-| introspect this skill | `inspect("skill", "harmonized-discovery", depth=1)` |
-| list available indices | `discover("index")` |
-| find canonical IRIs by label | `discover("candidate_iri", <query>)` |
-| find surface forms by substring | `discover("synonym", <query>)` |
-
-Every `run` response carries the §5 `WorkflowResult` envelope:
-- `markdown` — human-readable narration
-- `run_id` + `data_handle` — pointer to session-stored structured payload
-- `data_preview` — small structured peek (canonical_iri, candidates, etc.)
-- `status` — `"ok"`, `"hitl_required"`, `"partial"`, or `"error"`
-- `hitl_required` + `hitl_candidates` + `hitl_prompt` when disambiguation needed
-- `next_actions` — concrete follow-up primitive calls
-- `processing_steps` — full audit trail of decisions
-
-Adding a new capability doesn't add an MCP tool — operations live in
-`apecx_harvesters.mcp_surface._operations.OPERATIONS` and object types
-in `..._objects.OBJECT_INSPECTORS`. The wire surface stays at 5
-primitives forever.
+**Note 2026-06-09**: the standalone `apecx-mcp-reader` shipped under
+`apecx_harvesters.mcp_surface` was retired because it duplicated
+`resolve_canonical_entity` + `query_globus_search` from the canonical
+apecx-mcp surface. The harmonization-search domain logic (per-index
+filter map, raw-vs-harmonized divergence, HITL envelope from
+ambiguous resolution) is currently in
+`scripts/harmonized_query.py` and is the next thing to land as a
+proper workflow YAML / MCP tool in apecx-mcp-integration.
 
 ## Available scripts
 

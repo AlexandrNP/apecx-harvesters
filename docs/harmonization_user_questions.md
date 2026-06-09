@@ -1,8 +1,18 @@
 # Harmonization user-question reference
 
 Real biomedical-research questions a scientist asks Claude (with the
-`apecx-mcp-reader` MCP server connected), and the harmonized search
-the server runs in response.
+canonical `apecx-mcp` server from `apecx-mcp-integration` connected),
+and the harmonized search the server runs in response.
+
+> **Note 2026-06-09**: this document was originally written against
+> the standalone `apecx-mcp-reader` server in this repo, which has
+> been retired (it duplicated `resolve_canonical_entity` +
+> `query_globus_search` from the canonical apecx-mcp surface). The
+> tool-call snippets below use the apecx-mcp tool names where they
+> already exist (`resolve_canonical_entity`) and the proposed
+> `harmonized_search` workflow-tool name where the domain logic still
+> needs to land in apecx-mcp-integration. The example flows are
+> intent-correct even though one of the tool names is still aspirational.
 
 Sister to [`harmonization_test_queries.md`](./harmonization_test_queries.md)
 — that one is a mechanical regression checklist; THIS one is the
