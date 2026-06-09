@@ -16,6 +16,27 @@ dependencies = [
 aggregate-gsearch = "apecx_harvesters.scripts.aggregate_gsearch:main"
 search-author = "apecx_harvesters.scripts.search_author:main"
 search-topic = "apecx_harvesters.scripts.search_topic:main"
+# dict_reader CLIs (user-facing arm; only deps are pydantic + stdlib).
+apecx-lookup = "apecx_harvesters.dict_reader.cli:lookup_main"
+apecx-dict-update = "apecx_harvesters.dict_reader.cli:update_main"
+# MCP server (requires `pip install apecx-harvesters[mcp]`).
+apecx-mcp-reader = "apecx_harvesters.mcp_surface.server:main"
+
+[project.optional-dependencies]
+# Thin extra for the user-facing arm. Installing apecx-harvesters[reader]
+# pulls only the dict_reader + bootstrap path with no harvester deps —
+# the lookup CLI and Globus-published-dict bootstrap work standalone.
+reader = [
+    "pydantic>=2.12.5",
+]
+# MCP server extra. Bundles the reader plus FastMCP for stdio transport.
+# Used by `apecx-mcp-reader` console script — exposes the dict_reader
+# + harmonized_search functionality as MCP tools that ANY MCP client
+# (Claude Desktop, mcp-cli, custom Python clients) can call.
+mcp = [
+    "pydantic>=2.12.5",
+    "mcp>=1.0",
+]
 
 [build-system]
 requires = ["hatchling"]
