@@ -190,15 +190,60 @@ def test_bootstrap_atomic_replace(served_dict, tmp_path: Path) -> None:
     assert current_local_version(dest) is not None
 
 
-def test_get_public_base_url_requires_config() -> None:
-    """No silent default: a missing env var must raise."""
+def test_get_public_base_url_defaults_to_production() -> None:
+    """Clean install: a missing env var falls back to the published default.
+
+    The user-facing arm must bootstrap without any pre-configured URL —
+    operators set ``APECX_DICT_PUBLIC_BASE_URL`` only to point at a
+    staging or mirror deployment.
+    """
+    import os
+    from apecx_harvesters.dict_reader.bootstrap import (
+        DEFAULT_PUBLIC_BASE_URL,
+        get_public_base_url,
+    )
+
+    saved = os.environ.pop("APECX_DICT_PUBLIC_BASE_URL", None)
+    try:
+        resolved = get_public_base_url()
+        assert resolved == DEFAULT_PUBLIC_BASE_URL.rstrip("/")
+        # Sanity-check the default is a real Argonne LCF public path,
+        # not an empty string sneaking through.
+        assert resolved.startswith("https://")
+        assert "/public/synonyms_dictionary" in resolved
+    finally:
+        if saved is not None:
+            os.environ["APECX_DICT_PUBLIC_BASE_URL"] = saved
+
+
+def test_get_public_base_url_env_var_overrides_default() -> None:
+    """Operator can still pin a staging URL via the env var."""
     import os
     from apecx_harvesters.dict_reader.bootstrap import get_public_base_url
 
     saved = os.environ.pop("APECX_DICT_PUBLIC_BASE_URL", None)
+    os.environ["APECX_DICT_PUBLIC_BASE_URL"] = "https://staging.example.org/dict/"
     try:
-        with pytest.raises(RuntimeError, match="APECX_DICT_PUBLIC_BASE_URL"):
-            get_public_base_url()
+        assert get_public_base_url() == "https://staging.example.org/dict"
     finally:
+        os.environ.pop("APECX_DICT_PUBLIC_BASE_URL", None)
+        if saved is not None:
+            os.environ["APECX_DICT_PUBLIC_BASE_URL"] = saved
+
+
+def test_get_public_base_url_explicit_override_wins() -> None:
+    """Explicit override beats both env var and default."""
+    import os
+    from apecx_harvesters.dict_reader.bootstrap import get_public_base_url
+
+    saved = os.environ.pop("APECX_DICT_PUBLIC_BASE_URL", None)
+    os.environ["APECX_DICT_PUBLIC_BASE_URL"] = "https://env.example.org/dict"
+    try:
+        assert (
+            get_public_base_url(override="https://override.example.org/dict/")
+            == "https://override.example.org/dict"
+        )
+    finally:
+        os.environ.pop("APECX_DICT_PUBLIC_BASE_URL", None)
         if saved is not None:
             os.environ["APECX_DICT_PUBLIC_BASE_URL"] = saved

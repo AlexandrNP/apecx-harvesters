@@ -53,6 +53,16 @@ MANIFEST_FILENAME = "MANIFEST.json"
 _PUBLIC_BASE_ENV = "APECX_DICT_PUBLIC_BASE_URL"
 _BOOTSTRAP_AGENT = "apecx-dict-reader/bootstrap"
 
+# Production default — the Argonne LCF public path where the canonical
+# APECx dictionary is published. Treated as public knowledge (cited in
+# install docs + runbooks) so a clean install can bootstrap anonymously
+# without the user pre-exporting any URL. Override via env var or the
+# explicit ``override=`` argument for staging / mirror deployments.
+DEFAULT_PUBLIC_BASE_URL = (
+    "https://g-958ce2.fd635.8443.data.globus.org"
+    "/apecx-ramanathan-anl/public/synonyms_dictionary"
+)
+
 
 @dataclass(frozen=True)
 class PublishedManifest:
@@ -99,19 +109,17 @@ def get_public_base_url(override: str | None = None) -> str:
     """Resolve the published-dict base URL.
 
     Order of precedence: explicit override → environment variable →
-    raise. There is no silent default — bootstrap must NEVER fetch
-    from a hardcoded URL the operator didn't approve.
+    :data:`DEFAULT_PUBLIC_BASE_URL`. The default points at the
+    canonical APECx public path so a clean install needs zero
+    pre-configuration; operators can still pin a staging URL via the
+    env var or the explicit argument.
     """
     if override:
         return override.rstrip("/")
     env_val = os.environ.get(_PUBLIC_BASE_ENV)
     if env_val:
         return env_val.rstrip("/")
-    raise RuntimeError(
-        f"{_PUBLIC_BASE_ENV} not set. Configure it to point at the Globus "
-        f"HTTPS path of the published dictionary, e.g. "
-        f"https://<collection-host>/apecx-ramanathan-anl/public/synonyms_dictionary"
-    )
+    return DEFAULT_PUBLIC_BASE_URL.rstrip("/")
 
 
 def fetch_manifest(

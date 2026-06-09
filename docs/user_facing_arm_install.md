@@ -37,25 +37,31 @@ This installs:
 - The `apecx-dict-update` CLI for fetching/updating the dictionary
   from the published Globus path.
 
-## Step 2 — Point the bootstrap at the published Globus path
+## Step 2 — (Optional) Point the bootstrap at a staging / mirror URL
 
 The bootstrap fetches over anonymous HTTPS from the
-"APECx Data at Argonne LCF" Globus collection. There is **no hardcoded
-URL** — you must set the base URL once.
+"APECx Data at Argonne LCF" Globus collection. The canonical production
+URL is baked into the bootstrap default, so **clean installs need no
+configuration here** — skip to Step 3.
+
+You only need this step when targeting a staging or mirror deployment:
 
 ```bash
-export APECX_DICT_PUBLIC_BASE_URL=https://g-958ce2.fd635.8443.data.globus.org/apecx-ramanathan-anl/public/synonyms_dictionary
+export APECX_DICT_PUBLIC_BASE_URL=https://<staging-host>/<path>/synonyms_dictionary
 ```
 
-Persist this in your shell rc (`~/.zshrc`, `~/.bashrc`, etc.) so you
-don't have to re-export it.
+For reference, the production default is::
 
-This URL is the HTTPS-server hostname assigned by Globus Connect Server
+    https://g-958ce2.fd635.8443.data.globus.org/apecx-ramanathan-anl/public/synonyms_dictionary
+
+This is the HTTPS-server hostname assigned by Globus Connect Server
 to the "APECx Data at Argonne LCF" collection
 (UUID `8d2e71d6-7a29-41d9-94e5-38d8a95fa5db`), suffixed with the
-publish path. The host may change if the collection is redeployed —
-re-discover with `globus collection show 8d2e71d6-7a29-41d9-94e5-38d8a95fa5db`
-if the bootstrap returns DNS errors.
+publish path. If the collection is ever redeployed,
+``DEFAULT_PUBLIC_BASE_URL`` in
+``src/apecx_harvesters/dict_reader/bootstrap.py`` is the single edit
+point; re-discover the host via
+`globus collection show 8d2e71d6-7a29-41d9-94e5-38d8a95fa5db`.
 
 ## Step 3 — Bootstrap the local dictionary
 
@@ -160,7 +166,7 @@ Common confusions worth pre-empting:
 
 | Symptom | Diagnosis | Fix |
 |---|---|---|
-| `apecx-dict-update` says "APECX_DICT_PUBLIC_BASE_URL not set" | Step 2 was skipped | `export APECX_DICT_PUBLIC_BASE_URL=...` |
+| Need to point at a staging / mirror dictionary | Production default is baked in; export only required for non-production | `export APECX_DICT_PUBLIC_BASE_URL=<staging-url>` |
 | Download fails with 404 | Wrong base URL or the collection moved | Confirm the path with the admin |
 | Download fails with 403 | The Globus collection's HTTPS ACL requires auth | Contact the collection admin; the public path should be anonymous-readable |
 | sha256 mismatch | Publish-side corruption or stale manifest | `apecx-dict-update --force` |

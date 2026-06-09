@@ -152,7 +152,7 @@ matters to them.
 | `~/.apecx/dictionary/dictionary.sqlite` | both | The canonical local path. Backend writes here during ingest; bootstrap writes here on `apecx-dict-update`. |
 | `~/.apecx/dictionary/enriched/*.csv` | backend only | Mining inputs. NOT needed by user-facing arm. |
 | `/tmp/dict_publish/` (operator-chosen) | backend transient | Stage directory for compress + manifest before Globus upload. |
-| `${APECX_DICT_PUBLIC_BASE_URL}/MANIFEST.json` | published | Operator-controlled HTTPS URL pointing at the public Globus path. |
+| `${APECX_DICT_PUBLIC_BASE_URL}/MANIFEST.json` | published | Public Globus HTTPS path. Defaults to the canonical Argonne LCF URL when the env var is unset, so clean installs need no pre-configuration; override via env var for staging / mirror deployments. |
 
 ## What this contract does NOT cover
 
@@ -222,7 +222,9 @@ now goes through that canonical server.
 | `tests/test_dict_bootstrap.py::test_bootstrap_dictionary_fresh` | End-to-end download + sha verify + decompress |
 | `tests/test_dict_bootstrap.py::test_bootstrap_dictionary_idempotent` | No-op when local matches published |
 | `tests/test_dict_bootstrap.py::test_bootstrap_atomic_replace` | Partial download never visible at canonical path |
-| `tests/test_dict_bootstrap.py::test_get_public_base_url_requires_config` | No silent default URL |
+| `tests/test_dict_bootstrap.py::test_get_public_base_url_defaults_to_production` | Anonymous default URL (clean-install works without env config) |
+| `tests/test_dict_bootstrap.py::test_get_public_base_url_env_var_overrides_default` | Env var pins staging / mirror URL |
+| `tests/test_dict_bootstrap.py::test_get_public_base_url_explicit_override_wins` | Explicit `override=` arg beats env + default |
 
 Any change that breaks the contract MUST update or delete the
 corresponding test, with the change explained in the commit body.
