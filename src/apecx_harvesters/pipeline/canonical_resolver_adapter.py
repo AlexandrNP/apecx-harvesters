@@ -38,24 +38,36 @@ log = logging.getLogger(__name__)
 # Maps the dict_reader's ontology short-code to a (scheme_name, scheme_uri)
 # pair for the DataCite Subject. Kept in this adapter rather than the
 # dictionary so the scheme labels can drift without rebuilding the dict.
+# Keyed on the LOWERCASE OntologyName enum values that
+# ``dict_reader.lookup_entity`` actually returns (``"ncbitaxon"``, ``"vo"``,
+# …). Looked up case-insensitively via :func:`_scheme_for`. (A prior version
+# keyed on mixed-case "NCBITaxon" and silently produced zero subjects against
+# the real dictionary — the read-only republish pre-flight caught it.)
 _ONTOLOGY_SCHEME: dict[str, tuple[str, str]] = {
-    "NCBITaxon": (
+    "ncbitaxon": (
         "NCBI Taxonomy",
         "http://purl.obolibrary.org/obo/ncbitaxon.owl",
     ),
-    "VO": (
+    "vo": (
         "Vaccine Ontology",
         "http://purl.obolibrary.org/obo/vo.owl",
     ),
-    "DOID": (
+    "doid": (
         "Disease Ontology",
         "http://purl.obolibrary.org/obo/doid.owl",
     ),
-    "NCBIGene": (
+    "ncbigene": (
         "NCBI Gene",
         "https://www.ncbi.nlm.nih.gov/gene",
     ),
 }
+
+
+def _scheme_for(ontology: str | None) -> tuple[str, str] | None:
+    """Case-insensitive scheme lookup for an ontology code."""
+    if not ontology:
+        return None
+    return _ONTOLOGY_SCHEME.get(ontology.lower())
 
 
 # DataCite alternateIdentifierType → ontology code for the dual-stamp pass.
@@ -65,7 +77,7 @@ _ONTOLOGY_SCHEME: dict[str, tuple[str, str]] = {
 # to 2955291). Stamping BOTH ids as subjects.valueUri keeps the eventual
 # single-clause subjects.valueUri filter as broad as the Pass 1 union.
 _ALTID_TYPE_TO_ONTOLOGY: dict[str, str] = {
-    "NCBI-Taxonomy": "NCBITaxon",
+    "NCBI-Taxonomy": "ncbitaxon",
 }
 
 _NCBITAXON_IRI_PREFIX = "http://purl.obolibrary.org/obo/NCBITaxon_"
@@ -73,7 +85,7 @@ _NCBITAXON_IRI_PREFIX = "http://purl.obolibrary.org/obo/NCBITaxon_"
 
 def _altid_to_iri(ontology: str, value: str) -> str | None:
     """Build the canonical IRI for a source-stamped alternate identifier."""
-    if ontology == "NCBITaxon" and value.isdigit():
+    if ontology == "ncbitaxon" and value.isdigit():
         return f"{_NCBITAXON_IRI_PREFIX}{value}"
     return None
 
@@ -141,7 +153,7 @@ def _candidate_to_subject(
     surface: str, cand: LookupCandidate
 ) -> Subject | None:
     """Project one :class:`LookupCandidate` into a :class:`Subject`."""
-    scheme = _ONTOLOGY_SCHEME.get(cand.canonical_ontology)
+    scheme = _scheme_for(cand.canonical_ontology)
     if scheme is None:
         log.debug(
             "no scheme map for ontology %r — skipping",
@@ -169,7 +181,7 @@ def _result_to_subjects(
       ``subjects.valueUri`` then match any of the candidates.
     """
     if result.canonical_iri and not result.candidates:
-        scheme = _ONTOLOGY_SCHEME.get(result.canonical_ontology or "")
+        scheme = _scheme_for(result.canonical_ontology)
         if scheme is None:
             return []
         name, scheme_uri = scheme
@@ -289,7 +301,7 @@ def _dual_stamp_subjects(record: DataCite) -> list[Subject]:
         iri = _altid_to_iri(ontology, value)
         if iri is None or iri in seen:
             continue
-        scheme = _ONTOLOGY_SCHEME.get(ontology)
+        scheme = _scheme_for(ontology)
         if scheme is None:
             continue
         seen.add(iri)

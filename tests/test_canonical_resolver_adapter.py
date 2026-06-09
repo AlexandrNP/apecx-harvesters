@@ -167,6 +167,26 @@ def test_adapter_skips_empty_surface_form():
     assert out.subjects == []
 
 
+def test_adapter_real_lowercase_ontology_code_resolves():
+    """REGRESSION: lookup_entity returns lowercase 'ncbitaxon' — the adapter
+    must map it to a Subject. A prior version keyed only on mixed-case
+    'NCBITaxon' and silently produced zero subjects against the real dict."""
+    record = _make_violin_record("Chikungunya virus", 37124)
+    resolver = make_resolver_for_source("violin_pathogen")
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+        return_value=_resolved(
+            "http://purl.obolibrary.org/obo/NCBITaxon_37124",
+            "Chikungunya virus",
+            ontology="ncbitaxon",  # the REAL value lookup_entity returns
+        ),
+    ):
+        out = resolver(record)
+    assert len(out.subjects) == 1
+    assert out.subjects[0].subjectScheme == "NCBI Taxonomy"
+    assert out.subjects[0].valueUri.endswith("NCBITaxon_37124")
+
+
 def test_adapter_unknown_ontology_skipped():
     record = _make_violin_record("Influenza A virus", 11320)
     resolver = make_resolver_for_source("violin_pathogen")
