@@ -74,6 +74,8 @@ class RepublishStats:
     source_name: str = ""
     source_index: str = ""
     dest_index: str = ""
+    dictionary_version: str = ""
+    repository_version: str = REPUBLISH_VERSION
     records_read: int = 0
     records_resolved: int = 0
     records_subjects_added: int = 0
@@ -120,6 +122,7 @@ async def republish_index(
         source_name=name,
         source_index=source_uuid,
         dest_index=dest_uuid,
+        dictionary_version=_resolve_dictionary_version(),
         timestamp_utc=_dt.datetime.now(_dt.timezone.utc).isoformat(),
     )
 
@@ -285,6 +288,23 @@ async def _wait_for_ingest(
         else:
             states[task_id] = "TIMEOUT"
     return states
+
+
+def _resolve_dictionary_version() -> str:
+    """Read the dictionary version the resolver is bound to, for provenance.
+
+    Best-effort: returns ``"unknown"`` if the dictionary can't be loaded
+    (the republish still proceeds — version is metadata, not a gate).
+    """
+    try:
+        from apecx_harvesters.dict_reader import get_dictionary_index
+
+        index, err = get_dictionary_index()
+        if index is None or err:
+            return "unknown"
+        return index.manifest.dictionary_version
+    except Exception:  # noqa: BLE001
+        return "unknown"
 
 
 def dest_uuid_for_source(source_name: str) -> str:

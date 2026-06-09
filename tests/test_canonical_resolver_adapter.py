@@ -181,3 +181,98 @@ def test_adapter_unknown_ontology_skipped():
     # ungrounded entry; record passes through unchanged.
     assert out.subjects == []
     assert out.canonical_uri == record.canonical_uri
+
+
+# ---------------------------------------------------------------------------
+# P2-0: dual-stamp — carry the source-stamped taxon id forward as a Subject
+# ---------------------------------------------------------------------------
+
+
+def _make_violin_record_with_altid(pathogen: str, resolved_taxon: int, stamped_taxon: int):
+    """A record whose Species resolves to one taxon but is STAMPED with another.
+
+    Mirrors the BVBRC reality: Species "Alphainfluenzavirus influenzae" →
+    dict 2955291, but the record carries alt-id NCBI-Taxonomy 11320.
+    """
+    from apecx_harvesters.loaders.base import AlternateIdentifier
+
+    fields = ViolinPathogenFields(
+        id=1, VIOLIN_c_pathogen_id=1, Pathogen=pathogen, NCBI_Taxonomy_ID=resolved_taxon
+    )
+    return VIOLINPathogenContainer.new(
+        title=pathogen,
+        description=None,
+        creators=[],
+        publisher=Publisher(name="VIOLIN"),
+        alternateIdentifiers=[
+            AlternateIdentifier(
+                alternateIdentifier=str(stamped_taxon),
+                alternateIdentifierType="NCBI-Taxonomy",
+            )
+        ],
+        violin_pathogen=fields,
+    )
+
+
+def test_dual_stamp_carries_both_resolved_and_stamped_taxon():
+    """subjects.valueUri ends up holding BOTH the dict-resolved IRI AND the
+    source-stamped alt-id IRI — so either a common-name or a new-binomial
+    query (which resolve to different ids) matches after the filter collapse."""
+    record = _make_violin_record_with_altid(
+        "Alphainfluenzavirus influenzae", resolved_taxon=2955291, stamped_taxon=11320
+    )
+    resolver = make_resolver_for_source("violin_pathogen")
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+        return_value=_resolved(
+            "http://purl.obolibrary.org/obo/NCBITaxon_2955291",
+            "Alphainfluenzavirus influenzae",
+        ),
+    ):
+        out = resolver(record)
+    iris = {s.valueUri for s in out.subjects}
+    assert "http://purl.obolibrary.org/obo/NCBITaxon_2955291" in iris  # resolved
+    assert "http://purl.obolibrary.org/obo/NCBITaxon_11320" in iris  # stamped
+
+
+def test_dual_stamp_no_duplicate_when_resolved_equals_stamped():
+    """When the resolved id == the stamped id, only one Subject is emitted."""
+    record = _make_violin_record_with_altid(
+        "Influenza A virus", resolved_taxon=11320, stamped_taxon=11320
+    )
+    resolver = make_resolver_for_source("violin_pathogen")
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+        return_value=_resolved(
+            "http://purl.obolibrary.org/obo/NCBITaxon_11320", "Influenza A virus"
+        ),
+    ):
+        out = resolver(record)
+    iris = [s.valueUri for s in out.subjects]
+    assert iris == ["http://purl.obolibrary.org/obo/NCBITaxon_11320"]
+
+
+def test_dual_stamp_only_when_resolver_misses():
+    """Even if the Species doesn't resolve, the stamped alt-id is still carried."""
+    record = _make_violin_record_with_altid(
+        "Some Unresolvable Name", resolved_taxon=11320, stamped_taxon=11320
+    )
+    resolver = make_resolver_for_source("violin_pathogen")
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+        return_value=LookupResult(
+            surface_form="Some Unresolvable Name",
+            path="miss",
+            canonical_iri=None,
+            canonical_label=None,
+            canonical_ontology=None,
+            confidence=0.0,
+            resolution_status=ResolutionStatus.UNRESOLVED,
+            synonyms=(),
+            evidence="",
+            candidates=(),
+        ),
+    ):
+        out = resolver(record)
+    iris = {s.valueUri for s in out.subjects}
+    assert iris == {"http://purl.obolibrary.org/obo/NCBITaxon_11320"}

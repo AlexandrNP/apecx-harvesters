@@ -58,6 +58,26 @@ _ONTOLOGY_SCHEME: dict[str, tuple[str, str]] = {
 }
 
 
+# DataCite alternateIdentifierType → ontology code for the dual-stamp pass.
+# A harmonized record carries the source-stamped taxon id here (e.g. BVBRC
+# stamps NCBITaxon 11320 on Influenza A genomes even though their Species
+# was renamed to "Alphainfluenzavirus influenzae", which the dict resolves
+# to 2955291). Stamping BOTH ids as subjects.valueUri keeps the eventual
+# single-clause subjects.valueUri filter as broad as the Pass 1 union.
+_ALTID_TYPE_TO_ONTOLOGY: dict[str, str] = {
+    "NCBI-Taxonomy": "NCBITaxon",
+}
+
+_NCBITAXON_IRI_PREFIX = "http://purl.obolibrary.org/obo/NCBITaxon_"
+
+
+def _altid_to_iri(ontology: str, value: str) -> str | None:
+    """Build the canonical IRI for a source-stamped alternate identifier."""
+    if ontology == "NCBITaxon" and value.isdigit():
+        return f"{_NCBITAXON_IRI_PREFIX}{value}"
+    return None
+
+
 @dataclass(frozen=True)
 class OrganismSlot:
     """One organism slot on a source's DataCite container.
@@ -213,7 +233,6 @@ def make_resolver_for_source(
         if not slots:
             return record
         new_subjects: list[Subject] = list(record.subjects or [])
-        ambiguous = False
         any_hit = False
         for slot in slots:
             surface = _read_ext_attr(record, slot.ext_field, slot.surface_attr)
@@ -224,11 +243,21 @@ def make_resolver_for_source(
             if not projected:
                 continue
             any_hit = True
-            if len(projected) > 1:
-                ambiguous = True
             for s in projected:
                 if not _subject_already_present(new_subjects, s.valueUri):
                     new_subjects.append(s)
+
+        # P2-0 DUAL-STAMP: also carry the record's source-stamped taxon ids
+        # forward as subjects. This keeps the eventual single-clause
+        # subjects.valueUri filter as broad as the Pass 1 alt-id ∪ label
+        # union — a record stamped 11320 but whose Species resolves to
+        # 2955291 ends up with BOTH IRIs, so either query matches.
+        dual = _dual_stamp_subjects(record)
+        for s in dual:
+            if not _subject_already_present(new_subjects, s.valueUri):
+                new_subjects.append(s)
+                any_hit = True
+
         if not any_hit:
             # No subject resolved on any slot; pass record through to keep
             # caller-side counters accurate. The record still re-ingests.
@@ -239,6 +268,41 @@ def make_resolver_for_source(
 
     resolve.__source_name__ = source_name  # type: ignore[attr-defined]
     return resolve
+
+
+def _dual_stamp_subjects(record: DataCite) -> list[Subject]:
+    """Project the record's source-stamped alternate identifiers into Subjects.
+
+    Reads ``record.alternateIdentifiers`` for types in
+    :data:`_ALTID_TYPE_TO_ONTOLOGY` (currently NCBI-Taxonomy) and emits a
+    Subject per recognised id. The source-stamped id is authoritative for
+    the records the source actually carries, independent of how the
+    dictionary re-resolves the current Species name.
+    """
+    out: list[Subject] = []
+    seen: set[str] = set()
+    for alt in record.alternateIdentifiers or []:
+        ontology = _ALTID_TYPE_TO_ONTOLOGY.get(alt.alternateIdentifierType or "")
+        if ontology is None:
+            continue
+        value = (alt.alternateIdentifier or "").strip()
+        iri = _altid_to_iri(ontology, value)
+        if iri is None or iri in seen:
+            continue
+        scheme = _ONTOLOGY_SCHEME.get(ontology)
+        if scheme is None:
+            continue
+        seen.add(iri)
+        name, scheme_uri = scheme
+        out.append(
+            Subject(
+                subject=value,
+                subjectScheme=name,
+                schemeUri=scheme_uri,
+                valueUri=iri,
+            )
+        )
+    return out
 
 
 def _subject_already_present(
