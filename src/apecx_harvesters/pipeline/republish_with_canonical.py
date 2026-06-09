@@ -191,6 +191,84 @@ async def republish_index(
     return stats
 
 
+@dataclass
+class PreflightStats:
+    """Read-only projection of what a republish WOULD do (no ingest)."""
+
+    source_name: str = ""
+    dest_index: str = ""
+    dictionary_version: str = ""
+    records_read: int = 0
+    records_would_add_subjects: int = 0
+    records_unchanged: int = 0
+    records_reparse_failed: int = 0
+    canonical_uri_stable: int = 0
+    sample_subjects: list[dict[str, Any]] = field(default_factory=list)
+
+    @property
+    def canonical_uri_all_stable(self) -> bool:
+        return self.records_read > 0 and self.canonical_uri_stable == self.records_read
+
+    @property
+    def subjects_fraction(self) -> float:
+        return self.records_would_add_subjects / (self.records_read or 1)
+
+
+async def preflight_index(
+    *,
+    dest_uuid: str,
+    source_uuid: str,
+    client: globus_sdk.SearchClient,
+    page_size: int = 1000,
+    sample_n: int = 5,
+) -> PreflightStats:
+    """READ-ONLY projection of a republish: resolve every record, count what
+    WOULD change, but ingest nothing.
+
+    This is the OE-F0 gate. It caught the case-sensitivity zero-subject bug
+    before the OE-G1 live write. Callers should refuse to republish a source
+    whose pre-flight shows ``records_would_add_subjects == 0`` (either a real
+    bug or a genuinely non-taxonomy-anchored source) or
+    ``canonical_uri_all_stable is False``.
+    """
+    if source_uuid not in SOURCE_REGISTRY:
+        raise KeyError(f"no parser registered for source {source_uuid!r}")
+    name, parser = SOURCE_REGISTRY[source_uuid]
+    resolver = make_resolver_for_source(name)
+    stats = PreflightStats(
+        source_name=name,
+        dest_index=dest_uuid,
+        dictionary_version=_resolve_dictionary_version(),
+    )
+    async for rec in scroll_index_records(
+        dest_uuid, client=client, query="*", page_size=page_size
+    ):
+        stats.records_read += 1
+        subject = rec["subject"]
+        try:
+            record = _reparse_dest_content(rec["content"] or {}, parser, subject)
+        except Exception:  # noqa: BLE001
+            stats.records_reparse_failed += 1
+            continue
+        resolved = resolver(record)
+        if resolved.canonical_uri == record.canonical_uri:
+            stats.canonical_uri_stable += 1
+        before = len(record.subjects or [])
+        after = len(resolved.subjects or [])
+        if after > before:
+            stats.records_would_add_subjects += 1
+            if len(stats.sample_subjects) < sample_n:
+                stats.sample_subjects.append(
+                    {
+                        "subject": subject,
+                        "valueUris": [s.valueUri for s in (resolved.subjects or [])],
+                    }
+                )
+        else:
+            stats.records_unchanged += 1
+    return stats
+
+
 def _reparse_dest_content(
     content: dict[str, Any],
     parser: Callable[..., DataCite],
@@ -324,6 +402,8 @@ def source_uuid_for_name(source_name: str) -> str:
 
 
 __all__ = [
+    "PreflightStats",
+    "preflight_index",
     "REPUBLISH_VERSION",
     "PIPELINE_VERSION",
     "CanonicalUriDriftError",
