@@ -15,7 +15,7 @@ Schema versioning:
 - Reader compatibility: the reader refuses to load a dict whose major
   version is not in its ``SUPPORTED_SCHEMA_MAJOR`` set.
 
-Ported from ``apecx_integration.synonym_dictionary.schema`` (2026-06-08).
+Ported from ``apecx_integration.synonym_dictionary.schema`` (2026-06-04).
 """
 
 from __future__ import annotations

@@ -1,7 +1,7 @@
 # Two-arm contract — synonym dictionary publish + consume
 
-**Status**: shipped 2026-06-08. Owns the source-of-truth model
-(decision (c) from the 2026-06-08 discussion: published dict is a
+**Status**: shipped 2026-06-04. Owns the source-of-truth model
+(decision (c) from the 2026-06-04 discussion: published dict is a
 release artifact with its own version; local dict is dev sandbox;
 tests + applications use (a)-semantics — treat local as canonical,
 published as a snapshot to pull).
@@ -72,9 +72,9 @@ allowed; renaming or removing fields is a major-version bump on
 ```json
 {
   "schema_version": "1.0.0",
-  "dictionary_version": "sc-a4c-2026-06-08",
-  "built_at": "2026-06-08T19:59:31.263876Z",
-  "dictionary_filename": "dictionary-sc-a4c-2026-06-08.sqlite.gz",
+  "dictionary_version": "sc-a4c-2026-06-04",
+  "built_at": "2026-06-04T19:59:31.263876Z",
+  "dictionary_filename": "dictionary-sc-a4c-2026-06-04.sqlite.gz",
   "dictionary_sha256": "dd65d202df79aedbdf3644e284d3c245bfcdf1567c71652d11717f4103400cb6",
   "dictionary_size_bytes": 46955332,
   "compression": "gzip",

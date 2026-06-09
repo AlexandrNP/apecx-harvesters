@@ -1,4 +1,4 @@
-# Harmonization wins — local demonstration (2026-06-08, post-SC-B7)
+# Harmonization wins — local demonstration (2026-06-04, post-SC-B7)
 
 Runs 11 query scenarios against the enriched VIOLIN+BVBRC corpus CSVs
 (17,043 records: 217 VIOLIN pathogens + 16,826 BVBRC genomes). These
@@ -7,7 +7,7 @@ the comparison simulates what a `q="..."` baseline query vs a
 `subjects.valueUri:"<iri>"` harmonized query would catch.
 
 The synonym dictionary feeding `harmonized_query.py` includes the
-SC-B7 strain-prefix acronym pass landed on 2026-06-08. Four
+SC-B7 strain-prefix acronym pass landed on 2026-06-04. Four
 previously-missing acronyms (`CHIKV`, `WEEV`, `MAYV`, `MADV`) and
 one bonus species (`GETV`) were automatically inferred from BVBRC's
 own strain-isolate notation via frequency-thresholded co-occurrence
@@ -142,7 +142,7 @@ After SC-B7:
 
 ### `CHIKV`
 
-**GAP CLOSED 2026-06-08.** SC-B7 mined `CHIKV → 37124` from BVBRC's
+**GAP CLOSED 2026-06-04.** SC-B7 mined `CHIKV → 37124` from BVBRC's
 strain-prefix occurrences (`Chikungunya virus CHIKV/IRL/2007` and
 similar). Before: 0 harmonized records. After: 8,411 records (every
 Chikungunya virus genome in the corpus). Raw still catches only the
@@ -173,7 +173,7 @@ recovers them.
 
 ### `MAYV`
 
-**GAP CLOSED 2026-06-08.** Mined from `MAYV_BR/MT_...` strain
+**GAP CLOSED 2026-06-04.** Mined from `MAYV_BR/MT_...` strain
 prefixes via SC-B7. 239 records carry the Mayaro virus species name;
 only 6 carry the literal acronym, so harmonization delivers a 40×
 recall lift.
@@ -183,7 +183,7 @@ recall lift.
 
 ### `WEEV`
 
-**GAP CLOSED 2026-06-08.** Mined from `WEEV-UY-228` hyphen-separated
+**GAP CLOSED 2026-06-04.** Mined from `WEEV-UY-228` hyphen-separated
 strain prefixes via SC-B7. 206 Western equine encephalitis virus
 records reachable via the IRI filter; only 30 carry the literal
 acronym.

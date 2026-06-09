@@ -5,7 +5,7 @@ data structure that supports O(1) lookup. Held as a process singleton so
 loading happens once per process and concurrent reads are lock-free
 (plain dict reads hold the GIL in CPython).
 
-Ported from ``apecx_integration.synonym_dictionary.loader`` (2026-06-08)
+Ported from ``apecx_integration.synonym_dictionary.loader`` (2026-06-04)
 with one deliberate cut: the slow-path fallback that hit
 ``apecx_integration.mcp_surface.data.database`` has been removed.
 Consumers using this reader receive ``path: "miss"`` when the fast +

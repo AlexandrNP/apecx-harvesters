@@ -61,12 +61,12 @@ if the bootstrap returns DNS errors.
 
 ```bash
 apecx-dict-update
-# downloading https://.../dictionary-sc-a4c-2026-06-08.sqlite.gz
+# downloading https://.../dictionary-sc-a4c-2026-06-04.sqlite.gz
 #   2,359,296 / 46,955,332 bytes (5%)
 #   ...
 #   46,955,332 / 46,955,332 bytes (100%)
 # decompressing...
-# dictionary updated to version sc-a4c-2026-06-08 at ~/.apecx/dictionary/dictionary.sqlite
+# dictionary updated to version sc-a4c-2026-06-04 at ~/.apecx/dictionary/dictionary.sqlite
 ```
 
 This places the file at `~/.apecx/dictionary/dictionary.sqlite`.
@@ -123,8 +123,8 @@ Updates are **manual**. Reasons documented in
 
 ```bash
 apecx-dict-update --check-only
-# local:     sc-a4c-2026-06-08
-# published: sc-a4c-2026-06-08
+# local:     sc-a4c-2026-06-04
+# published: sc-a4c-2026-06-04
 # status: up-to-date
 
 # When an update is available:

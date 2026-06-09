@@ -69,7 +69,7 @@ for (norm, tid), sources in acc._buckets.items():
 For NCBI-merged taxa (e.g., NCBI 11593 -> 3052518 for CCHF), the
 sidecar emitter walks `merged_taxons` before writing so the ingest
 hits the active entry. See the existing one-off script in the
-2026-06-08 session log for the merge-walk pattern.
+2026-06-04 session log for the merge-walk pattern.
 
 ## Step 2 — Apply the mined observations via SC-B4 ingest
 
@@ -117,7 +117,7 @@ cd apecx-mcp-integration
 
 # Inspect staged files:
 ls -lh /tmp/dict_publish/
-# dictionary-sc-a4c-2026-06-08.sqlite.gz   45 MB
+# dictionary-sc-a4c-2026-06-04.sqlite.gz   45 MB
 # MANIFEST.json                            ~400 B
 
 # Direct HTTPS PUT to the collection (requires confidential-client creds):
@@ -151,16 +151,16 @@ campus network).
 
 ```bash
 # From any user-facing arm install (or your own).
-# URL verified live 2026-06-08 against APECx Data at Argonne LCF
+# URL verified live 2026-06-04 against APECx Data at Argonne LCF
 # collection 8d2e71d6-7a29-41d9-94e5-38d8a95fa5db:
 export APECX_DICT_PUBLIC_BASE_URL=https://g-958ce2.fd635.8443.data.globus.org/apecx-ramanathan-anl/public/synonyms_dictionary
 
 apecx-dict-update --check-only
-# local:     sc-a4c-2026-06-08
-# published: sc-a4c-2026-06-08
+# local:     sc-a4c-2026-06-04
+# published: sc-a4c-2026-06-04
 # schema:    1.0.0 (supported major: (1,))
-# built_at:  2026-06-08T19:59:31.263876Z
-# file:      dictionary-sc-a4c-2026-06-08.sqlite.gz (46,955,332 bytes, compression=gzip)
+# built_at:  2026-06-04T19:59:31.263876Z
+# file:      dictionary-sc-a4c-2026-06-04.sqlite.gz (46,955,332 bytes, compression=gzip)
 # status: up-to-date
 ```
 

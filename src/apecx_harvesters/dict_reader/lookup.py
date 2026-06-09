@@ -6,7 +6,7 @@ in-memory ``DictionaryIndex`` populated by
 of: ``fast`` / ``ambiguous`` / ``ancestor`` / ``fuzzy`` / ``deleted`` /
 ``miss``.
 
-Ported from ``apecx_integration.synonym_dictionary.lookup`` (2026-06-08)
+Ported from ``apecx_integration.synonym_dictionary.lookup`` (2026-06-04)
 with one deliberate cut: the database-substring slow-path has been
 removed. That fallback pulled in
 ``apecx_integration.mcp_surface.data.database`` which loads the

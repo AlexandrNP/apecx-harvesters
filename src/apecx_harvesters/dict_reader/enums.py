@@ -5,7 +5,7 @@ API. Changing a value here is a contract-breaking change requiring a
 schema-version bump on ``BuildManifest.schema_version``.
 
 Ported verbatim from ``apecx_integration.synonym_dictionary.enums``
-(2026-06-08).
+(2026-06-04).
 """
 
 from __future__ import annotations

@@ -11,7 +11,7 @@ query below carries:
 - **Pass criterion** — what to assert
 
 All numbers are measured live against the production APECx Globus indices on
-2026-06-09 with dictionary version `sc-a4c-2026-06-08`. Re-running may yield
+2026-06-09 with dictionary version `sc-a4c-2026-06-04`. Re-running may yield
 slightly different totals as upstream sources grow; the **relative shape**
 (harmonized > raw, ambiguous → 6 candidates, parity, etc.) is what the
 test verifies.

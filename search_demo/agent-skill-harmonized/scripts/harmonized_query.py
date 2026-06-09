@@ -200,7 +200,7 @@ def _labels_for_query(resolution: dict[str, Any]) -> list[str]:
 #    works against current production indices) OR 'taxon_id' (filter by
 #    integer NCBI taxon — VIOLIN Pathogen's column).
 #
-# IMPORTANT (2026-06-08): the SKILL.md design originally targeted
+# IMPORTANT (2026-06-04): the SKILL.md design originally targeted
 # ``subjects.valueUri`` as the universal harmonized filter, but the
 # current production Globus indices have NOT been re-ingested with the
 # harmonization layer yet. Until that ships, this map points each index

@@ -6,7 +6,7 @@ arm. Exposes :class:`SQLiteDictionaryReader` — the writer side stays in
 runtime-lookup arm so consumers don't pull in the writer's deps.
 
 Ported from ``apecx_integration.synonym_dictionary.sqlite_writer``
-(2026-06-08) — read methods only.
+(2026-06-04) — read methods only.
 """
 
 from __future__ import annotations

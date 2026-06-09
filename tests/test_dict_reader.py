@@ -74,7 +74,7 @@ def _build_test_dict(path: Path, schema_version: str = "1.0.0") -> None:
     )
     manifest = {
         "schema_version": schema_version,
-        "dictionary_version": "test-2026-06-08",
+        "dictionary_version": "test-2026-06-04",
         "built_at": datetime.now(timezone.utc).isoformat(),
         "harvester_version": None,
         "ontology_versions": {"ncbitaxon": "test"},

@@ -35,6 +35,8 @@ from apecx_harvesters.loaders.protabank import parse_protabank
 from apecx_harvesters.loaders.violin_gene import parse_violin_gene
 from apecx_harvesters.loaders.violin_pathogen import parse_violin_pathogen
 from apecx_harvesters.loaders.violin_vaccine import parse_violin_vaccine
+from apecx_harvesters.pipeline.corpus_mining import MinedSynonymAccumulator
+from apecx_harvesters.pipeline.corpus_mining_extractors import SOURCE_MINING_EXTRACTORS
 from apecx_harvesters.pipeline.globus_source import globus_index_source, index_total
 from apecx_harvesters.pipeline.sinks import to_gmetalist
 
@@ -95,6 +97,7 @@ async def harmonize_index(
     index_uuid: str,
     *,
     client: globus_sdk.SearchClient,
+    mining_accumulator: MinedSynonymAccumulator | None = None,
 ) -> tuple[list[DataCite], dict[str, Any], list[dict[str, str]]]:
     """Scrape + harmonize an entire source index.
 
@@ -102,18 +105,39 @@ async def harmonize_index(
     unregistered index and ``CanonicalCollisionError`` on a canonical collision
     (before any caller can ingest). Parse failures are collected (surfaced in
     provenance), never silently dropped.
+
+    Parameters
+    ----------
+    mining_accumulator:
+        Optional corpus-mining accumulator. When supplied, every parsed
+        record is run through the source's mining extractor (if one is
+        registered in :data:`SOURCE_MINING_EXTRACTORS`) and observations
+        are recorded against this source's name. Sources without a
+        registered extractor are skipped silently — mining is opt-in per
+        source. Default ``None`` skips mining; existing callers don't
+        need to update.
     """
     if index_uuid not in SOURCE_REGISTRY:
         raise KeyError(f"no parser registered for Globus Search index {index_uuid!r}")
     name, parser = SOURCE_REGISTRY[index_uuid]
+    extractor = (
+        SOURCE_MINING_EXTRACTORS.get(name)
+        if mining_accumulator is not None
+        else None
+    )
 
     total_before = await index_total(client, index_uuid)
     records: list[DataCite] = []
     errors: list[dict[str, str]] = []
+    mined_observed = 0
     async for result in globus_index_source(index_uuid, parser, client=client):
         if result.ok:
             assert result.record is not None
             records.append(result.record)
+            if extractor is not None and mining_accumulator is not None:
+                for surface, taxon in extractor(result.record):
+                    if mining_accumulator.observe(surface, taxon, source=name):
+                        mined_observed += 1
         else:
             errors.append({"subject": result.id, "error": result.error or ""})
     total_after = await index_total(client, index_uuid)
@@ -131,6 +155,9 @@ async def harmonize_index(
         "harmonized_count": len(records),
         "parse_error_count": len(errors),
     }
+    if extractor is not None:
+        provenance["mining_extractor"] = name
+        provenance["mining_observations_accepted"] = mined_observed
     return records, provenance, errors
 
 

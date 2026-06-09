@@ -1,4 +1,4 @@
-"""SC-B2 + SC-B5 (2026-06-08) — per-source extractors + strain filter.
+"""SC-B2 + SC-B5 (2026-06-04) — per-source extractors + strain filter.
 
 Tests run against synthetic containers (no Globus / network) so they
 verify the extractor → accumulator pipeline shape without external

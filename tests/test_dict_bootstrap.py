@@ -79,7 +79,7 @@ def served_dict(tmp_path: Path):
     a localhost HTTP server. Yields (base_url, expected_version)."""
     publish_root = tmp_path / "publish"
     publish_root.mkdir()
-    expected_version = "test-2026-06-08.1"
+    expected_version = "test-2026-06-04.1"
 
     raw = publish_root / "dictionary.sqlite"
     _build_minimal_dict(raw, expected_version)

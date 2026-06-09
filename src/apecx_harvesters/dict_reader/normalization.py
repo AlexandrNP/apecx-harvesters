@@ -5,7 +5,7 @@ lookup) MUST use this same function — divergence here is silent breakage
 of the lookup path.
 
 Ported verbatim from ``apecx_integration.synonym_dictionary.normalization``
-(2026-06-08). When the upstream module changes, this file must change
+(2026-06-04). When the upstream module changes, this file must change
 in lockstep — pinned by the dict_reader test
 :func:`test_normalize_matches_apecx_integration`.
 """

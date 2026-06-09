@@ -42,7 +42,7 @@ ships, every entry's `shape` field can be flipped to `"iri"` and the
 harmonization becomes uniformly IRI-anchored.
 
 Real measurements on the **live APECx Globus indices** (verified
-2026-06-08, anonymous read against the public indices) — these are
+2026-06-04, anonymous read against the public indices) — these are
 end-to-end wins, not local-demo extrapolations:
 
 | Query | raw `q=` | harmonized (label) | Δ |
@@ -77,7 +77,7 @@ The wins come from four mechanisms:
 3. **Ambiguity surfacing** — surfaces like `RSV` resolve to ≥2 candidate
    taxa; the harmonized response includes a `candidates` list so the
    caller routes to HITL instead of silently mis-attributing.
-4. **SC-B7 strain-prefix acronym mining (2026-06-08)** — automatic
+4. **SC-B7 strain-prefix acronym mining (2026-06-04)** — automatic
    inference of acronyms from BVBRC's strain-isolate notation
    (`Chikungunya virus CHIKV/IRL/2007`, `WEEV-UY-228`,
    `MAYV_BR/MT_CbaAr66/2017`) via frequency-thresholded co-occurrence.
@@ -257,7 +257,7 @@ picking one. Tune `--divergence-records` (default 5) and
   first one. Silent picking is exactly the failure SC-A5b ships to
   prevent.
 
-- **Resolution can still miss some acronyms.** SC-B7 (2026-06-08) closed
+- **Resolution can still miss some acronyms.** SC-B7 (2026-06-04) closed
   the major BVBRC strain-prefix gaps (`CHIKV`, `WEEV`, `MAYV`, `MADV`
   now all `fast`). SC-B8 (same date) added VIOLIN parenthetical mining:
   `HSV-1`, `HSV-2`, `HHV-1`, `TBEV`, `CCHF`, `RVF`, `BVDV`, `RHDV`,
