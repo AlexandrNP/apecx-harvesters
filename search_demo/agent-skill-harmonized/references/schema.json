@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "APECx harmonized index query schema",
+  "description": "Searchable fields across the 9 APECx source indices. Records share the DataCite 4.7 core schema; source-specific fields live under the named extension key (violin_pathogen, bvbrc_genome, etc.). Use the extension key's presence to identify the record type. The HARMONIZATION layer (added by SC-A through SC-D) populates subjects[*] with NCBI Taxonomy canonical IRIs — query subjects.valueUri to reach records regardless of how the source spelled the surface form.",
+  "properties": {
+    "identifier": {
+      "type": "object",
+      "description": "Primary persistent identifier (DOI when available)",
+      "properties": {
+        "identifier": {"type": "string"},
+        "identifierType": {"type": "string"}
+      }
+    },
+    "creators": {
+      "type": "array",
+      "description": "Authors / contributors",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "givenName": {"type": "string"},
+          "familyName": {"type": "string"},
+          "affiliation": {"type": "object"}
+        }
+      }
+    },
+    "titles": {
+      "type": "array",
+      "description": "One or more titles. titles[0].title is the source's primary surface form (Pathogen for VIOLIN, Genome_Name for BVBRC, Organism for BVBRC epitope, etc.).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {"type": "string"}
+        }
+      }
+    },
+    "publisher": {
+      "type": "object",
+      "description": "Source database. Use to slice by source: 'VIOLIN', 'BV-BRC', 'AntiviralDB', 'ProtaBank'.",
+      "properties": {
+        "name": {"type": "string"}
+      }
+    },
+    "publicationYear": {
+      "type": "integer",
+      "description": "Year of original publication when known"
+    },
+    "subjects": {
+      "type": "array",
+      "description": "Subject classifications. The HARMONIZED layer populates each record with subjects carrying NCBI Taxonomy IRIs: {subject: 'EEEV', subjectScheme: 'NCBI Taxonomy', schemeUri: 'http://purl.obolibrary.org/obo/ncbitaxon.owl', valueUri: 'http://purl.obolibrary.org/obo/NCBITaxon_11021'}. Filter on subjects.valueUri for cross-source canonical matching.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string",
+            "description": "Free-text subject label (acronym, common name, scientific name)"
+          },
+          "subjectScheme": {
+            "type": "string",
+            "description": "Ontology name, e.g. 'NCBI Taxonomy', 'Vaccine Ontology', 'Disease Ontology'"
+          },
+          "schemeUri": {
+            "type": "string",
+            "description": "URI of the ontology scheme"
+          },
+          "valueUri": {
+            "type": "string",
+            "description": "Canonical IRI of the resolved term — the HARMONIZED filter target"
+          }
+        }
+      }
+    },
+    "alternateIdentifiers": {
+      "type": "array",
+      "description": "Cross-source identifiers (NCBI Taxonomy IDs, NCBI Gene IDs, VO IDs, PDB IDs, etc.). Use for joining records across sources.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "alternateIdentifier": {"type": "string"},
+          "alternateIdentifierType": {"type": "string"}
+        }
+      }
+    },
+    "violin_pathogen": {
+      "type": "object",
+      "description": "Present on VIOLIN:Pathogen records. One pathogen per record.",
+      "properties": {
+        "VIOLIN_c_pathogen_id": {"type": "integer"},
+        "Pathogen": {"type": "string", "description": "Primary surface form for pathogen name"},
+        "NCBI_Taxonomy_ID": {"type": "integer"},
+        "Disease": {"type": "string"},
+        "Pathogen_Description": {"type": "string"},
+        "Microbial_Pathogenesis": {"type": "string"},
+        "Host_Ranges_and_Animal_Models": {"type": "string"},
+        "Host_Protective_Immunity": {"type": "string"}
+      }
+    },
+    "violin_vaccine": {
+      "type": "object",
+      "description": "Present on VIOLIN:Vaccine records.",
+      "properties": {
+        "Vaccine_Name": {"type": "string"},
+        "Vaccine": {"type": "string"},
+        "Vaccine_Ontology_ID": {"type": "string", "description": "VO:NNNNNNN canonical ID"},
+        "Description": {"type": "string"},
+        "Type": {"type": "string"},
+        "Antigen": {"type": "string"},
+        "Host_Species_for_Licensed_Use": {"type": "string"},
+        "Host_Species_as_Laboratory_Animal_Model": {"type": "string"},
+        "pathogen_id": {"type": "array", "items": {"type": "integer"}},
+        "VIOLIN_c_pathogen_id": {"type": "array", "items": {"type": "integer"}}
+      }
+    },
+    "violin_gene": {
+      "type": "object",
+      "description": "Present on VIOLIN:Gene records.",
+      "properties": {
+        "VIOLIN_c_gene_id": {"type": "integer"},
+        "Gene_Name": {"type": "string"},
+        "Protein_Name": {"type": "string"},
+        "NCBI_Gene_ID": {"type": "integer"},
+        "Organism": {"type": "string"}
+      }
+    },
+    "bvbrc_genome": {
+      "type": "object",
+      "description": "Present on BVBRC:Genome records. One organism (Genome_Name) per record with a nested list of strain-level genome assemblies.",
+      "properties": {
+        "Genome_Name": {"type": "string", "description": "Primary surface form, typically the species name"},
+        "Superkingdom": {"type": "string"},
+        "Kingdom": {"type": "string"},
+        "Phylum": {"type": "string"},
+        "Class": {"type": "string"},
+        "Order": {"type": "string"},
+        "Family": {"type": "string"},
+        "Genus": {"type": "string"},
+        "Species": {"type": "string"},
+        "Genome": {
+          "type": "array",
+          "description": "Nested list of strain-level genome assemblies",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Genome_ID": {"type": "string"},
+              "NCBI_Taxon_ID": {"type": "string", "description": "BVBRC species.strain notation, e.g. '11021.6497'"},
+              "Strain": {"type": "string"},
+              "Other_Names": {"type": "string"},
+              "Host_Name": {"type": "string"},
+              "Isolation_Country": {"type": "string"},
+              "Collection_Year": {"type": "integer"},
+              "GenBank_Accessions": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "bvbrc_protein": {
+      "type": "object",
+      "description": "Present on BVBRC:Protein records.",
+      "properties": {
+        "Genome": {"type": "string"},
+        "Protein": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Genome_ID": {"type": "string"},
+              "Gene_Symbol": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "bvbrc_protein_structure": {
+      "type": "object",
+      "description": "Present on BVBRC:Protein_Structure records.",
+      "properties": {
+        "Organism_Name": {"type": "string"},
+        "Publication_and_Protein_Structure": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Title": {"type": "string"},
+              "Taxon_ID": {"type": "array", "items": {"type": "integer"}, "description": "May carry multiple taxa for multi-organism complexes"},
+              "PMID": {"type": "array", "items": {"type": "integer"}},
+              "Protein_Structure": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "PDB_ID": {"type": "string"},
+                    "Method": {"type": "string"},
+                    "UniProtKB_Accession": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "bvbrc_epitope": {
+      "type": "object",
+      "description": "Present on BVBRC:Epitope records.",
+      "properties": {
+        "Organism": {"type": "string"},
+        "Taxon_ID": {"type": "integer"},
+        "Protein_and_Epitope": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Protein_Name": {"type": "string"},
+              "Protein_ID": {"type": "array", "items": {"type": "string"}},
+              "Epitope": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "Epitope_ID": {"type": "string"},
+                    "Epitope_Sequence": {"type": "string"},
+                    "Epitope_Type": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "antiviraldb": {
+      "type": "object",
+      "description": "Present on AntiviralDB records — antiviral drugs and their viral targets.",
+      "properties": {
+        "Virus": {"type": "string", "description": "Target virus surface form"},
+        "Protein_and_Drug": {
+          "type": "array",
+          "items": {"type": "object"}
+        }
+      }
+    },
+    "protabank": {
+      "type": "object",
+      "description": "Present on ProtaBank records — protein engineering datasets.",
+      "properties": {
+        "Title": {"type": "string"},
+        "Abstract": {"type": "string"},
+        "Publication_Year": {"type": "integer"},
+        "Publication_Authors": {"type": "array", "items": {"type": "string"}},
+        "Protein": {"type": "array", "items": {"type": "object"}}
+      }
+    }
+  }
+}
