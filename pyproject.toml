@@ -45,6 +45,14 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/apecx_harvesters"]
 
+# Bundle the agent-skill assets into the wheel so the apecx-mcp-reader
+# `inspect(skill, harmonized-discovery)` tool can serve SKILL.md +
+# references regardless of where the user installs the wheel. Source
+# location stays at search_demo/agent-skill-harmonized/ (canonical for
+# Claude Code skill discovery); the wheel copy is read-only data.
+[tool.hatch.build.targets.wheel.force-include]
+"search_demo/agent-skill-harmonized" = "apecx_harvesters/_skill_assets/agent-skill-harmonized"
+
 [tool.uv]
 package = true
 

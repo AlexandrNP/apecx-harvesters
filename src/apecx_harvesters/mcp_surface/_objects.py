@@ -211,18 +211,27 @@ def _inspect_skill(identifier: str, depth: int) -> dict[str, Any]:
             "error": f"unknown skill {identifier!r}; "
                      f"only 'harmonized-discovery' is shipped here",
         }
-    # Walk up from this module to find the skill root.
+    # Resolve the skill root. Two layouts to support:
+    # 1. Installed wheel: skill assets live at
+    #    apecx_harvesters/_skill_assets/agent-skill-harmonized/ via the
+    #    hatchling force-include in pyproject.toml.
+    # 2. Source checkout: skill lives at the repo's
+    #    search_demo/agent-skill-harmonized/ relative to project root.
     here = Path(__file__).resolve().parent
-    root = None
-    for p in (here, *here.parents):
-        cand = p / "search_demo" / "agent-skill-harmonized"
-        if cand.is_dir():
-            root = cand
-            break
-        cand2 = p.parent / "search_demo" / "agent-skill-harmonized"
-        if cand2.is_dir():
-            root = cand2
-            break
+    bundled = here.parent / "_skill_assets" / "agent-skill-harmonized"
+    root: Path | None = None
+    if bundled.is_dir():
+        root = bundled
+    else:
+        for p in (here, *here.parents):
+            cand = p / "search_demo" / "agent-skill-harmonized"
+            if cand.is_dir():
+                root = cand
+                break
+            cand2 = p.parent / "search_demo" / "agent-skill-harmonized"
+            if cand2.is_dir():
+                root = cand2
+                break
     if root is None:
         return {
             "processing_steps": trace.as_list(),
