@@ -194,6 +194,17 @@ apecx_harvesters/dict_reader/
 **Total**: ~1,000 lines of Python. Runtime deps: `pydantic>=2.12` and
 the stdlib. That's it.
 
+Install URL while the harmonization PR is unmerged upstream:
+
+```bash
+pip install 'apecx-harvesters[mcp] @ git+https://github.com/AlexandrNP/apecx-harvesters.git@main'
+```
+
+The fork at `AlexandrNP/apecx-harvesters` carries the dict_reader +
+mcp_surface + corpus mining + agent-skill that this contract documents.
+Once `abought/apecx-harvesters` merges, the install simplifies to
+`pip install 'apecx-harvesters[mcp]'`.
+
 ## Tests pinning the contract
 
 | Test | What it pins |

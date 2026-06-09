@@ -1,7 +1,7 @@
 ---
 name: apecx-discovery-harmonized
 description: Query the harmonized APECx biomedical search indices (VIOLIN, BVBRC, ProtaBank, AntiviralDB — pathogens, genomes, vaccines, epitopes, proteins). Records carry NCBI Taxonomy canonical IRIs as DataCite subjects (subjects.valueUri) so a query for "EEEV" reaches every "Eastern equine encephalitis virus" record via the same taxon. Use when a user asks about a virus / pathogen / vaccine / epitope and you want HIGH RECALL across the 9 APECx source indices.
-compatibility: Requires `pip install 'apecx-harvesters[reader]'` (thin reader, pydantic + stdlib only — no nanobrain/LLM/MCP deps). The install gives you the `apecx-lookup` and `apecx-dict-update` CLIs. First run: `APECX_DICT_PUBLIC_BASE_URL=<...> apecx-dict-update` to bootstrap the dictionary from the published Globus path (currently `/apecx-ramanathan-anl/public/synonyms_dictionary/` on the APECx Data at Argonne LCF collection). Subsequent runs use the local `~/.apecx/dictionary/dictionary.sqlite`. Also requires `jq` and `globus-sdk>=4.0` for the Globus Search query path.
+compatibility: Until the harmonization PR is merged upstream, install from the fork — `pip install 'apecx-harvesters[reader] @ git+https://github.com/AlexandrNP/apecx-harvesters.git@main'` (thin reader; pydantic + stdlib only — no nanobrain/LLM/MCP deps). The install gives you the `apecx-lookup` and `apecx-dict-update` CLIs. First run: `APECX_DICT_PUBLIC_BASE_URL="https://g-958ce2.fd635.8443.data.globus.org/apecx-ramanathan-anl/public/synonyms_dictionary" apecx-dict-update` to bootstrap the dictionary from the published Globus path (`/apecx-ramanathan-anl/public/synonyms_dictionary/` on the APECx Data at Argonne LCF collection). Subsequent runs use the local `~/.apecx/dictionary/dictionary.sqlite`. Also requires `jq` and `globus-sdk>=4.0` for the Globus Search query path.
 allowed-tools: Bash(uv *) Bash(jq *) Bash(apecx-lookup *) Bash(python *)
 ---
 
@@ -105,7 +105,8 @@ architecture from `apecx-mcp-integration/docs/external_orchestration_design.md`:
 **five generic primitives**, not N capability-specific tools.
 
 ```bash
-pip install 'apecx-harvesters[mcp]'
+# Until the upstream PR merges, install from the fork:
+pip install 'apecx-harvesters[mcp] @ git+https://github.com/AlexandrNP/apecx-harvesters.git@main'
 apecx-mcp-reader   # stdio; register in your MCP client config
 ```
 

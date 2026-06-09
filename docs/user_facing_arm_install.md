@@ -13,6 +13,19 @@ SQLite) is ~250 MB on disk and ~45 MB compressed in transit.
 
 ## Step 1 — Install the reader
 
+Until the upstream PR to `abought/apecx-harvesters` is merged, install
+from the fork that carries the harmonization work:
+
+```bash
+# Recommended for users (read-only):
+pip install 'apecx-harvesters[reader] @ git+https://github.com/AlexandrNP/apecx-harvesters.git@main'
+
+# Or pin to the feature branch for reproducibility:
+pip install 'apecx-harvesters[reader] @ git+https://github.com/AlexandrNP/apecx-harvesters.git@feature/globus-index-harmonization'
+```
+
+Once the upstream PR is merged, this simplifies to:
+
 ```bash
 pip install 'apecx-harvesters[reader]'
 ```
