@@ -79,10 +79,20 @@ def _scheme_for(ontology: str | None) -> tuple[str, str] | None:
 #   - VO (Vaccine Ontology): VIOLIN:Vaccine records carry a VO_xxxxxxx id but
 #     the vaccine NAME does not resolve as an NCBI pathogen, so the dict-side
 #     resolver returns nothing — the VO alt-id is the only clean anchor.
+#   - BVBRC-Genome: BVBRC:Protein records carry a "species.strain" id
+#     ("37124.7598") whose prefix IS the species taxon. Their Genome field is
+#     a strain-level name that resolves to nothing, and they carry no
+#     NCBI-Taxonomy alt-id — so the BVBRC-Genome prefix is the only reliable
+#     anchor (100% of a 300-record sample mapped to a valid species taxon).
 _ALTID_TYPE_TO_ONTOLOGY: dict[str, str] = {
     "NCBI-Taxonomy": "ncbitaxon",
     "VO": "vo",
+    "BVBRC-Genome": "ncbitaxon",
 }
+
+# Alt-id types whose value is "species.strain" — only the species prefix is
+# the taxon. Applied before IRI construction.
+_ALTID_SPECIES_PREFIX_TYPES: frozenset[str] = frozenset({"BVBRC-Genome"})
 
 _OBO_BASE = "http://purl.obolibrary.org/obo/"
 
@@ -345,10 +355,14 @@ def _dual_stamp_subjects(record: DataCite) -> list[Subject]:
     out: list[Subject] = []
     seen: set[str] = set()
     for alt in record.alternateIdentifiers or []:
-        ontology = _ALTID_TYPE_TO_ONTOLOGY.get(alt.alternateIdentifierType or "")
+        alt_type = alt.alternateIdentifierType or ""
+        ontology = _ALTID_TYPE_TO_ONTOLOGY.get(alt_type)
         if ontology is None:
             continue
         value = (alt.alternateIdentifier or "").strip()
+        # "species.strain" ids (BVBRC-Genome) carry the taxon as the prefix.
+        if alt_type in _ALTID_SPECIES_PREFIX_TYPES:
+            value = value.split(".", 1)[0]
         iri = _altid_to_iri(ontology, value)
         if iri is None or iri in seen:
             continue

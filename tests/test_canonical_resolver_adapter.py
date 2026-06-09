@@ -298,6 +298,35 @@ def test_dual_stamp_vo_alt_id_anchors_vaccine():
     assert subs[0].valueUri == "http://purl.obolibrary.org/obo/VO_0005278"
 
 
+def test_dual_stamp_bvbrc_genome_id_extracts_species_taxon():
+    """A BVBRC-Genome 'species.strain' id anchors on the species taxon prefix.
+
+    bvbrc_protein's Genome field is a strain-level name that resolves to
+    nothing and carries no NCBI-Taxonomy alt-id; the BVBRC-Genome prefix is
+    the only reliable anchor.
+    """
+    from apecx_harvesters.loaders.base import AlternateIdentifier
+    from apecx_harvesters.pipeline.canonical_resolver_adapter import _dual_stamp_subjects
+
+    fields = ViolinPathogenFields(
+        id=1, VIOLIN_c_pathogen_id=1, Pathogen="x", NCBI_Taxonomy_ID=1
+    )
+    record = VIOLINPathogenContainer.new(
+        title="x",
+        description=None,
+        creators=[],
+        publisher=Publisher(name="BVBRC"),
+        alternateIdentifiers=[
+            AlternateIdentifier(alternateIdentifier="37124.7598", alternateIdentifierType="BVBRC-Genome")
+        ],
+        violin_pathogen=fields,
+    )
+    subs = _dual_stamp_subjects(record)
+    assert len(subs) == 1
+    assert subs[0].subjectScheme == "NCBI Taxonomy"
+    assert subs[0].valueUri == "http://purl.obolibrary.org/obo/NCBITaxon_37124"
+
+
 def test_dual_stamp_only_when_resolver_misses():
     """Even if the Species doesn't resolve, the stamped alt-id is still carried."""
     record = _make_violin_record_with_altid(
