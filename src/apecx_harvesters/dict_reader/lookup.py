@@ -88,8 +88,17 @@ def lookup_entity(
     surface_form: str,
     *,
     entity_type: EntityType | None = None,
+    enable_fuzzy: bool = True,
 ) -> LookupResult:
-    """Look up a user-supplied term against the synonym dictionary."""
+    """Look up a user-supplied term against the synonym dictionary.
+
+    ``enable_fuzzy=False`` skips the trigram-Jaccard fuzzy fallback. The
+    republish path uses this: it resolves CONTROLLED organism fields
+    (Species / Genome / Organism) that are clean NCBI names — they should
+    match exactly or not at all. A fuzzy match there risks stamping a WRONG
+    taxon subject, and the trigram index build over a large dictionary is
+    expensive. Interactive lookups keep fuzzy on (the default).
+    """
     if not surface_form or not surface_form.strip():
         return fast_miss(surface_form, reason="empty input")
 
@@ -123,8 +132,8 @@ def lookup_entity(
             if len(matches) >= 2:
                 return _ambiguous_to_result(surface_form, tuple(matches))
 
-    # Fuzzy fallback (SC-C5).
-    if index is not None:
+    # Fuzzy fallback (SC-C5). Skipped when the caller disables it.
+    if index is not None and enable_fuzzy:
         fuzzy = index.lookup_fuzzy(
             surface_form, entity_type=entity_type, threshold=0.70
         )

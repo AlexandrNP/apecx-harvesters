@@ -261,6 +261,27 @@ def make_resolver_for_source(
         )
     use_xwalk = source_name == "violin_vaccine" and violin_pathogen_crosswalk
 
+    # Per-run memoization. A source republish resolves tens of thousands of
+    # records but only hundreds of distinct organism strings (e.g. bvbrc_protein
+    # has 24.9k records, far fewer distinct Genome organisms). Without this,
+    # the same string — including the ~18% that hit the expensive fuzzy
+    # trigram fallback — is re-resolved thousands of times. Keyed on
+    # (surface, entity_type); lives for the resolver's lifetime (one run).
+    _lookup_cache: dict[tuple[str, Any], list[Subject]] = {}
+
+    def _resolve_surface(surface: str, entity_type: Any) -> list[Subject]:
+        key = (surface, entity_type)
+        cached = _lookup_cache.get(key)
+        if cached is not None:
+            return cached
+        # Fuzzy disabled: the republish resolves controlled organism fields;
+        # a fuzzy match would stamp a wrong taxon, and the trigram build over
+        # a large dictionary is slow. Exact-or-nothing is correct here.
+        result = lookup_entity(surface, entity_type=entity_type, enable_fuzzy=False)
+        projected = _result_to_subjects(surface, result)
+        _lookup_cache[key] = projected
+        return projected
+
     def resolve(record: DataCite) -> DataCite:
         if not slots:
             return record
@@ -270,8 +291,7 @@ def make_resolver_for_source(
             surface = _read_ext_attr(record, slot.ext_field, slot.surface_attr)
             if not isinstance(surface, str) or not surface.strip():
                 continue
-            result = lookup_entity(surface.strip(), entity_type=slot.entity_type)
-            projected = _result_to_subjects(surface.strip(), result)
+            projected = _resolve_surface(surface.strip(), slot.entity_type)
             if not projected:
                 continue
             any_hit = True
