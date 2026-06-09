@@ -233,6 +233,8 @@ class ResolveStats:
 
 def make_resolver_for_source(
     source_name: str,
+    *,
+    violin_pathogen_crosswalk: dict[int, int] | None = None,
 ) -> Callable[[DataCite], DataCite]:
     """Return a resolver callable for ``source_name``.
 
@@ -241,6 +243,12 @@ def make_resolver_for_source(
     ``record.subjects`` extended by zero-or-more Subject entries per
     organism slot configured for the source. Records for sources with
     no registered slot pass through unchanged.
+
+    ``violin_pathogen_crosswalk`` (only used for ``violin_vaccine``): a
+    ``{pathogen_id: taxon}`` map from VIOLIN:Pathogen. When supplied, a
+    vaccine inherits its target pathogen(s)' NCBI taxon — the cross-table
+    join VIOLIN's fragmentation otherwise hides. Build it with
+    ``violin_crosswalk.build_violin_pathogen_crosswalk``.
 
     Construction is fast (no SQLite hit); the dictionary singleton is
     lazily materialized on the first ``lookup_entity`` call.
@@ -251,6 +259,7 @@ def make_resolver_for_source(
             "no organism slots registered for source %r — pass-through",
             source_name,
         )
+    use_xwalk = source_name == "violin_vaccine" and violin_pathogen_crosswalk
 
     def resolve(record: DataCite) -> DataCite:
         if not slots:
@@ -280,6 +289,17 @@ def make_resolver_for_source(
             if not _subject_already_present(new_subjects, s.valueUri):
                 new_subjects.append(s)
                 any_hit = True
+
+        # VIOLIN cross-walk: a vaccine inherits its target pathogen(s)' taxon.
+        if use_xwalk:
+            from apecx_harvesters.pipeline.violin_crosswalk import (  # noqa: PLC0415
+                violin_vaccine_crosswalk_subjects,
+            )
+
+            for s in violin_vaccine_crosswalk_subjects(record, violin_pathogen_crosswalk):
+                if not _subject_already_present(new_subjects, s.valueUri):
+                    new_subjects.append(s)
+                    any_hit = True
 
         if not any_hit:
             # No subject resolved on any slot; pass record through to keep

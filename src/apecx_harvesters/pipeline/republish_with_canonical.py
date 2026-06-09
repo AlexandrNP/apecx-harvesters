@@ -116,7 +116,9 @@ async def republish_index(
     if source_uuid not in SOURCE_REGISTRY:
         raise KeyError(f"no parser registered for source {source_uuid!r}")
     name, parser = SOURCE_REGISTRY[source_uuid]
-    resolver = make_resolver_for_source(name)
+    resolver = make_resolver_for_source(
+        name, violin_pathogen_crosswalk=await _maybe_violin_crosswalk(name, client)
+    )
 
     stats = RepublishStats(
         source_name=name,
@@ -221,20 +223,27 @@ async def preflight_index(
     client: globus_sdk.SearchClient,
     page_size: int = 1000,
     sample_n: int = 5,
+    max_records: int | None = None,
 ) -> PreflightStats:
-    """READ-ONLY projection of a republish: resolve every record, count what
-    WOULD change, but ingest nothing.
+    """READ-ONLY projection of a republish: resolve records, count what WOULD
+    change, but ingest nothing.
 
     This is the OE-F0 gate. It caught the case-sensitivity zero-subject bug
     before the OE-G1 live write. Callers should refuse to republish a source
     whose pre-flight shows ``records_would_add_subjects == 0`` (either a real
     bug or a genuinely non-taxonomy-anchored source) or
     ``canonical_uri_all_stable is False``.
+
+    ``max_records`` caps how many records are sampled. A few hundred is
+    enough to detect a SYSTEMATIC zero-subject failure cheaply; pass ``None``
+    to project the whole index (expensive on large sources).
     """
     if source_uuid not in SOURCE_REGISTRY:
         raise KeyError(f"no parser registered for source {source_uuid!r}")
     name, parser = SOURCE_REGISTRY[source_uuid]
-    resolver = make_resolver_for_source(name)
+    resolver = make_resolver_for_source(
+        name, violin_pathogen_crosswalk=await _maybe_violin_crosswalk(name, client)
+    )
     stats = PreflightStats(
         source_name=name,
         dest_index=dest_uuid,
@@ -243,6 +252,8 @@ async def preflight_index(
     async for rec in scroll_index_records(
         dest_uuid, client=client, query="*", page_size=page_size
     ):
+        if max_records is not None and stats.records_read >= max_records:
+            break
         stats.records_read += 1
         subject = rec["subject"]
         try:
@@ -366,6 +377,22 @@ async def _wait_for_ingest(
         else:
             states[task_id] = "TIMEOUT"
     return states
+
+
+async def _maybe_violin_crosswalk(
+    source_name: str, client: globus_sdk.SearchClient
+) -> dict[int, int] | None:
+    """Build the VIOLIN pathogen→taxon cross-walk, only for violin_vaccine.
+
+    Returns None for every other source (no cross-table join applies).
+    """
+    if source_name != "violin_vaccine":
+        return None
+    from apecx_harvesters.pipeline.violin_crosswalk import (
+        build_violin_pathogen_crosswalk,
+    )
+
+    return await build_violin_pathogen_crosswalk(client)
 
 
 def _resolve_dictionary_version() -> str:
