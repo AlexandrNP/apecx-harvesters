@@ -121,6 +121,13 @@ def _build_client() -> globus_sdk.SearchClient:
 # ---------------------------------------------------------------------------
 
 
+# IRI → species-ancestor IRI memo. species_iri_for opens a fresh read-only
+# SQLite connection to the 771MB dict on every call; adjudication hits the
+# same handful of taxa across thousands of records, so without this the
+# benchmark is connection-open-bound (CPU pegged at ~98%).
+_SPECIES_CACHE: dict[str, str | None] = {}
+
+
 def _species_expand(iris: set[str]) -> set[str]:
     """Add the species-rank ancestor of every NCBITaxon IRI in the set."""
     index, _ = get_dictionary_index()
@@ -128,10 +135,13 @@ def _species_expand(iris: set[str]) -> set[str]:
     if index is None:
         return out
     for iri in iris:
-        if iri.startswith(_PREF):
-            sp = index.species_iri_for(iri)
-            if sp:
-                out.add(sp)
+        if not iri.startswith(_PREF):
+            continue
+        if iri not in _SPECIES_CACHE:
+            _SPECIES_CACHE[iri] = index.species_iri_for(iri)
+        sp = _SPECIES_CACHE[iri]
+        if sp:
+            out.add(sp)
     return out
 
 
@@ -145,13 +155,22 @@ class Resolution:
     s_q: set[str] = field(default_factory=set)  # iris ∪ species ancestors
 
 
-_RESOLVE_CACHE: dict[str, Resolution] = {}
+_RESOLVE_CACHE: dict[tuple[str, bool], Resolution] = {}
 
 
-def resolve_query(term: str) -> Resolution:
-    if term in _RESOLVE_CACHE:
-        return _RESOLVE_CACHE[term]
-    r = lookup_entity(term)  # interactive default: fuzzy ON
+def resolve_query(term: str, *, enable_fuzzy: bool = True) -> Resolution:
+    """Resolve a term to its canonical IRI set.
+
+    ``enable_fuzzy`` defaults True for USER queries (people type approximate
+    terms). Record-organism adjudication passes False: a record's organism is
+    a CONTROLLED field that should match exactly — a fuzzy match there would
+    loosely bucket a different organism as the query entity and inflate the
+    'true' count (the same reason the republish resolver uses fuzzy off).
+    """
+    key = (term, enable_fuzzy)
+    if key in _RESOLVE_CACHE:
+        return _RESOLVE_CACHE[key]
+    r = lookup_entity(term, enable_fuzzy=enable_fuzzy)
     iris: set[str] = set()
     labels: list[str] = []
     if r.path == "ambiguous":
@@ -184,7 +203,7 @@ def resolve_query(term: str) -> Resolution:
         taxa=taxa,
         s_q=_species_expand(ncbitaxon_iris),
     )
-    _RESOLVE_CACHE[term] = res
+    _RESOLVE_CACHE[key] = res
     return res
 
 
@@ -311,7 +330,7 @@ def adjudicate_source(records: list[dict], source: str, s_q: set[str]) -> dict[s
         if not organism:
             u += 1
             continue
-        rr = resolve_query(organism)
+        rr = resolve_query(organism, enable_fuzzy=False)
         record_iris = _species_expand(rr.iris)
         if not record_iris:
             u += 1
