@@ -87,6 +87,32 @@ def _ambiguous(
     )
 
 
+@pytest.fixture(autouse=True)
+def _no_species_dictionary(monkeypatch):
+    """Keep these pure unit tests: neutralize the strain→species expansion.
+
+    The expansion pass calls ``get_dictionary_index()`` — a PROCESS-WIDE
+    singleton that another test file (``test_republish_roundtrip``) configures
+    with the real SQLite. Without this, run order would leak the real dict in
+    and add unexpected species subjects. Tests that exercise the expansion
+    re-patch ``get_dictionary_index`` locally.
+    """
+    monkeypatch.setattr(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.get_dictionary_index",
+        lambda: (None, None),
+    )
+
+
+class _StubIndex:
+    """Minimal stand-in for DictionaryIndex.species_iri_for in unit tests."""
+
+    def __init__(self, mapping: dict[str, str]):
+        self._mapping = mapping
+
+    def species_iri_for(self, iri: str) -> str | None:
+        return self._mapping.get(iri)
+
+
 def test_adapter_constructs_per_source():
     resolver = make_resolver_for_source("violin_pathogen")
     assert callable(resolver)
@@ -167,6 +193,26 @@ def test_adapter_skips_empty_surface_form():
     assert out.subjects == []
 
 
+def test_adapter_real_lowercase_ontology_code_resolves():
+    """REGRESSION: lookup_entity returns lowercase 'ncbitaxon' — the adapter
+    must map it to a Subject. A prior version keyed only on mixed-case
+    'NCBITaxon' and silently produced zero subjects against the real dict."""
+    record = _make_violin_record("Chikungunya virus", 37124)
+    resolver = make_resolver_for_source("violin_pathogen")
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+        return_value=_resolved(
+            "http://purl.obolibrary.org/obo/NCBITaxon_37124",
+            "Chikungunya virus",
+            ontology="ncbitaxon",  # the REAL value lookup_entity returns
+        ),
+    ):
+        out = resolver(record)
+    assert len(out.subjects) == 1
+    assert out.subjects[0].subjectScheme == "NCBI Taxonomy"
+    assert out.subjects[0].valueUri.endswith("NCBITaxon_37124")
+
+
 def test_adapter_unknown_ontology_skipped():
     record = _make_violin_record("Influenza A virus", 11320)
     resolver = make_resolver_for_source("violin_pathogen")
@@ -181,3 +227,238 @@ def test_adapter_unknown_ontology_skipped():
     # ungrounded entry; record passes through unchanged.
     assert out.subjects == []
     assert out.canonical_uri == record.canonical_uri
+
+
+# ---------------------------------------------------------------------------
+# P2-0: dual-stamp — carry the source-stamped taxon id forward as a Subject
+# ---------------------------------------------------------------------------
+
+
+def _make_violin_record_with_altid(pathogen: str, resolved_taxon: int, stamped_taxon: int):
+    """A record whose Species resolves to one taxon but is STAMPED with another.
+
+    Mirrors the BVBRC reality: Species "Alphainfluenzavirus influenzae" →
+    dict 2955291, but the record carries alt-id NCBI-Taxonomy 11320.
+    """
+    from apecx_harvesters.loaders.base import AlternateIdentifier
+
+    fields = ViolinPathogenFields(
+        id=1, VIOLIN_c_pathogen_id=1, Pathogen=pathogen, NCBI_Taxonomy_ID=resolved_taxon
+    )
+    return VIOLINPathogenContainer.new(
+        title=pathogen,
+        description=None,
+        creators=[],
+        publisher=Publisher(name="VIOLIN"),
+        alternateIdentifiers=[
+            AlternateIdentifier(
+                alternateIdentifier=str(stamped_taxon),
+                alternateIdentifierType="NCBI-Taxonomy",
+            )
+        ],
+        violin_pathogen=fields,
+    )
+
+
+def test_dual_stamp_carries_both_resolved_and_stamped_taxon():
+    """subjects.valueUri ends up holding BOTH the dict-resolved IRI AND the
+    source-stamped alt-id IRI — so either a common-name or a new-binomial
+    query (which resolve to different ids) matches after the filter collapse."""
+    record = _make_violin_record_with_altid(
+        "Alphainfluenzavirus influenzae", resolved_taxon=2955291, stamped_taxon=11320
+    )
+    resolver = make_resolver_for_source("violin_pathogen")
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+        return_value=_resolved(
+            "http://purl.obolibrary.org/obo/NCBITaxon_2955291",
+            "Alphainfluenzavirus influenzae",
+        ),
+    ):
+        out = resolver(record)
+    iris = {s.valueUri for s in out.subjects}
+    assert "http://purl.obolibrary.org/obo/NCBITaxon_2955291" in iris  # resolved
+    assert "http://purl.obolibrary.org/obo/NCBITaxon_11320" in iris  # stamped
+
+
+def test_dual_stamp_no_duplicate_when_resolved_equals_stamped():
+    """When the resolved id == the stamped id, only one Subject is emitted."""
+    record = _make_violin_record_with_altid(
+        "Influenza A virus", resolved_taxon=11320, stamped_taxon=11320
+    )
+    resolver = make_resolver_for_source("violin_pathogen")
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+        return_value=_resolved(
+            "http://purl.obolibrary.org/obo/NCBITaxon_11320", "Influenza A virus"
+        ),
+    ):
+        out = resolver(record)
+    iris = [s.valueUri for s in out.subjects]
+    assert iris == ["http://purl.obolibrary.org/obo/NCBITaxon_11320"]
+
+
+def test_dual_stamp_vo_alt_id_anchors_vaccine():
+    """A VIOLIN:Vaccine-style record whose Vaccine name doesn't resolve as an
+    NCBI pathogen still gets a Vaccine Ontology Subject from its VO alt-id."""
+    from apecx_harvesters.loaders.base import AlternateIdentifier
+
+    fields = ViolinPathogenFields(
+        id=1, VIOLIN_c_pathogen_id=1, Pathogen="RSV vaccine candidate", NCBI_Taxonomy_ID=1
+    )
+    record = VIOLINPathogenContainer.new(
+        title="RSV vaccine candidate",
+        description=None,
+        creators=[],
+        publisher=Publisher(name="VIOLIN"),
+        alternateIdentifiers=[
+            AlternateIdentifier(alternateIdentifier="VO_0005278", alternateIdentifierType="VO")
+        ],
+        violin_pathogen=fields,
+    )
+    from apecx_harvesters.pipeline.canonical_resolver_adapter import _dual_stamp_subjects
+
+    subs = _dual_stamp_subjects(record)
+    assert len(subs) == 1
+    assert subs[0].subjectScheme == "Vaccine Ontology"
+    assert subs[0].valueUri == "http://purl.obolibrary.org/obo/VO_0005278"
+
+
+def test_dual_stamp_bvbrc_genome_id_extracts_species_taxon():
+    """A BVBRC-Genome 'species.strain' id anchors on the species taxon prefix.
+
+    bvbrc_protein's Genome field is a strain-level name that resolves to
+    nothing and carries no NCBI-Taxonomy alt-id; the BVBRC-Genome prefix is
+    the only reliable anchor.
+    """
+    from apecx_harvesters.loaders.base import AlternateIdentifier
+    from apecx_harvesters.pipeline.canonical_resolver_adapter import _dual_stamp_subjects
+
+    fields = ViolinPathogenFields(
+        id=1, VIOLIN_c_pathogen_id=1, Pathogen="x", NCBI_Taxonomy_ID=1
+    )
+    record = VIOLINPathogenContainer.new(
+        title="x",
+        description=None,
+        creators=[],
+        publisher=Publisher(name="BVBRC"),
+        alternateIdentifiers=[
+            AlternateIdentifier(alternateIdentifier="37124.7598", alternateIdentifierType="BVBRC-Genome")
+        ],
+        violin_pathogen=fields,
+    )
+    subs = _dual_stamp_subjects(record)
+    assert len(subs) == 1
+    assert subs[0].subjectScheme == "NCBI Taxonomy"
+    assert subs[0].valueUri == "http://purl.obolibrary.org/obo/NCBITaxon_37124"
+
+
+def test_dual_stamp_only_when_resolver_misses():
+    """Even if the Species doesn't resolve, the stamped alt-id is still carried."""
+    record = _make_violin_record_with_altid(
+        "Some Unresolvable Name", resolved_taxon=11320, stamped_taxon=11320
+    )
+    resolver = make_resolver_for_source("violin_pathogen")
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+        return_value=LookupResult(
+            surface_form="Some Unresolvable Name",
+            path="miss",
+            canonical_iri=None,
+            canonical_label=None,
+            canonical_ontology=None,
+            confidence=0.0,
+            resolution_status=ResolutionStatus.UNRESOLVED,
+            synonyms=(),
+            evidence="",
+            candidates=(),
+        ),
+    ):
+        out = resolver(record)
+    iris = {s.valueUri for s in out.subjects}
+    assert iris == {"http://purl.obolibrary.org/obo/NCBITaxon_11320"}
+
+
+# ---------------------------------------------------------------------------
+# Strain→species normalization — stamp the species-rank ancestor alongside
+# every NCBITaxon subject so a species-level subjects.valueUri query matches
+# strain-stamped records uniformly across sources.
+# ---------------------------------------------------------------------------
+
+_PREF = "http://purl.obolibrary.org/obo/NCBITaxon_"
+
+
+def test_species_expansion_stamps_species_ancestor_of_strain():
+    """A record carrying a strain taxon also gains its species ancestor."""
+    record = _make_violin_record("Mycobacterium tuberculosis H37Rv", 83332)
+    resolver = make_resolver_for_source("violin_pathogen")
+    with (
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+            return_value=_resolved(f"{_PREF}83332", "M.tb H37Rv"),
+        ),
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.get_dictionary_index",
+            return_value=(_StubIndex({f"{_PREF}83332": f"{_PREF}1773"}), None),
+        ),
+    ):
+        out = resolver(record)
+    iris = {s.valueUri for s in out.subjects}
+    assert f"{_PREF}83332" in iris  # the strain itself
+    assert f"{_PREF}1773" in iris  # its species ancestor
+    species = next(s for s in out.subjects if s.valueUri == f"{_PREF}1773")
+    assert species.subjectScheme == "NCBI Taxonomy"
+    assert species.subject == "1773"
+
+
+def test_species_expansion_no_duplicate_when_taxon_is_a_species():
+    """A species-rank taxon maps to itself — no duplicate Subject is added."""
+    record = _make_violin_record("Homo sapiens", 9606)
+    resolver = make_resolver_for_source("violin_pathogen")
+    with (
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+            return_value=_resolved(f"{_PREF}9606", "Homo sapiens"),
+        ),
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.get_dictionary_index",
+            return_value=(_StubIndex({f"{_PREF}9606": f"{_PREF}9606"}), None),
+        ),
+    ):
+        out = resolver(record)
+    iris = [s.valueUri for s in out.subjects]
+    assert iris == [f"{_PREF}9606"]
+
+
+def test_species_expansion_idempotent_on_rerun():
+    """Re-running over an already-species-stamped record adds nothing."""
+    record = _make_violin_record("Mycobacterium tuberculosis H37Rv", 83332)
+    resolver = make_resolver_for_source("violin_pathogen")
+    with (
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+            return_value=_resolved(f"{_PREF}83332", "M.tb H37Rv"),
+        ),
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.get_dictionary_index",
+            return_value=(_StubIndex({f"{_PREF}83332": f"{_PREF}1773"}), None),
+        ),
+    ):
+        once = resolver(record)
+        twice = resolver(once)
+    assert {s.valueUri for s in once.subjects} == {s.valueUri for s in twice.subjects}
+    assert len([s for s in twice.subjects if s.valueUri == f"{_PREF}1773"]) == 1
+
+
+def test_species_expansion_noop_without_dictionary():
+    """Pre-normalization dictionary (index None) → expansion is a silent no-op."""
+    record = _make_violin_record("Mycobacterium tuberculosis H37Rv", 83332)
+    resolver = make_resolver_for_source("violin_pathogen")
+    # get_dictionary_index already neutralized to (None, None) by the autouse
+    # fixture — the expansion must not raise and must add no species subject.
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+        return_value=_resolved(f"{_PREF}83332", "M.tb H37Rv"),
+    ):
+        out = resolver(record)
+    assert {s.valueUri for s in out.subjects} == {f"{_PREF}83332"}

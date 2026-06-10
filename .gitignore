@@ -8,4 +8,4 @@ __pycache__/
 output/
 
 # Keep YOC's scripts for reference, but do not share them on github
-prior_art/
+prior_art/benchmarks/output/

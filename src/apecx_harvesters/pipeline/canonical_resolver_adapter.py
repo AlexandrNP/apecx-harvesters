@@ -29,6 +29,7 @@ from apecx_harvesters.dict_reader import (
     EntityType,
     LookupCandidate,
     LookupResult,
+    get_dictionary_index,
     lookup_entity,
 )
 from apecx_harvesters.loaders.base import DataCite, Subject
@@ -38,24 +39,77 @@ log = logging.getLogger(__name__)
 # Maps the dict_reader's ontology short-code to a (scheme_name, scheme_uri)
 # pair for the DataCite Subject. Kept in this adapter rather than the
 # dictionary so the scheme labels can drift without rebuilding the dict.
+# Keyed on the LOWERCASE OntologyName enum values that
+# ``dict_reader.lookup_entity`` actually returns (``"ncbitaxon"``, ``"vo"``,
+# …). Looked up case-insensitively via :func:`_scheme_for`. (A prior version
+# keyed on mixed-case "NCBITaxon" and silently produced zero subjects against
+# the real dictionary — the read-only republish pre-flight caught it.)
 _ONTOLOGY_SCHEME: dict[str, tuple[str, str]] = {
-    "NCBITaxon": (
+    "ncbitaxon": (
         "NCBI Taxonomy",
         "http://purl.obolibrary.org/obo/ncbitaxon.owl",
     ),
-    "VO": (
+    "vo": (
         "Vaccine Ontology",
         "http://purl.obolibrary.org/obo/vo.owl",
     ),
-    "DOID": (
+    "doid": (
         "Disease Ontology",
         "http://purl.obolibrary.org/obo/doid.owl",
     ),
-    "NCBIGene": (
+    "ncbigene": (
         "NCBI Gene",
         "https://www.ncbi.nlm.nih.gov/gene",
     ),
 }
+
+
+def _scheme_for(ontology: str | None) -> tuple[str, str] | None:
+    """Case-insensitive scheme lookup for an ontology code."""
+    if not ontology:
+        return None
+    return _ONTOLOGY_SCHEME.get(ontology.lower())
+
+
+# DataCite alternateIdentifierType → ontology code for the dual-stamp pass.
+# A harmonized record carries source-stamped ids here that anchor it to an
+# ontology even when the dictionary lookup doesn't resolve the surface form:
+#   - NCBI-Taxonomy: BVBRC stamps 11320 on Influenza A genomes even though
+#     their renamed Species resolves to 2955291 — stamping both keeps the
+#     eventual subjects.valueUri filter as broad as the Pass 1 union.
+#   - VO (Vaccine Ontology): VIOLIN:Vaccine records carry a VO_xxxxxxx id but
+#     the vaccine NAME does not resolve as an NCBI pathogen, so the dict-side
+#     resolver returns nothing — the VO alt-id is the only clean anchor.
+#   - BVBRC-Genome: BVBRC:Protein records carry a "species.strain" id
+#     ("37124.7598") whose prefix IS the species taxon. Their Genome field is
+#     a strain-level name that resolves to nothing, and they carry no
+#     NCBI-Taxonomy alt-id — so the BVBRC-Genome prefix is the only reliable
+#     anchor (100% of a 300-record sample mapped to a valid species taxon).
+_ALTID_TYPE_TO_ONTOLOGY: dict[str, str] = {
+    "NCBI-Taxonomy": "ncbitaxon",
+    "VO": "vo",
+    "BVBRC-Genome": "ncbitaxon",
+}
+
+# Alt-id types whose value is "species.strain" — only the species prefix is
+# the taxon. Applied before IRI construction.
+_ALTID_SPECIES_PREFIX_TYPES: frozenset[str] = frozenset({"BVBRC-Genome"})
+
+_OBO_BASE = "http://purl.obolibrary.org/obo/"
+
+
+def _altid_to_iri(ontology: str, value: str) -> str | None:
+    """Build the canonical IRI for a source-stamped alternate identifier.
+
+    NCBI-Taxonomy values are bare numbers ("11320"); VO values already carry
+    their prefix ("VO_0005278"). Returns None for anything that doesn't match
+    the expected shape.
+    """
+    if ontology == "ncbitaxon" and value.isdigit():
+        return f"{_OBO_BASE}NCBITaxon_{value}"
+    if ontology == "vo" and value.upper().startswith("VO_"):
+        return f"{_OBO_BASE}{value}"
+    return None
 
 
 @dataclass(frozen=True)
@@ -121,7 +175,7 @@ def _candidate_to_subject(
     surface: str, cand: LookupCandidate
 ) -> Subject | None:
     """Project one :class:`LookupCandidate` into a :class:`Subject`."""
-    scheme = _ONTOLOGY_SCHEME.get(cand.canonical_ontology)
+    scheme = _scheme_for(cand.canonical_ontology)
     if scheme is None:
         log.debug(
             "no scheme map for ontology %r — skipping",
@@ -149,7 +203,7 @@ def _result_to_subjects(
       ``subjects.valueUri`` then match any of the candidates.
     """
     if result.canonical_iri and not result.candidates:
-        scheme = _ONTOLOGY_SCHEME.get(result.canonical_ontology or "")
+        scheme = _scheme_for(result.canonical_ontology)
         if scheme is None:
             return []
         name, scheme_uri = scheme
@@ -190,6 +244,8 @@ class ResolveStats:
 
 def make_resolver_for_source(
     source_name: str,
+    *,
+    violin_pathogen_crosswalk: dict[int, int] | None = None,
 ) -> Callable[[DataCite], DataCite]:
     """Return a resolver callable for ``source_name``.
 
@@ -198,6 +254,12 @@ def make_resolver_for_source(
     ``record.subjects`` extended by zero-or-more Subject entries per
     organism slot configured for the source. Records for sources with
     no registered slot pass through unchanged.
+
+    ``violin_pathogen_crosswalk`` (only used for ``violin_vaccine``): a
+    ``{pathogen_id: taxon}`` map from VIOLIN:Pathogen. When supplied, a
+    vaccine inherits its target pathogen(s)' NCBI taxon — the cross-table
+    join VIOLIN's fragmentation otherwise hides. Build it with
+    ``violin_crosswalk.build_violin_pathogen_crosswalk``.
 
     Construction is fast (no SQLite hit); the dictionary singleton is
     lazily materialized on the first ``lookup_entity`` call.
@@ -208,27 +270,107 @@ def make_resolver_for_source(
             "no organism slots registered for source %r — pass-through",
             source_name,
         )
+    use_xwalk = source_name == "violin_vaccine" and violin_pathogen_crosswalk
+
+    # Per-run memoization. A source republish resolves tens of thousands of
+    # records but only hundreds of distinct organism strings (e.g. bvbrc_protein
+    # has 24.9k records, far fewer distinct Genome organisms). Without this,
+    # the same string — including the ~18% that hit the expensive fuzzy
+    # trigram fallback — is re-resolved thousands of times. Keyed on
+    # (surface, entity_type); lives for the resolver's lifetime (one run).
+    _lookup_cache: dict[tuple[str, Any], list[Subject]] = {}
+
+    # Strain→species memoization. species_iri_for is a single indexed read,
+    # but a republish hits the same handful of distinct taxa across tens of
+    # thousands of records; caching the IRI→species-IRI map keeps the
+    # expansion pass free after the first lookup of each taxon. None marks
+    # "no species ancestor" (taxon above species rank, or pre-normalization
+    # dictionary without the taxon_species table) so we don't re-query.
+    _species_cache: dict[str, str | None] = {}
+
+    def _species_iri_for(taxon_iri: str) -> str | None:
+        if taxon_iri in _species_cache:
+            return _species_cache[taxon_iri]
+        index, _load_error = get_dictionary_index()
+        species_iri = index.species_iri_for(taxon_iri) if index is not None else None
+        _species_cache[taxon_iri] = species_iri
+        return species_iri
+
+    def _resolve_surface(surface: str, entity_type: Any) -> list[Subject]:
+        key = (surface, entity_type)
+        cached = _lookup_cache.get(key)
+        if cached is not None:
+            return cached
+        # Fuzzy disabled: the republish resolves controlled organism fields;
+        # a fuzzy match would stamp a wrong taxon, and the trigram build over
+        # a large dictionary is slow. Exact-or-nothing is correct here.
+        result = lookup_entity(surface, entity_type=entity_type, enable_fuzzy=False)
+        projected = _result_to_subjects(surface, result)
+        _lookup_cache[key] = projected
+        return projected
 
     def resolve(record: DataCite) -> DataCite:
         if not slots:
             return record
         new_subjects: list[Subject] = list(record.subjects or [])
-        ambiguous = False
         any_hit = False
         for slot in slots:
             surface = _read_ext_attr(record, slot.ext_field, slot.surface_attr)
             if not isinstance(surface, str) or not surface.strip():
                 continue
-            result = lookup_entity(surface.strip(), entity_type=slot.entity_type)
-            projected = _result_to_subjects(surface.strip(), result)
+            projected = _resolve_surface(surface.strip(), slot.entity_type)
             if not projected:
                 continue
             any_hit = True
-            if len(projected) > 1:
-                ambiguous = True
             for s in projected:
                 if not _subject_already_present(new_subjects, s.valueUri):
                     new_subjects.append(s)
+
+        # P2-0 DUAL-STAMP: also carry the record's source-stamped taxon ids
+        # forward as subjects. This keeps the eventual single-clause
+        # subjects.valueUri filter as broad as the Pass 1 alt-id ∪ label
+        # union — a record stamped 11320 but whose Species resolves to
+        # 2955291 ends up with BOTH IRIs, so either query matches.
+        dual = _dual_stamp_subjects(record)
+        for s in dual:
+            if not _subject_already_present(new_subjects, s.valueUri):
+                new_subjects.append(s)
+                any_hit = True
+
+        # VIOLIN cross-walk: a vaccine inherits its target pathogen(s)' taxon.
+        if use_xwalk:
+            from apecx_harvesters.pipeline.violin_crosswalk import (  # noqa: PLC0415
+                violin_vaccine_crosswalk_subjects,
+            )
+
+            for s in violin_vaccine_crosswalk_subjects(record, violin_pathogen_crosswalk):
+                if not _subject_already_present(new_subjects, s.valueUri):
+                    new_subjects.append(s)
+                    any_hit = True
+
+        # STRAIN→SPECIES NORMALIZATION: for every NCBITaxon subject now on the
+        # record (slot-resolved, dual-stamped, or crosswalk-derived), also
+        # stamp its species-rank ancestor. A record carrying strain 1773's
+        # ancestor — or a BVBRC "species.strain" prefix that is itself a
+        # strain — then matches a species-level subjects.valueUri query
+        # uniformly across sources. Snapshot the NCBITaxon IRIs first: we
+        # mutate new_subjects inside the loop.
+        taxon_iris = [
+            s.valueUri
+            for s in new_subjects
+            if s.valueUri and s.valueUri.startswith(f"{_OBO_BASE}NCBITaxon_")
+        ]
+        for taxon_iri in taxon_iris:
+            species_iri = _species_iri_for(taxon_iri)
+            if species_iri is None or species_iri == taxon_iri:
+                continue
+            if _subject_already_present(new_subjects, species_iri):
+                continue
+            species_subject = _ncbitaxon_species_subject(species_iri)
+            if species_subject is not None:
+                new_subjects.append(species_subject)
+                any_hit = True
+
         if not any_hit:
             # No subject resolved on any slot; pass record through to keep
             # caller-side counters accurate. The record still re-ingests.
@@ -239,6 +381,68 @@ def make_resolver_for_source(
 
     resolve.__source_name__ = source_name  # type: ignore[attr-defined]
     return resolve
+
+
+def _dual_stamp_subjects(record: DataCite) -> list[Subject]:
+    """Project the record's source-stamped alternate identifiers into Subjects.
+
+    Reads ``record.alternateIdentifiers`` for types in
+    :data:`_ALTID_TYPE_TO_ONTOLOGY` (currently NCBI-Taxonomy) and emits a
+    Subject per recognised id. The source-stamped id is authoritative for
+    the records the source actually carries, independent of how the
+    dictionary re-resolves the current Species name.
+    """
+    out: list[Subject] = []
+    seen: set[str] = set()
+    for alt in record.alternateIdentifiers or []:
+        alt_type = alt.alternateIdentifierType or ""
+        ontology = _ALTID_TYPE_TO_ONTOLOGY.get(alt_type)
+        if ontology is None:
+            continue
+        value = (alt.alternateIdentifier or "").strip()
+        # "species.strain" ids (BVBRC-Genome) carry the taxon as the prefix.
+        if alt_type in _ALTID_SPECIES_PREFIX_TYPES:
+            value = value.split(".", 1)[0]
+        iri = _altid_to_iri(ontology, value)
+        if iri is None or iri in seen:
+            continue
+        scheme = _scheme_for(ontology)
+        if scheme is None:
+            continue
+        seen.add(iri)
+        name, scheme_uri = scheme
+        out.append(
+            Subject(
+                subject=value,
+                subjectScheme=name,
+                schemeUri=scheme_uri,
+                valueUri=iri,
+            )
+        )
+    return out
+
+
+def _ncbitaxon_species_subject(species_iri: str) -> Subject | None:
+    """Build a Subject for a species-rank NCBITaxon IRI.
+
+    Strain→species normalization: ``species_iri`` is the species-rank
+    ancestor returned by ``DictionaryIndex.species_iri_for``. Stamping it
+    alongside the strain-level taxon makes a species-level
+    ``subjects.valueUri`` query match strain-stamped records uniformly.
+    """
+    if not species_iri.startswith(f"{_OBO_BASE}NCBITaxon_"):
+        return None
+    value = species_iri[len(f"{_OBO_BASE}NCBITaxon_"):]
+    scheme = _scheme_for("ncbitaxon")
+    if scheme is None:
+        return None
+    name, scheme_uri = scheme
+    return Subject(
+        subject=value,
+        subjectScheme=name,
+        schemeUri=scheme_uri,
+        valueUri=species_iri,
+    )
 
 
 def _subject_already_present(

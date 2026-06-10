@@ -1,0 +1,42 @@
+# Curated alias → canonical surface form, applied BEFORE dictionary lookup.
+# Addresses two benchmark findings: (1) community/ICTV acronyms NCBI's
+# names.dmp lacks, and (2) broad names that resolve to a childless NCBI
+# grouping taxon (dead-end) — redirected to the subtree root so descendant
+# expansion can retrieve the family/genus.
+#
+# Format: <alias>\t<canonical surface form>\t<note>
+# Match is case-insensitive on the normalized surface form.
+#
+# PRODUCTION NOTE: the proper home for these is the dictionary itself (a
+# curated synonym delta + republish), so every consumer benefits. This file
+# is the resolution-layer demonstration; it does not require a republish.
+#
+# Some entries are deliberate recall-over-precision JUDGMENT CALLS (noted) —
+# a broad redirect that catches more records at the cost of taxonomic exactness.
+
+# --- acronyms NCBI lacks (clean) ---
+DENV	Dengue virus	ICTV acronym, NCBI has no acronym record
+LASV	Lassa virus	ICTV acronym
+NiV	Nipah virus	ICTV acronym
+RABV	Rabies lyssavirus	ICTV acronym
+MARV	Marburg marburgvirus	full name is ambiguous; pin to the species
+HEV	Hepatitis E virus	disambiguates from HeV (Hendra)
+HeV	Hendra virus	disambiguates from HEV (Hepatitis E)
+
+# --- broad common names that miss or hit a dead-end node ---
+coronavirus	Coronaviridae	family root (2267 desc); bare name misses
+poxvirus	Poxviridae	family root (649 desc); bare name misses
+herpesvirus	Herpesviridae	dead-end 0-desc node → Orthoherpesviridae (1269 desc)
+hepatitis a virus	Hepatovirus A	dead-end node → species with subtree
+
+# --- recall-over-precision judgment calls (noted) ---
+HIV	HIV-1	JUDGMENT: 12721 is childless; HIV-1 (2832 desc) dominant but EXCLUDES HIV-2
+
+# REMOVED 2026-06-09 after measurement: coxsackievirus→Enterovirus and
+# rhinovirus→Enterovirus. Both redirect to the Enterovirus genus (1117 desc),
+# so each retrieved the ENTIRE genus (41,838 records — all polio/echo/rhino/
+# coxsackie) at a FAKE 100% precision (the oracle judges against the redirected
+# target, so it cannot see that most results are not coxsackie/rhino). A broad
+# redirect that loses the very specificity the user asked for is worse than a
+# miss. Lesson: redirect only to a node that IS the user's entity, never to an
+# ancestor that dilutes it.
