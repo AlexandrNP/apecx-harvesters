@@ -104,3 +104,86 @@ Harmonization gives **zero** benefit when the query doesn't resolve — both
 
 Raw artifacts: `benchmarks/output/full/ablation_report.{md,json}`,
 `per_query.jsonl` (per query×index, all four cells + buckets — re-scorable).
+
+---
+
+# Improvements implemented + measured (2026-06-09)
+
+Three levers, each a benchmark flag, measured on the **affected queries only**
+(no full re-run — unchanged queries keep their baseline numbers).
+Artifacts: `benchmarks/output/exp_combined/`.
+
+## A. `--expand-descendants` — descendant-expanded `subjects.valueUri` filter
+
+The harm_dest filter expands to the query taxon's full subtree (chunked ≤1000
+for Globus). Converts a genus-level query — stamped on almost no records
+because records carry species/strain taxa *below* the genus — into the whole
+subtree, at genuine 100% precision (subtree-correct). No re-republish.
+
+| query | harm_dest before | after | lift |
+|---|---|---|---|
+| adenovirus | 28 | 9,868 | 352× |
+| rotavirus | 31 | 17,970 | 580× |
+| norovirus | 4 | 84,659 | huge |
+| measles virus (species) | 6,284 | 6,288 | ~1× (already correct) |
+
+Species-level queries are unchanged (they already resolve to a stamped taxon).
+Dead-end resolutions (descendants=0) are untouched — they need B.
+
+## B. `--use-aliases` — curated alias redirect (`queries/curated_aliases.tsv`)
+
+Redirects, at resolution time, (1) acronyms NCBI's `names.dmp` lacks and
+(2) broad names that hit a childless grouping taxon, to a subtree root.
+Composes with A.
+
+| query | before | after | note |
+|---|---|---|---|
+| DENV | 0 (miss) | 42,413 | acronym → Dengue virus |
+| RABV | 0 (miss) | 24,459 | acronym → Rabies lyssavirus |
+| coronavirus | 0 (miss) | 65,904 | → Coronaviridae (2267-taxon subtree) |
+| poxvirus | 0 (miss) | 21,313 | → Poxviridae |
+| herpesvirus | 12 | 23,639 | dead-end → Orthoherpesviridae |
+| cytomegalovirus | 4 | 11,106 | dead-end → subtree |
+
+All at 100% precision. **Honest caveats:**
+- **HEV/HeV went 1,463 → 9** — NOT a regression. Baseline resolved *ambiguous*
+  (HEV matched several taxa); the alias pins it to Hepatitis E virus precisely.
+  Precision up, recall down because Hepatitis E is genuinely sparse here.
+- **Removed `coxsackievirus`/`rhinovirus` → Enterovirus after measurement.**
+  Both redirected to the Enterovirus genus → each returned the *entire* genus
+  (41,838: polio/echo/rhino/coxsackie) at a **fake** 100% precision (the oracle
+  judges against the redirected target, so it cannot see most results aren't
+  coxsackie). A redirect that loses the user's specificity is worse than a
+  miss. **Rule: redirect only to a node that IS the entity, never to a
+  diluting ancestor.**
+- The production home for these is a **dictionary synonym delta + republish**,
+  not a resolution-layer file. This is the no-republish demonstration.
+
+## C. `--enable-ner` — optional LLM entity extraction for free-text
+
+On a resolution miss, extract entities via `apecx_db_integration.
+extract_entities_llm` (direct import, else subprocess to apecx-mcp-integration's
+venv; no-op if unavailable — apecx-harvesters stays framework-agnostic).
+Verified live against mistral-nemo.
+
+| free-text query | before | after |
+|---|---|---|
+| SARS-CoV-2 spike protein | 0 | 645 |
+| Ebola virus glycoprotein | 0 | 129 |
+| zika virus structure | 0 | 15 |
+| adenovirus vaccine | 0 | 9,868 (NER strips "vaccine") |
+
+**NER is necessary but not sufficient.** Still-zero: `influenza vaccine`,
+`tuberculosis genome`, `rabies vaccine`, `Lassa fever virus`, `herpes simplex`,
+`swine flu` — NER extracted the right entity *string*, but that string then
+failed to resolve (bare "influenza"/"tuberculosis"/"Lassa fever virus" aren't
+dictionary entries). The next lever is synonym coverage on the *extracted*
+entity (B's alias map would close most of these).
+
+## Net effect (affected queries, excluding the removed over-broad pair)
+
+Harm_dest recall on the changed queries rose from ~13.7k to ~475k records
+(~34×) at genuine subtree-correct precision, by turning total-misses and
+dead-ends into populated subtrees. The wins concentrate exactly where the
+baseline was weakest (broad names, acronyms, free-text) and leave the
+already-correct species queries untouched.

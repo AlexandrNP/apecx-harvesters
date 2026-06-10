@@ -31,5 +31,12 @@ hepatitis a virus	Hepatovirus A	dead-end node → species with subtree
 
 # --- recall-over-precision judgment calls (noted) ---
 HIV	HIV-1	JUDGMENT: 12721 is childless; HIV-1 (2832 desc) dominant but EXCLUDES HIV-2
-coxsackievirus	Enterovirus	JUDGMENT: coxsackie ⊂ Enterovirus genus; broader than exact
-rhinovirus	Enterovirus	JUDGMENT: rhinoviruses reclassified into Enterovirus; broad
+
+# REMOVED 2026-06-09 after measurement: coxsackievirus→Enterovirus and
+# rhinovirus→Enterovirus. Both redirect to the Enterovirus genus (1117 desc),
+# so each retrieved the ENTIRE genus (41,838 records — all polio/echo/rhino/
+# coxsackie) at a FAKE 100% precision (the oracle judges against the redirected
+# target, so it cannot see that most results are not coxsackie/rhino). A broad
+# redirect that loses the very specificity the user asked for is worse than a
+# miss. Lesson: redirect only to a node that IS the user's entity, never to an
+# ancestor that dilutes it.
