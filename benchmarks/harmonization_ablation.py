@@ -145,6 +145,46 @@ def _species_expand(iris: set[str]) -> set[str]:
     return out
 
 
+# Query IRI set → descendant taxon-id set (the subtree under the query taxon).
+# Memoized: lookup_descendant_taxon_ids runs a recursive CTE + opens a
+# connection per call. Used by the adjudication oracle so a broad query
+# ("adenovirus", a genus) CREDITS a specific-species record ("Human
+# adenovirus C") as a true hit instead of a false positive — the oracle does
+# upward species-normalization AND downward descendant matching.
+_DESC_CACHE: dict[frozenset[str], set[int]] = {}
+
+
+def _query_descendants(iris: set[str]) -> set[int]:
+    key = frozenset(iris)
+    if key in _DESC_CACHE:
+        return _DESC_CACHE[key]
+    index, _ = get_dictionary_index()
+    out: set[int] = set()
+    if index is not None:
+        for iri in iris:
+            out.update(index.lookup_descendant_taxon_ids(iri))
+    _DESC_CACHE[key] = out
+    return out
+
+
+def _taxon_matches(taxon_iri: str, s_q: set[str], desc_ids: set[int]) -> bool:
+    """Is a record's taxon within the query entity's subtree (any rank)?
+
+    True when the record taxon equals the query taxon, its species ancestor
+    is in S_Q (strain→species upward), or its id is a descendant of the query
+    taxon (downward — a specific species under a broad query).
+    """
+    if taxon_iri in s_q:
+        return True
+    if _species_expand({taxon_iri}) & s_q:
+        return True
+    try:
+        tid = int(taxon_iri[len(_PREF):])
+    except (ValueError, TypeError):
+        return False
+    return tid in desc_ids
+
+
 @dataclass
 class Resolution:
     term: str
@@ -300,10 +340,10 @@ def _record_organism_text(record: dict, source: str) -> str | None:
     return None
 
 
-def adjudicate_dest(records: list[dict], s_q: set[str]) -> dict[str, int]:
-    """Bucket DEST records by subjects.valueUri ∩ (species-expanded) S_Q."""
+def adjudicate_dest(records: list[dict], s_q: set[str], desc_ids: set[int]) -> dict[str, int]:
+    """Bucket DEST records by subjects.valueUri within the query subtree."""
     # No resolved target → we cannot judge correctness; everything is unknown.
-    if not s_q:
+    if not s_q and not desc_ids:
         return {"true": 0, "false": 0, "unknown": len(records)}
     t = f_ = u = 0
     for r in records:
@@ -311,18 +351,19 @@ def adjudicate_dest(records: list[dict], s_q: set[str]) -> dict[str, int]:
         if not taxa:
             u += 1
             continue
-        expanded = _species_expand(taxa)
-        if expanded & s_q:
+        if any(_taxon_matches(ti, s_q, desc_ids) for ti in taxa):
             t += 1
         else:
             f_ += 1
     return {"true": t, "false": f_, "unknown": u}
 
 
-def adjudicate_source(records: list[dict], source: str, s_q: set[str]) -> dict[str, int]:
+def adjudicate_source(
+    records: list[dict], source: str, s_q: set[str], desc_ids: set[int]
+) -> dict[str, int]:
     """Bucket SOURCE records by resolving the organism text field."""
     # No resolved target → unadjudicable (see adjudicate_dest).
-    if not s_q:
+    if not s_q and not desc_ids:
         return {"true": 0, "false": 0, "unknown": len(records)}
     t = f_ = u = 0
     for r in records:
@@ -331,10 +372,9 @@ def adjudicate_source(records: list[dict], source: str, s_q: set[str]) -> dict[s
             u += 1
             continue
         rr = resolve_query(organism, enable_fuzzy=False)
-        record_iris = _species_expand(rr.iris)
-        if not record_iris:
+        if not rr.iris:
             u += 1
-        elif record_iris & s_q:
+        elif any(_taxon_matches(ti, s_q, desc_ids) for ti in rr.iris):
             t += 1
         else:
             f_ += 1
@@ -409,9 +449,10 @@ def run(
             res = resolve_query(term)
             if res.iris:
                 resolved_count += 1
+            desc_ids = _query_descendants(res.iris)
             print(
                 f"  [{qi}/{len(queries)}] {term!r} path={res.path} "
-                f"iris={len(res.iris)} s_q={len(res.s_q)}",
+                f"iris={len(res.iris)} s_q={len(res.s_q)} descendants={len(desc_ids)}",
                 file=sys.stderr,
             )
             for name, src, dst in pairs:
@@ -422,10 +463,10 @@ def run(
                 hd_t, hd_r = cell_harmonized_dest(client, dst, res, limit, lbl + ":harm_dst")
 
                 judged = {
-                    "raw_source": (rs_t, adjudicate_source(rs_r, name, res.s_q)),
-                    "harm_source": (hs_t, adjudicate_source(hs_r, name, res.s_q)),
-                    "raw_dest": (rd_t, adjudicate_dest(rd_r, res.s_q)),
-                    "harm_dest": (hd_t, adjudicate_dest(hd_r, res.s_q)),
+                    "raw_source": (rs_t, adjudicate_source(rs_r, name, res.s_q, desc_ids)),
+                    "harm_source": (hs_t, adjudicate_source(hs_r, name, res.s_q, desc_ids)),
+                    "raw_dest": (rd_t, adjudicate_dest(rd_r, res.s_q, desc_ids)),
+                    "harm_dest": (hd_t, adjudicate_dest(hd_r, res.s_q, desc_ids)),
                 }
                 row = {"category": category, "term": term, "index": name, "path": res.path}
                 for cell, (total, adj) in judged.items():
