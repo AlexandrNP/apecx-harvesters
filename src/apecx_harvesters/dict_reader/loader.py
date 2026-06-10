@@ -162,6 +162,36 @@ class DictionaryIndex:
             return False
         return row is not None
 
+    def species_iri_for(self, iri: str) -> str | None:
+        """Strain→species normalization: the species-rank ancestor IRI.
+
+        Reads the ``taxon_species`` table (built by the nanobrain
+        TaxonSpeciesMapStep). Returns the species IRI for a strain /
+        subspecies taxon (or the taxon itself when it IS a species), or
+        ``None`` when there is no species mapping (taxon above species rank,
+        or table absent — pre-normalization dictionaries).
+        """
+        if self._db_path is None or not iri.startswith(_NCBITAXON_OBO_PREFIX):
+            return None
+        try:
+            taxon_id = int(iri[len(_NCBITAXON_OBO_PREFIX):])
+        except ValueError:
+            return None
+        try:
+            conn = sqlite3.connect(f"file:{self._db_path}?mode=ro", uri=True)
+            try:
+                row = conn.execute(
+                    "SELECT species_taxon_id FROM taxon_species WHERE taxon_id = ?",
+                    (taxon_id,),
+                ).fetchone()
+            finally:
+                conn.close()
+        except sqlite3.OperationalError:
+            return None
+        if row is None:
+            return None
+        return f"{_NCBITAXON_OBO_PREFIX}{int(row[0])}"
+
     def lookup_ancestor(self, iri: str) -> DictionaryEntry | None:
         """Walk the NCBITaxon hierarchy upward to the nearest in-dict ancestor."""
         if not self._has_hierarchy or self._db_path is None:

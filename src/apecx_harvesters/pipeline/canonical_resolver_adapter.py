@@ -29,6 +29,7 @@ from apecx_harvesters.dict_reader import (
     EntityType,
     LookupCandidate,
     LookupResult,
+    get_dictionary_index,
     lookup_entity,
 )
 from apecx_harvesters.loaders.base import DataCite, Subject
@@ -279,6 +280,22 @@ def make_resolver_for_source(
     # (surface, entity_type); lives for the resolver's lifetime (one run).
     _lookup_cache: dict[tuple[str, Any], list[Subject]] = {}
 
+    # Strain→species memoization. species_iri_for is a single indexed read,
+    # but a republish hits the same handful of distinct taxa across tens of
+    # thousands of records; caching the IRI→species-IRI map keeps the
+    # expansion pass free after the first lookup of each taxon. None marks
+    # "no species ancestor" (taxon above species rank, or pre-normalization
+    # dictionary without the taxon_species table) so we don't re-query.
+    _species_cache: dict[str, str | None] = {}
+
+    def _species_iri_for(taxon_iri: str) -> str | None:
+        if taxon_iri in _species_cache:
+            return _species_cache[taxon_iri]
+        index, _load_error = get_dictionary_index()
+        species_iri = index.species_iri_for(taxon_iri) if index is not None else None
+        _species_cache[taxon_iri] = species_iri
+        return species_iri
+
     def _resolve_surface(surface: str, entity_type: Any) -> list[Subject]:
         key = (surface, entity_type)
         cached = _lookup_cache.get(key)
@@ -331,6 +348,29 @@ def make_resolver_for_source(
                     new_subjects.append(s)
                     any_hit = True
 
+        # STRAIN→SPECIES NORMALIZATION: for every NCBITaxon subject now on the
+        # record (slot-resolved, dual-stamped, or crosswalk-derived), also
+        # stamp its species-rank ancestor. A record carrying strain 1773's
+        # ancestor — or a BVBRC "species.strain" prefix that is itself a
+        # strain — then matches a species-level subjects.valueUri query
+        # uniformly across sources. Snapshot the NCBITaxon IRIs first: we
+        # mutate new_subjects inside the loop.
+        taxon_iris = [
+            s.valueUri
+            for s in new_subjects
+            if s.valueUri and s.valueUri.startswith(f"{_OBO_BASE}NCBITaxon_")
+        ]
+        for taxon_iri in taxon_iris:
+            species_iri = _species_iri_for(taxon_iri)
+            if species_iri is None or species_iri == taxon_iri:
+                continue
+            if _subject_already_present(new_subjects, species_iri):
+                continue
+            species_subject = _ncbitaxon_species_subject(species_iri)
+            if species_subject is not None:
+                new_subjects.append(species_subject)
+                any_hit = True
+
         if not any_hit:
             # No subject resolved on any slot; pass record through to keep
             # caller-side counters accurate. The record still re-ingests.
@@ -380,6 +420,29 @@ def _dual_stamp_subjects(record: DataCite) -> list[Subject]:
             )
         )
     return out
+
+
+def _ncbitaxon_species_subject(species_iri: str) -> Subject | None:
+    """Build a Subject for a species-rank NCBITaxon IRI.
+
+    Strain→species normalization: ``species_iri`` is the species-rank
+    ancestor returned by ``DictionaryIndex.species_iri_for``. Stamping it
+    alongside the strain-level taxon makes a species-level
+    ``subjects.valueUri`` query match strain-stamped records uniformly.
+    """
+    if not species_iri.startswith(f"{_OBO_BASE}NCBITaxon_"):
+        return None
+    value = species_iri[len(f"{_OBO_BASE}NCBITaxon_"):]
+    scheme = _scheme_for("ncbitaxon")
+    if scheme is None:
+        return None
+    name, scheme_uri = scheme
+    return Subject(
+        subject=value,
+        subjectScheme=name,
+        schemeUri=scheme_uri,
+        valueUri=species_iri,
+    )
 
 
 def _subject_already_present(

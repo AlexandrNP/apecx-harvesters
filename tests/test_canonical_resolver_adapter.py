@@ -87,6 +87,32 @@ def _ambiguous(
     )
 
 
+@pytest.fixture(autouse=True)
+def _no_species_dictionary(monkeypatch):
+    """Keep these pure unit tests: neutralize the strain→species expansion.
+
+    The expansion pass calls ``get_dictionary_index()`` — a PROCESS-WIDE
+    singleton that another test file (``test_republish_roundtrip``) configures
+    with the real SQLite. Without this, run order would leak the real dict in
+    and add unexpected species subjects. Tests that exercise the expansion
+    re-patch ``get_dictionary_index`` locally.
+    """
+    monkeypatch.setattr(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.get_dictionary_index",
+        lambda: (None, None),
+    )
+
+
+class _StubIndex:
+    """Minimal stand-in for DictionaryIndex.species_iri_for in unit tests."""
+
+    def __init__(self, mapping: dict[str, str]):
+        self._mapping = mapping
+
+    def species_iri_for(self, iri: str) -> str | None:
+        return self._mapping.get(iri)
+
+
 def test_adapter_constructs_per_source():
     resolver = make_resolver_for_source("violin_pathogen")
     assert callable(resolver)
@@ -351,3 +377,88 @@ def test_dual_stamp_only_when_resolver_misses():
         out = resolver(record)
     iris = {s.valueUri for s in out.subjects}
     assert iris == {"http://purl.obolibrary.org/obo/NCBITaxon_11320"}
+
+
+# ---------------------------------------------------------------------------
+# Strain→species normalization — stamp the species-rank ancestor alongside
+# every NCBITaxon subject so a species-level subjects.valueUri query matches
+# strain-stamped records uniformly across sources.
+# ---------------------------------------------------------------------------
+
+_PREF = "http://purl.obolibrary.org/obo/NCBITaxon_"
+
+
+def test_species_expansion_stamps_species_ancestor_of_strain():
+    """A record carrying a strain taxon also gains its species ancestor."""
+    record = _make_violin_record("Mycobacterium tuberculosis H37Rv", 83332)
+    resolver = make_resolver_for_source("violin_pathogen")
+    with (
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+            return_value=_resolved(f"{_PREF}83332", "M.tb H37Rv"),
+        ),
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.get_dictionary_index",
+            return_value=(_StubIndex({f"{_PREF}83332": f"{_PREF}1773"}), None),
+        ),
+    ):
+        out = resolver(record)
+    iris = {s.valueUri for s in out.subjects}
+    assert f"{_PREF}83332" in iris  # the strain itself
+    assert f"{_PREF}1773" in iris  # its species ancestor
+    species = next(s for s in out.subjects if s.valueUri == f"{_PREF}1773")
+    assert species.subjectScheme == "NCBI Taxonomy"
+    assert species.subject == "1773"
+
+
+def test_species_expansion_no_duplicate_when_taxon_is_a_species():
+    """A species-rank taxon maps to itself — no duplicate Subject is added."""
+    record = _make_violin_record("Homo sapiens", 9606)
+    resolver = make_resolver_for_source("violin_pathogen")
+    with (
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+            return_value=_resolved(f"{_PREF}9606", "Homo sapiens"),
+        ),
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.get_dictionary_index",
+            return_value=(_StubIndex({f"{_PREF}9606": f"{_PREF}9606"}), None),
+        ),
+    ):
+        out = resolver(record)
+    iris = [s.valueUri for s in out.subjects]
+    assert iris == [f"{_PREF}9606"]
+
+
+def test_species_expansion_idempotent_on_rerun():
+    """Re-running over an already-species-stamped record adds nothing."""
+    record = _make_violin_record("Mycobacterium tuberculosis H37Rv", 83332)
+    resolver = make_resolver_for_source("violin_pathogen")
+    with (
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+            return_value=_resolved(f"{_PREF}83332", "M.tb H37Rv"),
+        ),
+        patch(
+            "apecx_harvesters.pipeline.canonical_resolver_adapter.get_dictionary_index",
+            return_value=(_StubIndex({f"{_PREF}83332": f"{_PREF}1773"}), None),
+        ),
+    ):
+        once = resolver(record)
+        twice = resolver(once)
+    assert {s.valueUri for s in once.subjects} == {s.valueUri for s in twice.subjects}
+    assert len([s for s in twice.subjects if s.valueUri == f"{_PREF}1773"]) == 1
+
+
+def test_species_expansion_noop_without_dictionary():
+    """Pre-normalization dictionary (index None) → expansion is a silent no-op."""
+    record = _make_violin_record("Mycobacterium tuberculosis H37Rv", 83332)
+    resolver = make_resolver_for_source("violin_pathogen")
+    # get_dictionary_index already neutralized to (None, None) by the autouse
+    # fixture — the expansion must not raise and must add no species subject.
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.lookup_entity",
+        return_value=_resolved(f"{_PREF}83332", "M.tb H37Rv"),
+    ):
+        out = resolver(record)
+    assert {s.valueUri for s in out.subjects} == {f"{_PREF}83332"}
