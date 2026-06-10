@@ -197,20 +197,64 @@ class Resolution:
 
 _RESOLVE_CACHE: dict[tuple[str, bool], Resolution] = {}
 
+# Curated alias map (lazy-loaded). alias(normalized) → canonical surface form.
+_ALIASES: dict[str, str] | None = None
+_USE_ALIASES = False
 
-def resolve_query(term: str, *, enable_fuzzy: bool = True) -> Resolution:
-    """Resolve a term to its canonical IRI set.
+# Optional NER (Change C). LLM entity extraction from free-text queries. The
+# implementation lives in apecx_db_integration (a sibling repo, LLM-backed);
+# it is NOT a dependency of apecx-harvesters by design. We try a direct import
+# first; if absent we shell out to apecx-mcp-integration's venv (which has it
+# editable-installed); if neither works, NER is disabled and the benchmark
+# runs as-is.
+_USE_NER = False
+_NER_VENV_PY = (
+    _REPO.parent / "apecx-mcp-integration" / ".venv" / "bin" / "python"
+)
+_NER_MODEL = os.environ.get("APECX_LLM_MODEL", "mistral-nemo:latest")
+_NER_BASE_URL = os.environ.get("APECX_LLM_BASE_URL", "http://localhost:11434/v1")
+_NER_CACHE: dict[str, list[str]] = {}
 
-    ``enable_fuzzy`` defaults True for USER queries (people type approximate
-    terms). Record-organism adjudication passes False: a record's organism is
-    a CONTROLLED field that should match exactly — a fuzzy match there would
-    loosely bucket a different organism as the query entity and inflate the
-    'true' count (the same reason the republish resolver uses fuzzy off).
-    """
-    key = (term, enable_fuzzy)
-    if key in _RESOLVE_CACHE:
-        return _RESOLVE_CACHE[key]
-    r = lookup_entity(term, enable_fuzzy=enable_fuzzy)
+
+def _ner_extract(query: str) -> list[str]:
+    """Extract candidate entity names from a free-text query (LLM). [] on miss."""
+    if query in _NER_CACHE:
+        return _NER_CACHE[query]
+    names: list[str] = []
+    try:  # direct import (only if apecx_db_integration installed in this env)
+        from apecx_db_integration import extract_entities_llm  # noqa: PLC0415
+
+        names = [e.get("name") for e in extract_entities_llm(query) if e.get("name")]
+    except Exception:
+        # Subprocess fallback to the sibling venv that has the package.
+        if _NER_VENV_PY.exists():
+            import subprocess  # noqa: PLC0415
+
+            snippet = (
+                "import json,sys; from apecx_db_integration import extract_entities_llm; "
+                "print(json.dumps([e.get('name') for e in extract_entities_llm(sys.argv[1]) "
+                "if e.get('name')]))"
+            )
+            env = {**os.environ, "APECX_LLM_MODEL": _NER_MODEL, "APECX_LLM_BASE_URL": _NER_BASE_URL}
+            try:
+                out = subprocess.run(
+                    [str(_NER_VENV_PY), "-c", snippet, query],
+                    capture_output=True, text=True, timeout=120, env=env,
+                )
+                if out.returncode == 0 and out.stdout.strip():
+                    names = json.loads(out.stdout.strip().splitlines()[-1])
+            except Exception as exc:
+                print(f"  NER subprocess failed: {exc}", file=sys.stderr)
+    _NER_CACHE[query] = names
+    return names
+
+
+def _lookup_to_iris(term: str, enable_fuzzy: bool) -> tuple[str, set[str], list[str]]:
+    """Alias-redirect + dictionary lookup → (path, ncbitaxon IRIs, labels)."""
+    lookup_term = term
+    if _USE_ALIASES and enable_fuzzy:
+        lookup_term = _load_aliases().get(term.strip().lower(), term)
+    r = lookup_entity(lookup_term, enable_fuzzy=enable_fuzzy)
     iris: set[str] = set()
     labels: list[str] = []
     if r.path == "ambiguous":
@@ -227,21 +271,58 @@ def resolve_query(term: str, *, enable_fuzzy: bool = True) -> Resolution:
     for syn in r.synonyms or ():
         if isinstance(syn, str) and syn and syn not in labels:
             labels.append(syn)
-    taxa = []
-    for iri in iris:
-        if iri.startswith(_PREF):
-            try:
-                taxa.append(int(iri[len(_PREF):]))
-            except ValueError:
-                pass
-    ncbitaxon_iris = {i for i in iris if i.startswith(_PREF)}
+    return r.path, {i for i in iris if i.startswith(_PREF)}, labels
+
+
+def _load_aliases() -> dict[str, str]:
+    global _ALIASES
+    if _ALIASES is None:
+        _ALIASES = {}
+        path = _HERE / "queries" / "curated_aliases.tsv"
+        if path.exists():
+            for line in path.read_text().splitlines():
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                parts = line.split("\t")
+                if len(parts) >= 2:
+                    _ALIASES[parts[0].strip().lower()] = parts[1].strip()
+    return _ALIASES
+
+
+def resolve_query(term: str, *, enable_fuzzy: bool = True) -> Resolution:
+    """Resolve a term to its canonical IRI set.
+
+    ``enable_fuzzy`` defaults True for USER queries (people type approximate
+    terms). Record-organism adjudication passes False: a record's organism is
+    a CONTROLLED field that should match exactly — a fuzzy match there would
+    loosely bucket a different organism as the query entity and inflate the
+    'true' count (the same reason the republish resolver uses fuzzy off).
+    """
+    key = (term, enable_fuzzy)
+    if key in _RESOLVE_CACHE:
+        return _RESOLVE_CACHE[key]
+    # Alias redirect happens inside _lookup_to_iris (query-side only; never on
+    # record-organism adjudication, which must judge the record's real organism).
+    path, iris, labels = _lookup_to_iris(term, enable_fuzzy)
+    # NER fallback: free-text query that didn't resolve → extract entities and
+    # resolve each. Query-side only (enable_fuzzy). Never recurses into NER.
+    if not iris and enable_fuzzy and _USE_NER:
+        for ent in _ner_extract(term):
+            _, e_iris, e_labels = _lookup_to_iris(ent, enable_fuzzy=True)
+            if e_iris:
+                iris |= e_iris
+                labels.extend(label for label in e_labels if label not in labels)
+        if iris:
+            path = "ner"
+    taxa = [int(i[len(_PREF):]) for i in iris]
     res = Resolution(
         term=term,
-        path=r.path,
-        iris=ncbitaxon_iris,
+        path=path,
+        iris=iris,
         labels=labels,
         taxa=taxa,
-        s_q=_species_expand(ncbitaxon_iris),
+        s_q=_species_expand(iris),
     )
     _RESOLVE_CACHE[key] = res
     return res
@@ -609,7 +690,24 @@ def main(argv: list[str] | None = None) -> int:
         help="comma-separated explicit query subset (targeted re-runs; avoids "
         "re-running unchanged queries).",
     )
+    ap.add_argument(
+        "--use-aliases",
+        action="store_true",
+        help="apply benchmarks/queries/curated_aliases.tsv before resolution "
+        "(acronyms + dead-end redirects experiment).",
+    )
+    ap.add_argument(
+        "--enable-ner",
+        action="store_true",
+        help="on a resolution miss, extract entities via the apecx_db_integration "
+        "LLM NER (direct import or sibling-venv subprocess) and resolve those. "
+        "No-op if the package + an LLM backend are unavailable.",
+    )
     args = ap.parse_args(argv)
+
+    global _USE_ALIASES, _USE_NER
+    _USE_ALIASES = args.use_aliases
+    _USE_NER = args.enable_ner
 
     cats = [c.strip() for c in args.categories.split(",") if c.strip()]
     idx = [i.strip() for i in args.indices.split(",")] if args.indices else None
