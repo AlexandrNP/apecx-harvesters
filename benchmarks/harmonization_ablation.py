@@ -301,17 +301,49 @@ def cell_harmonized_source(
     return _post(client, index_id, payload, label)
 
 
+# Globus match_any tolerates ~1300 filter values (verified). Chunk below that
+# so a broad query's full descendant subtree (e.g. HIV-1 ~2832) can be filtered
+# without a single oversized payload.
+_MAX_FILTER_VALUES = 1000
+
+
 def cell_harmonized_dest(
-    client, index_id: str, res: Resolution, limit: int, label: str
+    client,
+    index_id: str,
+    res: Resolution,
+    limit: int,
+    label: str,
+    expand_descendants: set[int] | None = None,
 ) -> tuple[int, list[dict]]:
-    values = sorted(res.s_q)
+    values = set(res.s_q)
+    if expand_descendants:
+        values |= {f"{_PREF}{d}" for d in expand_descendants}
+    values = sorted(values)
     if not values:
         return 0, []
-    payload = {
-        "filters": [{"type": "match_any", "field_name": "subjects.valueUri", "values": values}],
-        "limit": limit,
-    }
-    return _post(client, index_id, payload, label)
+    if len(values) <= _MAX_FILTER_VALUES:
+        payload = {
+            "filters": [{"type": "match_any", "field_name": "subjects.valueUri", "values": values}],
+            "limit": limit,
+        }
+        return _post(client, index_id, payload, label)
+    # Chunked: the descendant taxa are disjoint, so a record matches at most a
+    # few chunks. Sum totals (a near-exact upper bound — a record with taxa in
+    # two chunks double-counts, rare) and concatenate fetched records up to
+    # ``limit`` for the adjudication sample.
+    total = 0
+    records: list[dict] = []
+    for i in range(0, len(values), _MAX_FILTER_VALUES):
+        chunk = values[i : i + _MAX_FILTER_VALUES]
+        payload = {
+            "filters": [{"type": "match_any", "field_name": "subjects.valueUri", "values": chunk}],
+            "limit": limit,
+        }
+        t, recs = _post(client, index_id, payload, f"{label}#chunk{i // _MAX_FILTER_VALUES}")
+        if t > 0:
+            total += t
+        records.extend(recs)
+    return total, records[:limit]
 
 
 # ---------------------------------------------------------------------------
@@ -414,6 +446,8 @@ def run(
     max_queries: int | None,
     indices: list[str] | None,
     out_dir: Path,
+    expand_descendants: bool = False,
+    only_queries: set[str] | None = None,
 ) -> int:
     dict_path = Path(
         os.environ.get("APECX_SYNONYM_DICT_PATH", str(default_dictionary_path()))
@@ -439,6 +473,8 @@ def run(
 
     for category in categories:
         queries = _load_queries(category)
+        if only_queries is not None:
+            queries = [q for q in queries if q in only_queries]
         if max_queries:
             queries = queries[:max_queries]
         print(f"\n### category={category}  ({len(queries)} queries)", file=sys.stderr)
@@ -460,7 +496,10 @@ def run(
                 rs_t, rs_r = cell_raw(client, src, term, limit, lbl + ":raw_src")
                 hs_t, hs_r = cell_harmonized_source(client, src, name, res, limit, lbl + ":harm_src")
                 rd_t, rd_r = cell_raw(client, dst, term, limit, lbl + ":raw_dst")
-                hd_t, hd_r = cell_harmonized_dest(client, dst, res, limit, lbl + ":harm_dst")
+                hd_t, hd_r = cell_harmonized_dest(
+                    client, dst, res, limit, lbl + ":harm_dst",
+                    expand_descendants=desc_ids if expand_descendants else None,
+                )
 
                 judged = {
                     "raw_source": (rs_t, adjudicate_source(rs_r, name, res.s_q, desc_ids)),
@@ -558,11 +597,27 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--max-queries", type=int, default=None, help="cap queries/category (smoke runs)")
     ap.add_argument("--indices", default=None, help="comma-separated source short names (default: all 9)")
     ap.add_argument("--out", default=str(_HERE / "output"))
+    ap.add_argument(
+        "--expand-descendants",
+        action="store_true",
+        help="harm_dest filters subjects.valueUri on the query taxon's full "
+        "descendant subtree (improvement experiment for broad queries).",
+    )
+    ap.add_argument(
+        "--queries",
+        default=None,
+        help="comma-separated explicit query subset (targeted re-runs; avoids "
+        "re-running unchanged queries).",
+    )
     args = ap.parse_args(argv)
 
     cats = [c.strip() for c in args.categories.split(",") if c.strip()]
     idx = [i.strip() for i in args.indices.split(",")] if args.indices else None
-    return run(cats, args.limit, args.max_queries, idx, Path(args.out))
+    only = {q.strip() for q in args.queries.split(",")} if args.queries else None
+    return run(
+        cats, args.limit, args.max_queries, idx, Path(args.out),
+        expand_descendants=args.expand_descendants, only_queries=only,
+    )
 
 
 if __name__ == "__main__":
