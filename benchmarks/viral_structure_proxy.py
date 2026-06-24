@@ -59,6 +59,12 @@ VIRUSES: list[tuple[str, str, str]] = [
     ("West Nile", "West Nile virus", "11082"),
     ("HIV-1", "Human immunodeficiency virus 1", "11676"),
     ("HBV", "Hepatitis B virus", "10407"),
+    # NCBI reclassified these (arena/filo/hepaciviruses, 2023+) — the listed taxids are now STALE, so
+    # their lineage gold is 0 while name-match still finds records. They exercise the refine loop's
+    # stale-taxid diagnosis + auto-safe re-derivation; left here intentionally as real moving targets.
+    ("Lassa", "Lassa mammarenavirus", "11620"),
+    ("HCV", "Hepacivirus C", "11103"),
+    ("Ebola", "Zaire ebolavirus", "186538"),
     ("Yellow fever", "Yellow fever virus", "11089"),
     ("Measles", "Measles morbillivirus", "11234"),
     ("Rotavirus A", "Rotavirus A", "28875"),
@@ -149,7 +155,12 @@ def _derive_result(disp: str, taxid: str, *, gold: int, name_match: int, free_te
         free_text_overmatch=max(0, free_text - gold),
         emdb_total=emdb_total,
         emdb_taxid_fill=round(emdb_tax / emdb_total, 4) if emdb_total else None,
-        stale_taxid=bool(gold == 0 and name_match > 0),
+        # name-match is a SUBSET of the lineage gold normally (a record named "X" has X in its lineage),
+        # so gold==0-with-name-hits OR name_match meaningfully exceeding gold both mean the species taxid
+        # is wrong/narrow (reclassified or a sub-species node) — a diagnosable stale signal. The margin
+        # (max(2, gold//10)) absorbs minor RCSB name/lineage annotation skew so a couple of mis-annotated
+        # records don't false-flag a correct taxid.
+        stale_taxid=bool((gold == 0 and name_match > 0) or name_match > gold + max(2, gold // 10)),
     )
 
 

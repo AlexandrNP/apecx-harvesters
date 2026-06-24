@@ -30,6 +30,15 @@ def test_stale_taxid_flagged_when_gold_zero_but_name_matches():
     assert r.recall_after_realized is None             # no sample -> undefined
 
 
+def test_narrow_taxid_flagged_when_name_match_exceeds_gold():
+    # Ebola-shaped: a too-narrow sub-species taxid -> name-match (38) > lineage gold (19), an impossible
+    # ordering (name is a subset of lineage) that signals the taxid is wrong. Must flag stale, not emit
+    # a nonsensical recall_before > 1.0 into the aggregate.
+    r = _derive_result("Ebola", "186538", gold=19, name_match=38, free_text=113,
+                       stamped=8, sample_n=8, emdb_total=16, emdb_tax=15)
+    assert r.stale_taxid is True
+
+
 def test_no_emdb_entries_yields_none_fill():
     r = _derive_result("Rift Valley", "11588", gold=32, name_match=0, free_text=42,
                        stamped=10, sample_n=10, emdb_total=0, emdb_tax=0)
