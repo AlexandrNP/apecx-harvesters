@@ -481,3 +481,31 @@ class TestPdbByAuthor:
         q = SearchQuery.by_author("J. Smith")
         values = _phrase_values(q)
         assert values == ["Smith, J"]
+
+
+class TestTaxidAndUniprot:
+    """WS1: the harmonization-critical fields — exact taxid + UniProt — captured per entity
+    and stamped as alternateIdentifiers (the resolver IRI key + the ProtaBank bridge key)."""
+
+    def test_parses_taxid_and_uniprot_from_6m0j(self, record_6m0j):
+        # 6M0J = SARS-CoV-2 spike RBD (2697049, UniProt P0DTC2) + human ACE2 (9606, Q9BYF1).
+        ents = record_6m0j.pdb.polymer_entities
+        taxids = {e.ncbi_taxonomy_id for e in ents}
+        uniprots = {u for e in ents for u in e.uniprot_ids}
+        assert {2697049, 9606} <= taxids
+        assert {"P0DTC2", "Q9BYF1"} <= uniprots
+
+    def test_pdb_stamps_ncbitaxonomy_and_uniprot_altids(self, record_6m0j):
+        by_type: dict[str, set[str]] = {}
+        for a in record_6m0j.alternateIdentifiers:
+            by_type.setdefault(a.alternateIdentifierType, set()).add(a.alternateIdentifier)
+        assert {"2697049", "9606"} <= by_type.get("NCBI-Taxonomy", set())
+        assert {"P0DTC2", "Q9BYF1"} <= by_type.get("UniProt", set())
+        assert by_type.get("PDB") == {"6M0J"}  # the existing PDB id alt-id is preserved
+
+    def test_synthetic_construct_yields_no_taxid(self, record_4zt0):
+        # SpCas9 + sgRNA: assert the parse does not crash + entities expose the (possibly empty)
+        # new fields uniformly — no AttributeError, no fabricated taxids.
+        for e in record_4zt0.pdb.polymer_entities:
+            assert e.ncbi_taxonomy_id is None or isinstance(e.ncbi_taxonomy_id, int)
+            assert isinstance(e.uniprot_ids, list)

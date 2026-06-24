@@ -10,6 +10,33 @@ from ..base.parser import deduplicate_subjects, orcid_name_identifier
 from .model import PDBContainer, PDBFields, PolymerEntity, StructKeywords
 
 
+def _organism_uniprot_altids(entities: list[PolymerEntity]) -> list[AlternateIdentifier]:
+    """Stamp distinct source-organism taxids + UniProt accessions as alternateIdentifiers.
+
+    The NCBI-Taxonomy ids drive the harmonization resolver (``_dual_stamp_subjects`` projects the
+    NCBITaxon IRI + species rollup); the UniProt accessions are the PDB->UniProt bridge key that
+    makes ProtaBank taxon-findable through PDB. Bare-number NCBI-Taxonomy + plain UniProt accession
+    match the type strings the resolver and ProtaBank already use.
+    """
+    out: list[AlternateIdentifier] = []
+    seen_tax: set[int] = set()
+    seen_up: set[str] = set()
+    for ent in entities:
+        if ent.ncbi_taxonomy_id is not None and ent.ncbi_taxonomy_id not in seen_tax:
+            seen_tax.add(ent.ncbi_taxonomy_id)
+            out.append(AlternateIdentifier(
+                alternateIdentifier=str(ent.ncbi_taxonomy_id),
+                alternateIdentifierType="NCBI-Taxonomy",
+            ))
+        for up in ent.uniprot_ids:
+            if up not in seen_up:
+                seen_up.add(up)
+                out.append(AlternateIdentifier(
+                    alternateIdentifier=up, alternateIdentifierType="UniProt",
+                ))
+    return out
+
+
 def _parse_entry(entry: dict[str, Any]) -> PDBContainer:
     """Parse a single GraphQL entry dict into a ``PDBContainer``."""
     primary = entry.get("rcsb_primary_citation") or {}
@@ -22,6 +49,7 @@ def _parse_entry(entry: dict[str, Any]) -> PDBContainer:
     pdb_id = entry["rcsb_id"]
     info = entry.get("rcsb_accession_info", {})
     release_date = info.get("initial_release_date", "")
+    pdb_fields = _parse_pdb_fields(entry)
     return PDBContainer.new(
         creators=_parse_creators(entry),
         title=entry["struct"]["title"],
@@ -34,10 +62,11 @@ def _parse_entry(entry: dict[str, Any]) -> PDBContainer:
         doi=_parse_entry_doi(entry),
         alternateIdentifiers=[
             AlternateIdentifier(alternateIdentifier=pdb_id, alternateIdentifierType="PDB"),
+            *_organism_uniprot_altids(pdb_fields.polymer_entities),
         ],
         relatedIdentifiers=citation_ids,
         relatedItems=citation_items,
-        pdb=_parse_pdb_fields(entry),
+        pdb=pdb_fields,
     )
 
 
@@ -127,15 +156,24 @@ def _build_citation_fields(
 
 
 def _parse_polymer_entities(data: dict[str, Any]) -> list[PolymerEntity]:
-    """Extract per-entity source organism from ``polymer_entities``."""
+    """Extract per-entity source organism + UniProt cross-refs from ``polymer_entities``."""
     entities = []
     for entity in data.get("polymer_entities") or []:
+        # organisms[0]: one source organism per entity (established convention, matches the
+        # singular scientific_name field). The per-ENTITY fan-out covers multi-organism structures
+        # (e.g. 6M0J → 2 entities → 2 taxids); a rare chimeric entity's extra organisms are not split.
         organisms = entity.get("rcsb_entity_source_organism") or []
         scientific_name = organisms[0].get("scientific_name") if organisms else None
+        ncbi_taxonomy_id = organisms[0].get("ncbi_taxonomy_id") if organisms else None
+        uniprot_ids = [
+            u["rcsb_id"] for u in (entity.get("uniprots") or []) if u.get("rcsb_id")
+        ]
         poly = entity.get("entity_poly") or {}
         entities.append(PolymerEntity(
             entity_id=entity["rcsb_id"],
             scientific_name=scientific_name,
+            ncbi_taxonomy_id=ncbi_taxonomy_id,
+            uniprot_ids=uniprot_ids,
             polymer_type=poly.get("rcsb_entity_polymer_type"),
         ))
     return entities

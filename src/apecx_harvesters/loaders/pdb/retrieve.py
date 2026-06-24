@@ -44,7 +44,8 @@ query($ids: [String!]!) {
     polymer_entities {
       rcsb_id
       entity_poly { rcsb_entity_polymer_type }
-      rcsb_entity_source_organism { scientific_name }
+      rcsb_entity_source_organism { scientific_name ncbi_taxonomy_id }
+      uniprots { rcsb_id }
     }
   }
 }

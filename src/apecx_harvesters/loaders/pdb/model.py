@@ -28,6 +28,18 @@ class PolymerEntity(BaseModel):
         description="Source organism scientific name from rcsb_entity_source_organism. "
                     "None when the organism is not recorded (e.g. synthetic constructs).",
     )] = None
+    ncbi_taxonomy_id: Annotated[Optional[int], Field(
+        title="NCBI Taxonomy ID",
+        description="Exact NCBI taxon id from rcsb_entity_source_organism.ncbi_taxonomy_id. "
+                    "None when the organism is not recorded. Stamped as an NCBI-Taxonomy "
+                    "alternateIdentifier so the harmonization resolver projects the taxon IRI.",
+    )] = None
+    uniprot_ids: Annotated[list[str], Field(
+        default_factory=list,
+        title="UniProt Accessions",
+        description="UniProt accessions linked to this entity (RCSB uniprots.rcsb_id). The "
+                    "PDB->UniProt bridge key that makes ProtaBank taxon-findable through PDB.",
+    )]
     polymer_type: Annotated[Optional[str], Field(
         title="Polymer Type",
         description="Broad polymer class from entity_poly.rcsb_entity_polymer_type, "
