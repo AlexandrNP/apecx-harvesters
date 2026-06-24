@@ -252,8 +252,9 @@ def make_resolver_for_source(
     The returned callable is fed one parsed DataCite record at a time;
     it returns a new record (same type, ``model_copy``) with
     ``record.subjects`` extended by zero-or-more Subject entries per
-    organism slot configured for the source. Records for sources with
-    no registered slot pass through unchanged.
+    organism slot configured for the source, PLUS the alt-id dual-stamp +
+    species rollup — which run even for sources with no name-slots (e.g. PDB/EMDB,
+    which carry exact-taxid NCBI-Taxonomy alternateIdentifiers, no name to resolve).
 
     ``violin_pathogen_crosswalk`` (only used for ``violin_vaccine``): a
     ``{pathogen_id: taxon}`` map from VIOLIN:Pathogen. When supplied, a
@@ -267,7 +268,8 @@ def make_resolver_for_source(
     slots = _SOURCE_SLOTS.get(source_name, ())
     if not slots:
         log.info(
-            "no organism slots registered for source %r — pass-through",
+            "no organism name-slots for source %r — relying on the alt-id dual-stamp "
+            "(NCBI-Taxonomy etc.) + species rollup only",
             source_name,
         )
     use_xwalk = source_name == "violin_vaccine" and violin_pathogen_crosswalk
@@ -310,8 +312,10 @@ def make_resolver_for_source(
         return projected
 
     def resolve(record: DataCite) -> DataCite:
-        if not slots:
-            return record
+        # Do NOT early-return on empty slots: the alt-id dual-stamp + species rollup below
+        # are independent of name-resolution slots, and slot-less sources (PDB/EMDB carry
+        # exact-taxid NCBI-Taxonomy alt-ids, no organism name to resolve) depend on them.
+        # The slot loop is naturally a no-op when ``slots`` is empty.
         new_subjects: list[Subject] = list(record.subjects or [])
         any_hit = False
         for slot in slots:

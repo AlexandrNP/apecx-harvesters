@@ -22,7 +22,7 @@ from unittest.mock import patch
 import pytest
 
 from apecx_harvesters.dict_reader import LookupCandidate, LookupResult, ResolutionStatus
-from apecx_harvesters.loaders.base import Publisher, Subject
+from apecx_harvesters.loaders.base import AlternateIdentifier, Publisher, Subject
 from apecx_harvesters.loaders.violin_pathogen import VIOLINPathogenContainer
 from apecx_harvesters.loaders.violin_pathogen.model import ViolinPathogenFields
 from apecx_harvesters.pipeline.canonical_resolver_adapter import (
@@ -120,12 +120,33 @@ def test_adapter_constructs_per_source():
 
 
 def test_adapter_pass_through_for_source_with_no_slots():
-    """ProtaBank has no organism-slot map yet — record returns unchanged."""
+    """A slot-less source whose record has NOTHING to dual-stamp returns unchanged. (The resolver
+    no longer early-returns merely on empty slots; a record with no NCBI-Taxonomy alt-id still
+    passes through via the any_hit=False path.)"""
     resolver = make_resolver_for_source("protabank")
-    record = _make_violin_record()  # type doesn't matter; ext_field won't match
+    record = _make_violin_record()  # no NCBI-Taxonomy alt-id -> nothing to dual-stamp
     out = resolver(record)
     assert out is record
     assert out.subjects == []
+
+
+def test_adapter_slotless_source_dual_stamps_ncbitaxon_altid():
+    """WS3a: a slot-less source (PDB/EMDB) whose record carries an NCBI-Taxonomy alt-id now gains
+    the NCBITaxon IRI Subject via the dual-stamp. Before the fix, resolve()'s empty-slots
+    early-return skipped the dual-stamp entirely — a silent harmonization failure (no taxon IRI)."""
+    resolver = make_resolver_for_source("pdb")  # not in _SOURCE_SLOTS -> slot-less
+    record = _make_violin_record().model_copy(update={
+        "alternateIdentifiers": [
+            AlternateIdentifier(
+                alternateIdentifier="2697049", alternateIdentifierType="NCBI-Taxonomy"
+            ),
+        ],
+        "subjects": [],
+    })
+    out = resolver(record)
+    iris = [s.valueUri for s in out.subjects]
+    assert "http://purl.obolibrary.org/obo/NCBITaxon_2697049" in iris
+    assert out is not record  # the dual-stamp produced a change
 
 
 def test_adapter_resolved_writes_one_subject():
