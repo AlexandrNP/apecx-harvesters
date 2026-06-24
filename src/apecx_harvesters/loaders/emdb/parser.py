@@ -40,6 +40,7 @@ def _parse_entry(payload: dict[str, Any]) -> EMDBContainer:
         dates=_parse_dates(admin),
         alternateIdentifiers=[
             AlternateIdentifier(alternateIdentifier=emdb_id, alternateIdentifierType="EMDB"),
+            *_natural_source_altids(payload),
         ],
         fundingReferences=_parse_funding(admin),
         relatedIdentifiers=_parse_related_identifiers(payload),
@@ -83,6 +84,44 @@ def _parse_creators(payload: dict[str, Any]) -> list[Creator]:
             nameIdentifiers=name_identifiers,
         ))
     return creators
+
+
+def _natural_source_taxids(payload: dict[str, Any]) -> list[int]:
+    """Recursively collect distinct natural_source.organism.ncbi taxids from the sample tree
+    (sample.macromolecule_list / supramolecule_list, varying nesting). ``recombinant_expression``
+    subtrees are skipped — that is the EXPRESSION HOST (e.g. an E. coli used to produce a viral
+    protein), not the organism the structure is OF. Order-preserving + de-duplicated.
+    """
+    found: list[int] = []
+
+    def walk(node: Any) -> None:
+        if isinstance(node, dict):
+            ns = node.get("natural_source")
+            if ns is not None:
+                for item in (ns if isinstance(ns, list) else [ns]):
+                    if not isinstance(item, dict):
+                        continue
+                    ncbi = (item.get("organism") or {}).get("ncbi")
+                    if isinstance(ncbi, int) and ncbi not in found:
+                        found.append(ncbi)
+            for key, value in node.items():
+                if key != "recombinant_expression":  # never the expression host
+                    walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(payload.get("sample") or {})
+    return found
+
+
+def _natural_source_altids(payload: dict[str, Any]) -> list[AlternateIdentifier]:
+    """Stamp each distinct natural-source organism taxid as an NCBI-Taxonomy alternateIdentifier;
+    the harmonization resolver (_dual_stamp_subjects) projects these to NCBITaxon IRIs + species."""
+    return [
+        AlternateIdentifier(alternateIdentifier=str(ncbi), alternateIdentifierType="NCBI-Taxonomy")
+        for ncbi in _natural_source_taxids(payload)
+    ]
 
 
 def _parse_description(payload: dict[str, Any]) -> str | None:

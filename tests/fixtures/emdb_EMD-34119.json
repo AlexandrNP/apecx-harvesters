@@ -1,0 +1,581 @@
+{
+ "_id": "634bbbe7d79f4542946f3488",
+ "admin": {
+  "authors_list": {
+   "author": [
+    {
+     "instance_type": "author",
+     "valueOf_": "Cong Y"
+    },
+    {
+     "instance_type": "author",
+     "valueOf_": "Liu CX"
+    }
+   ]
+  },
+  "current_status": {
+   "code": {
+    "valueOf_": "REL"
+   },
+   "date": "2024-10-23T00:00:00",
+   "processing_site": "PDBj"
+  },
+  "grant_support": {
+   "grant_reference": [
+    {
+     "code": "XDB29040300",
+     "country": "China",
+     "funding_body": "Chinese Academy of Sciences",
+     "instance_type": "grant_reference"
+    }
+   ]
+  },
+  "key_dates": {
+   "deposition": "2022-08-18T00:00:00",
+   "header_release": "2022-10-19T00:00:00",
+   "map_release": "2022-10-19T00:00:00",
+   "update": "2024-10-23T00:00:00"
+  },
+  "keywords": "coxsackievirus A16, cryo-EM, STRUCTURAL PROTEIN",
+  "sites": {
+   "deposition": "PDBj",
+   "last_processing": "PDBj"
+  },
+  "title": "Cryo-EM structure of expanded coxsackievirus A16 empty particle in complex with antibody 9B5"
+ },
+ "crossreferences": {
+  "citation_list": {
+   "primary_citation": {
+    "citation_type": {
+     "author": [
+      {
+       "ORCID": "0000-0002-8658-9009",
+       "instance_type": "author",
+       "order": 1,
+       "valueOf_": "Zhang C"
+      },
+      {
+       "instance_type": "author",
+       "order": 2,
+       "valueOf_": "Liu C"
+      },
+      {
+       "instance_type": "author",
+       "order": 3,
+       "valueOf_": "Shi J"
+      },
+      {
+       "instance_type": "author",
+       "order": 4,
+       "valueOf_": "Wang Y"
+      },
+      {
+       "instance_type": "author",
+       "order": 5,
+       "valueOf_": "Xu C"
+      },
+      {
+       "instance_type": "author",
+       "order": 6,
+       "valueOf_": "Ye X"
+      },
+      {
+       "instance_type": "author",
+       "order": 7,
+       "valueOf_": "Liu Q"
+      },
+      {
+       "instance_type": "author",
+       "order": 8,
+       "valueOf_": "Li X"
+      },
+      {
+       "instance_type": "author",
+       "order": 9,
+       "valueOf_": "Qiao W"
+      },
+      {
+       "instance_type": "author",
+       "order": 10,
+       "valueOf_": "Yin Y"
+      },
+      {
+       "ORCID": "0000-0002-7164-8694",
+       "instance_type": "author",
+       "order": 11,
+       "valueOf_": "Cong Y"
+      },
+      {
+       "ORCID": "0000-0002-2161-1359",
+       "instance_type": "author",
+       "order": 12,
+       "valueOf_": "Huang Z"
+      }
+     ],
+     "country": "UK",
+     "external_references": [
+      {
+       "instance_type": "external_references",
+       "type_": "PUBMED",
+       "valueOf_": "36543790"
+      },
+      {
+       "instance_type": "external_references",
+       "type_": "DOI",
+       "valueOf_": "doi:10.1038/s41467-022-35575-w"
+      },
+      {
+       "instance_type": "external_references",
+       "type_": "ISSN",
+       "valueOf_": "2041-1723"
+      }
+     ],
+     "first_page": "7854",
+     "journal": "Nat Commun",
+     "journal_abbreviation": "Nat Commun",
+     "last_page": "7854",
+     "published": true,
+     "title": "Molecular mechanism of antibody neutralization of coxsackievirus A16.",
+     "volume": "13",
+     "year": "2022"
+    }
+   }
+  },
+  "pdb_list": {
+   "pdb_reference": [
+    {
+     "instance_type": "pdb_reference",
+     "pdb_id": "7yv7",
+     "relationship": {
+      "in_frame": "FULLOVERLAP"
+     }
+    }
+   ]
+  }
+ },
+ "emdb_id": "EMD-34119",
+ "map": {
+  "axis_order": {
+   "fast": "X",
+   "medium": "Y",
+   "slow": "Z"
+  },
+  "cell": {
+   "a": {
+    "units": "\u212b",
+    "valueOf_": "572.0"
+   },
+   "alpha": {
+    "units": "deg",
+    "valueOf_": "90.0"
+   },
+   "b": {
+    "units": "\u212b",
+    "valueOf_": "572.0"
+   },
+   "beta": {
+    "units": "deg",
+    "valueOf_": "90.0"
+   },
+   "c": {
+    "units": "\u212b",
+    "valueOf_": "572.0"
+   },
+   "gamma": {
+    "units": "deg",
+    "valueOf_": "90.0"
+   }
+  },
+  "contour_list": {
+   "contour": [
+    {
+     "instance_type": "contour",
+     "level": 0.08,
+     "primary": true,
+     "source": "AUTHOR"
+    }
+   ]
+  },
+  "data_type": "IMAGE STORED AS FLOATING POINT NUMBER (4 BYTES)",
+  "dimensions": {
+   "col": 520,
+   "row": 520,
+   "sec": 520
+  },
+  "file": "emd_34119.map.gz",
+  "format": "CCP4",
+  "label": "::::EMDATABANK.org::::EMD-34119::::",
+  "origin": {
+   "col": 0,
+   "row": 0,
+   "sec": 0
+  },
+  "pixel_spacing": {
+   "x": {
+    "units": "\u212b",
+    "valueOf_": "1.1"
+   },
+   "y": {
+    "units": "\u212b",
+    "valueOf_": "1.1"
+   },
+   "z": {
+    "units": "\u212b",
+    "valueOf_": "1.1"
+   }
+  },
+  "size_kbytes": 562433,
+  "spacing": {
+   "x": 520,
+   "y": 520,
+   "z": 520
+  },
+  "statistics": {
+   "average": 0.0051000714,
+   "maximum": 1.9081824,
+   "minimum": -0.0035758545,
+   "std": 0.050385885
+  },
+  "symmetry": {
+   "space_group": 1
+  }
+ },
+ "sample": {
+  "macromolecule_list": {
+   "macromolecule": [
+    {
+     "ec_number": [
+      "3.4.22.29"
+     ],
+     "enantiomer": "LEVO",
+     "instance_type": "protein_or_peptide",
+     "macromolecule_id": 1,
+     "molecular_weight": {
+      "theoretical": {
+       "units": "MDa",
+       "valueOf_": "0.033080402"
+      }
+     },
+     "name": {
+      "valueOf_": "Capsid protein VP1"
+     },
+     "natural_source": {
+      "database": "NCBI",
+      "organism": {
+       "ncbi": 31704,
+       "valueOf_": "Coxsackievirus A16"
+      }
+     },
+     "number_of_copies": "1",
+     "recombinant_expression": {
+      "database": "NCBI",
+      "recombinant_organism": {
+       "ncbi": 10095,
+       "valueOf_": "Mus sp."
+      }
+     },
+     "sequence": {
+      "external_references": [
+       {
+        "instance_type": "external_references",
+        "type_": "UNIPROTKB",
+        "valueOf_": "M4TAU2"
+       }
+      ],
+      "string": "GDPIADMIDQTVNNQVNRSLTALQVLPTAANTEASSHRLGTGVVPALQAAETGASSNASDKNLIETRCVLNHHSTQETAI GNFFSRAGLVSIITMPTMGTQNTDGYANWDIDLMGYAQLRRKCELFTYMRFDAEFTFVVAKPNGELVPQLLQYMYVPPGA PKPTSRDSFAWQTATNPSVFVKMTDPPAQVSVPFMSPASAYQWFYDGYPTFGEHLQANDLDYGQCPNNMMGTFSIRTVGT KKSPHSITLRVYMRIKHVRAWIPRPLRNQPYLFKTNPNYKGNDIKCTSTSRDKITTL"
+     }
+    },
+    {
+     "ec_number": [
+      "3.4.22.29"
+     ],
+     "enantiomer": "LEVO",
+     "instance_type": "protein_or_peptide",
+     "macromolecule_id": 2,
+     "molecular_weight": {
+      "theoretical": {
+       "units": "MDa",
+       "valueOf_": "0.027557104"
+      }
+     },
+     "name": {
+      "valueOf_": "Capsid protein VP2"
+     },
+     "natural_source": {
+      "database": "NCBI",
+      "organism": {
+       "ncbi": 31704,
+       "valueOf_": "Coxsackievirus A16"
+      }
+     },
+     "number_of_copies": "1",
+     "recombinant_expression": {
+      "database": "NCBI",
+      "recombinant_organism": {
+       "ncbi": 10095,
+       "valueOf_": "Mus sp."
+      }
+     },
+     "sequence": {
+      "external_references": [
+       {
+        "instance_type": "external_references",
+        "type_": "UNIPROTKB",
+        "valueOf_": "A9LXZ4"
+       }
+      ],
+      "string": "SPSAEACGYSDRVAQLTIGNSTITTQEAANIVIAYGEWPEYCPDTDATAVDKPTRPDVSVNRFFTLDTKSWAKDSKGWYW KFPDVLTEVGVFGQNAQFHYLYRSGFCVHVQCNASKFHQGALLVAVLPEYVLGTIAGGTGNENSHPPYATTQPGQVGAVL THPYVLDAGIPLSQLTVCPHQWINLRTNNCATIIVPYMNTVPFDSALNHCNFGLLVIPVVPLDFNAGATSEIPITVTIAP MCAEFAGLRQAVKQ"
+     }
+    },
+    {
+     "ec_number": [
+      "3.4.22.29"
+     ],
+     "enantiomer": "LEVO",
+     "instance_type": "protein_or_peptide",
+     "macromolecule_id": 3,
+     "molecular_weight": {
+      "theoretical": {
+       "units": "MDa",
+       "valueOf_": "0.026646318"
+      }
+     },
+     "name": {
+      "valueOf_": "Capsid protein VP3"
+     },
+     "natural_source": {
+      "database": "NCBI",
+      "organism": {
+       "ncbi": 31704,
+       "valueOf_": "Coxsackievirus A16"
+      }
+     },
+     "number_of_copies": "1",
+     "recombinant_expression": {
+      "database": "NCBI",
+      "recombinant_organism": {
+       "ncbi": 10095,
+       "valueOf_": "Mus sp."
+      }
+     },
+     "sequence": {
+      "external_references": [
+       {
+        "instance_type": "external_references",
+        "type_": "UNIPROTKB",
+        "valueOf_": "A9LXZ4"
+       }
+      ],
+      "string": "GIPTELKPGTNQFLTTDDGVSAPILPGFHPTPPIHIPGEVRNLLEICRVETILEVNNLKTNETTPMQRLCFPVSVQSKTG ELCAAFRADPGRDGPWQSTILGQLCRYYTQWSGSLEVTFMFAGSFMATGKMLIAYTPPGGSVPADRITAMLGTHVIWDFG LQSSVTLVVPWISNTHYRAHARAGYFDYYTTGIITIWYQTNYVVPIGAPTTAYIVALAAAQDNFTMKLCKDTEDIEQTAN IQ"
+     }
+    },
+    {
+     "enantiomer": "LEVO",
+     "instance_type": "protein_or_peptide",
+     "macromolecule_id": 4,
+     "molecular_weight": {
+      "theoretical": {
+       "units": "MDa",
+       "valueOf_": "0.023600934"
+      }
+     },
+     "name": {
+      "valueOf_": "The light chain of antibody 9B5"
+     },
+     "natural_source": {
+      "database": "NCBI",
+      "organism": {
+       "ncbi": 31704,
+       "valueOf_": "Coxsackievirus A16"
+      }
+     },
+     "number_of_copies": "1",
+     "recombinant_expression": {
+      "database": "NCBI",
+      "recombinant_organism": {
+       "ncbi": 10095,
+       "valueOf_": "Mus sp."
+      }
+     },
+     "sequence": {
+      "string": "DIQMTQSPASLSVSVGETVTITCRASENIYSNLAWYQQKQGKSPQLLVYAATNLADGVPSRFSGSGSGTQYSLKINSLQS EDFGTYYCQQFWDTPFTFGSGTKLAIKRADAAPTVSIFPPSSEQLTSGGASVVCFLNNFYPKDINVKWKIDGSERQNGVL NSWTDQDSKDSTYSMSSTLTLTKDEYERHNSYTCEATHKTSTSPIVKSFNRNEC"
+     }
+    },
+    {
+     "enantiomer": "LEVO",
+     "instance_type": "protein_or_peptide",
+     "macromolecule_id": 5,
+     "molecular_weight": {
+      "theoretical": {
+       "units": "MDa",
+       "valueOf_": "0.023500203"
+      }
+     },
+     "name": {
+      "valueOf_": "The heavy chain of antibody 9B5"
+     },
+     "natural_source": {
+      "database": "NCBI",
+      "organism": {
+       "ncbi": 31704,
+       "valueOf_": "Coxsackievirus A16"
+      }
+     },
+     "number_of_copies": "1",
+     "recombinant_expression": {
+      "database": "NCBI",
+      "recombinant_organism": {
+       "ncbi": 10095,
+       "valueOf_": "Mus sp."
+      }
+     },
+     "sequence": {
+      "string": "EVQLQQSGPELVKPGASVKMSCKTSGYTFTENTMHWVRQSHGKSLEWIGGIYPKNDDTKYNQKFKGKATLTVDKSSSTAC MELRSLTSEDSAVYYCARGDYENYFYAMDYWGQGTSVTVSSAKTTPPSVYPLAPGCGDTTGSSVTLGCLVKGYFPESVTV TWNSGSLSSSVHTFPALLQSGLYTMSSSVTVPSSTWPSQTVTCSVAHPASSTTVDKKL"
+     }
+    }
+   ]
+  },
+  "name": {
+   "valueOf_": "Cryo-EM structure of expanded coxsackievirus A16 empty particle in complex with  antibody 9B5"
+  },
+  "supramolecule_list": {
+   "supramolecule": [
+    {
+     "instance_type": "complex_supramolecule",
+     "macromolecule_list": {
+      "macromolecule": [
+       {
+        "instance_type": "macromolecule",
+        "macromolecule_id": 1
+       },
+       {
+        "instance_type": "macromolecule",
+        "macromolecule_id": 2
+       },
+       {
+        "instance_type": "macromolecule",
+        "macromolecule_id": 3
+       },
+       {
+        "instance_type": "macromolecule",
+        "macromolecule_id": 4
+       },
+       {
+        "instance_type": "macromolecule",
+        "macromolecule_id": 5
+       }
+      ]
+     },
+     "name": {
+      "valueOf_": "Cryo-EM structure of expanded coxsackievirus A16 empty particle in complex with  antibody 9B5"
+     },
+     "natural_source": [
+      {
+       "database": "NCBI",
+       "instance_type": "natural_source",
+       "organism": {
+        "ncbi": 31704,
+        "valueOf_": "Coxsackievirus A16"
+       }
+      }
+     ],
+     "parent": 0,
+     "supramolecule_id": 1
+    }
+   ]
+  }
+ },
+ "structure_determination_list": {
+  "structure_determination": [
+   {
+    "aggregation_state": "particle",
+    "image_processing": [
+     {
+      "final_angle_assignment": {
+       "type_": "MAXIMUM LIKELIHOOD"
+      },
+      "final_reconstruction": {
+       "number_images_used": 3564,
+       "resolution": {
+        "res_type": "BY AUTHOR",
+        "units": "\u212b",
+        "valueOf_": "3.8"
+       },
+       "resolution_method": "FSC 0.143 CUT-OFF"
+      },
+      "image_processing_id": 1,
+      "image_recording_id": 1,
+      "initial_angle_assignment": {
+       "type_": "MAXIMUM LIKELIHOOD"
+      },
+      "instance_type": "singleparticle_processing",
+      "startup_model": [
+       {
+        "instance_type": "startup_model",
+        "type_of_model": "OTHER"
+       }
+      ]
+     }
+    ],
+    "instance_type": "structure_determination",
+    "method": "singleParticle",
+    "microscopy_list": {
+     "microscopy": [
+      {
+       "acceleration_voltage": {
+        "units": "kV",
+        "valueOf_": "300"
+       },
+       "electron_source": "FIELD EMISSION GUN",
+       "illumination_mode": "FLOOD BEAM",
+       "image_recording_list": {
+        "image_recording": [
+         {
+          "average_electron_dose_per_image": {
+           "units": "e/\u212b^2",
+           "valueOf_": "38.0"
+          },
+          "detector_mode": "SUPER-RESOLUTION",
+          "film_or_detector_model": {
+           "valueOf_": "GATAN K3 BIOQUANTUM (6k x 4k)"
+          },
+          "image_recording_id": 1,
+          "instance_type": "image_recording"
+         }
+        ]
+       },
+       "imaging_mode": "BRIGHT FIELD",
+       "instance_type": "single_particle_microscopy",
+       "microscope": "FEI TITAN KRIOS",
+       "microscopy_id": 1,
+       "nominal_defocus_max": {
+        "units": "\u00b5m",
+        "valueOf_": "2.5"
+       },
+       "nominal_defocus_min": {
+        "units": "\u00b5m",
+        "valueOf_": "0.8"
+       }
+      }
+     ]
+    },
+    "specimen_preparation_list": {
+     "specimen_preparation": [
+      {
+       "buffer": {
+        "ph": 7.5
+       },
+       "instance_type": "single_particle_preparation",
+       "preparation_id": 1,
+       "vitrification": {
+        "cryogen_name": "ETHANE"
+       }
+      }
+     ]
+    },
+    "structure_determination_id": 1
+   }
+  ]
+ },
+ "version": "3.0.9.3"
+}

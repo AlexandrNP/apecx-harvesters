@@ -356,3 +356,31 @@ class TestEmdbAuthorTerm:
         assert 'author:"Smith JM"' in term
         assert 'author:"Smith J"' in term
         assert 'author_orcid:"0000-0002-1234-5678"' in term
+
+
+class TestNaturalSourceTaxon:
+    """WS2: capture the natural-source organism taxid (NOT the expression host) and stamp it as an
+    NCBI-Taxonomy alternateIdentifier the harmonization resolver projects to a taxon IRI."""
+
+    EMD_34119 = FIXTURE_DIR / "emdb_EMD-34119.json"
+
+    @staticmethod
+    def _altids(fixture_path: Path) -> dict[str, set[str]]:
+        from apecx_harvesters.loaders.emdb.parser import _parse_entry
+        rec = _parse_entry(json.loads(fixture_path.read_text()))
+        by_type: dict[str, set[str]] = {}
+        for a in rec.alternateIdentifiers:
+            by_type.setdefault(a.alternateIdentifierType, set()).add(a.alternateIdentifier)
+        return by_type
+
+    def test_natural_source_taxid_stamped_not_host(self):
+        # EMD-34119: Coxsackievirus A16 natural source (31704), NOT the expression host (10095).
+        by_type = self._altids(self.EMD_34119)
+        assert "31704" in by_type.get("NCBI-Taxonomy", set())
+        assert "10095" not in by_type.get("NCBI-Taxonomy", set())
+        assert by_type.get("EMDB") == {"EMD-34119"}
+
+    def test_no_natural_source_yields_no_taxid_altid(self):
+        # The EMD-74041 fixture carries no natural_source -> no NCBI-Taxonomy alt-id, no crash.
+        by_type = self._altids(FIXTURE)
+        assert "NCBI-Taxonomy" not in by_type
