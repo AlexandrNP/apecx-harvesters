@@ -7,5 +7,8 @@ __pycache__/
 .cache/
 output/
 
+# Loop-generated auto-proposed aliases (LLM-proposed + dict-validated; review/promote, don't commit)
+benchmarks/queries/auto_aliases.tsv
+
 # Keep YOC's scripts for reference, but do not share them on github
 prior_art/benchmarks/output/

@@ -278,8 +278,13 @@ def _load_aliases() -> dict[str, str]:
     global _ALIASES
     if _ALIASES is None:
         _ALIASES = {}
-        path = _HERE / "queries" / "curated_aliases.tsv"
-        if path.exists():
+        # auto_aliases.tsv (loop-proposed, dict-validated) loads FIRST so a human-curated entry in
+        # curated_aliases.tsv overrides it on conflict. Auto entries stay in a separate file so they
+        # are reviewable/promotable, never silently merged into the human-curated set.
+        for fname in ("auto_aliases.tsv", "curated_aliases.tsv"):
+            path = _HERE / "queries" / fname
+            if not path.exists():
+                continue
             for line in path.read_text().splitlines():
                 line = line.strip()
                 if not line or line.startswith("#"):
