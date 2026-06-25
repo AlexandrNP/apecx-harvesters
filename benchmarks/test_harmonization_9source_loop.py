@@ -32,6 +32,17 @@ def test_split_queries_deterministic_disjoint_partition():
     assert train and held                               # neither empty at K=5
 
 
+def test_derive_refuses_multi_entity_alias(monkeypatch):
+    # GUARD: a multi-entity query must NOT be aliased to its organism alone (discarding the protein).
+    # derive_validated_alias refuses BEFORE any dict/LLM call when classify says multi_entity.
+    import harmonization_9source_loop as L
+    from entity_split import QuerySplit
+    monkeypatch.setattr(L, "classify_query_entities",
+                        lambda t: QuerySplit(term=t, organism="hiv", organism_iris={"x"},
+                                             protein_term="protease", protein_confident=True, multi_entity=True))
+    assert L.derive_validated_alias("HIV protease") is None
+
+
 @pytest.mark.skipif(not os.environ.get("APECX_RUN_LIVE"), reason="live dict+Ollama; set APECX_RUN_LIVE=1")
 def test_derive_validated_alias_expands_acronym():
     from apecx_harvesters.dict_reader import configure_dictionary_path, default_dictionary_path

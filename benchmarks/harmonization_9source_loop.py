@@ -38,6 +38,7 @@ from harmonization_ablation import (
 )
 from recall_oracle import measure_recall_full
 from precision_audit import audit_query_source, _extract_json, _LLM_BASE, _LLM_MODEL
+from entity_split import classify_query_entities
 from harmonization_refine_loop import should_terminate
 from apecx_harvesters.dict_reader import (
     configure_dictionary_path, default_dictionary_path, get_dictionary_index,
@@ -75,6 +76,10 @@ def derive_validated_alias(term: str) -> tuple[str, str, str] | None:
     """(term, canonical, method) — a DICT-VALIDATED alias whose canonical resolves to a real taxon.
     Fuzzy first (deterministic, high-confidence); else LLM-propose + dict-gate. None if unvalidatable
     (then the term stays on the gated worklist for a human)."""
+    # GUARD: never alias a MULTI-ENTITY query (organism + protein/gene, e.g. "HIV protease") to a single
+    # taxon — that silently discards the protein. Refuse; the loop gates it for the compound-query path.
+    if classify_query_entities(term).multi_entity:
+        return None
     idx, _ = get_dictionary_index()
     if idx is not None:
         for entry, score in idx.lookup_fuzzy(term, threshold=0.9, limit=3):
@@ -179,10 +184,19 @@ def run_loop(max_iters: int, indices, max_queries, held_out_every, out_dir: Path
             break
 
     # IMPACT + GATED worklist: measure full-corpus recall + precision on the queries we just made resolve,
-    # plus surface the still-unresolved (need a human alias) and precision/recall gated items.
-    gated: list[GatedItem] = [GatedItem(q, "*", "unresolved_query_unvalidatable",
-                                        "no fuzzy + no dict-validated LLM expansion — needs a human alias")
-                              for q in still_unresolved_train + held_unresolved]
+    # plus surface the still-unresolved. Split them: MULTI-ENTITY queries (organism + protein) were
+    # deliberately NOT aliased (a single-taxon alias would discard the protein) -> gated for the
+    # compound-query path; the rest need a human alias.
+    gated: list[GatedItem] = []
+    for q in still_unresolved_train + held_unresolved:
+        split = classify_query_entities(q)
+        if split.multi_entity:
+            gated.append(GatedItem(q, "*", "multi_entity",
+                                   f"organism={split.organism!r} + protein={split.protein_term!r} — build a "
+                                   f"compound (taxon AND protein) query, do NOT alias to the organism alone"))
+        else:
+            gated.append(GatedItem(q, "*", "unresolved_query_unvalidatable",
+                                   "no fuzzy + no dict-validated LLM expansion — needs a human alias"))
     impact = []
     for term, canon, method in applied_aliases:
         for name, src, dst in pairs:
