@@ -288,6 +288,25 @@ picking one. Tune `--divergence-records` (default 5) and
   intersection) instead of silently picking. See the `--compare`
   section above.
 
+- **Multi-entity queries get a COMPOUND filter, not an organism-only
+  collapse.** A query like `HIV protease` carries TWO entities — the
+  organism (HIV-1) AND a protein (protease). Resolving only the
+  organism would discard "protease" and return the whole virus. The
+  query layer detects a protein/gene term (`apecx_harvesters.query_intent.find_protein_term`
+  — a curated viral-protein lexicon: protease/polymerase/spike/
+  glycoprotein/reverse transcriptase/…) and, on an index with a
+  VERIFIED protein field (`PROTEIN_FIELD`, currently
+  `bvbrc_protein.Protein.Product`), builds a COMPOUND payload
+  `and[ match_any(taxon) , like(protein_field, "*protease*") ]` so the
+  result honors BOTH entities. Indices without a verified protein field
+  (genome/pathogen sources — a genome is not a single protein) stay
+  taxon-only rather than compound on a guessed field. Record-type
+  modifiers (`genome`/`vaccine`/`structure`) are an index-routing hint,
+  NOT a discarded entity. The matching guard on the benchmark side
+  (`benchmarks/harmonization_9source_loop.py`) REFUSES to auto-alias a
+  multi-entity query to its organism alone — it gates it as
+  `multi_entity` for this compound path.
+
 - **The dictionary path matters.** `apecx-lookup` requires
   `APECX_SYNONYM_DICT_PATH` to point at a built dictionary SQLite, or
   falls back to `~/.apecx/dictionary/dictionary.sqlite`. Missing
