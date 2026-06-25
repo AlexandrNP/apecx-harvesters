@@ -34,18 +34,34 @@ _RCSB = "https://search.rcsb.org/rcsbsearch/v2/query"
 _EMDB = "https://www.ebi.ac.uk/emdb/api/search"
 _LINEAGE = "rcsb_entity_source_organism.taxonomy_lineage.id"
 
-# (display, PDB species taxid, EMDB organism name). The product's viral focus.
+# (display, PDB species taxid, EMDB organism name). The product's viral focus. Reclassified viruses use
+# their CURRENT NCBI species taxid (the old taxids fail an RCSB lineage search — e.g. Lassa 11620 -> 0,
+# the current 3052310 -> 77); all taxids validated against RCSB taxonomy_lineage before listing.
 VIRUSES: list[tuple[str, str, str]] = [
     ("Chikungunya", "37124", "Chikungunya virus"),
     ("Dengue", "12637", "Dengue virus"),
     ("Zika", "64320", "Zika virus"),
     ("SARS-CoV-2", "2697049", "Severe acute respiratory syndrome coronavirus 2"),
+    ("SARS-CoV", "694009", "Severe acute respiratory syndrome-related coronavirus"),
     ("Influenza A", "11320", "Influenza A virus"),
+    ("Influenza B", "11520", "Influenza B virus"),
     ("West Nile", "11082", "West Nile virus"),
     ("HIV-1", "11676", "Human immunodeficiency virus 1"),
     ("MERS-CoV", "1335626", "Middle East respiratory syndrome-related coronavirus"),
     ("Yellow fever", "11089", "Yellow fever virus"),
     ("Measles", "11234", "Measles morbillivirus"),
+    ("HBV", "10407", "Hepatitis B virus"),
+    ("HCV", "3052230", "Hepacivirus hominis"),
+    ("Lassa", "3052310", "Lassa mammarenavirus"),
+    ("Ebola", "3052462", "Zaire ebolavirus"),
+    ("Marburg", "3052505", "Marburg marburgvirus"),
+    ("Nipah", "3052225", "Nipah henipavirus"),
+    ("Rift Valley", "11588", "Rift Valley fever virus"),
+    ("RSV", "11250", "Human respiratory syncytial virus"),
+    ("Rotavirus A", "28875", "Rotavirus A"),
+    ("Norovirus", "11983", "Norwalk virus"),
+    ("HSV-1", "10298", "Human herpesvirus 1"),
+    ("Mayaro", "59301", "Mayaro virus"),
 ]
 
 
