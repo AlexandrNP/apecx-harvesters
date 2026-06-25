@@ -17,22 +17,9 @@ import re
 from dataclasses import dataclass, field
 
 from harmonization_ablation import resolve_query
-
-# Curated viral/structural protein + functional-domain terms. Multi-word entries are matched first so
-# "spike protein" / "reverse transcriptase" win over their single tokens. Not exhaustive — the dict
-# EntityType.GENE lookup backs it up for names not listed here.
-_VIRAL_PROTEINS = {
-    "reverse transcriptase", "matrix protein", "fusion protein", "nucleocapsid protein",
-    "envelope protein", "capsid protein", "membrane protein", "surface glycoprotein", "spike protein",
-    "protease", "polymerase", "spike", "glycoprotein", "capsid", "envelope", "nucleoprotein",
-    "hemagglutinin", "neuraminidase", "integrase", "nucleocapsid", "helicase", "replicase",
-    "ns1", "ns3", "ns5", "nsp1", "rdrp", "vp1", "vp2", "vp7", "gp120", "gp41", "e1", "e2",
-}
-# Record-TYPE modifiers: these route to a source index / record type, they are NOT a discarded entity.
-_RECORD_TYPES = {"genome", "genomes", "structure", "structures", "sequence", "sequences",
-                 "vaccine", "vaccines", "epitope", "epitopes", "assembly", "proteome"}
-# Generic words to strip when isolating the organism (kept out of the "unknown residual" bucket).
-_GENERIC = {"protein", "proteins", "the", "a", "of", "for", "and", "data", "record", "records"}
+from apecx_harvesters.query_intent import (  # the shared, pure protein/record-type lexicon
+    GENERIC_WORDS, RECORD_TYPES, find_protein_term, find_record_type,
+)
 
 
 @dataclass
@@ -45,14 +32,6 @@ class QuerySplit:
     record_type: str | None = None    # genome/vaccine/structure/... (index hint, not a loss)
     residual_unknown: str | None = None  # a residual that is neither protein nor record-type -> HITL
     multi_entity: bool = False        # organism resolves AND a protein/gene residual is present
-
-
-def _find_lexicon_protein(low: str) -> str | None:
-    """Longest viral-protein lexicon term present as a whole word/phrase in the query, else None."""
-    for cand in sorted(_VIRAL_PROTEINS, key=len, reverse=True):
-        if re.search(rf"\b{re.escape(cand)}\b", low):
-            return cand
-    return None
 
 
 def _dict_is_gene(token: str) -> bool:
@@ -74,15 +53,15 @@ def classify_query_entities(term: str, resolver=resolve_query) -> QuerySplit:
     """resolver is injectable for unit tests (defaults to the dict-backed resolve_query)."""
     low = term.lower()
     # 1. protein/gene residual (lexicon first, then a dict-GENE check on leftover tokens).
-    protein = _find_lexicon_protein(low)
+    protein = find_protein_term(term)
     protein_confident = protein is not None
     # 2. record-type modifier.
-    record_type = next((w for w in low.split() if w in _RECORD_TYPES), None)
+    record_type = find_record_type(term)
     # 3. organism candidate = the query minus the protein term, record-type, and generic words.
     remainder = low
     for piece in filter(None, [protein, record_type]):
         remainder = re.sub(rf"\b{re.escape(piece)}\b", " ", remainder)
-    org_tokens = [t for t in re.split(r"\s+", remainder) if t and t not in _GENERIC and t not in _RECORD_TYPES]
+    org_tokens = [t for t in re.split(r"\s+", remainder) if t and t not in GENERIC_WORDS and t not in RECORD_TYPES]
     # a leftover token that is itself a dict GENE is a protein we missed in the lexicon.
     if protein is None:
         gene_tok = next((t for t in org_tokens if _dict_is_gene(t)), None)

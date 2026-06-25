@@ -220,6 +220,16 @@ HARMONIZED_FILTER: dict[str, dict[str, str]] = {
 }
 
 
+# Per-index field carrying the PROTEIN/GENE name, for compound (taxon AND protein) queries. A query like
+# "HIV protease" = organism HIV-1 + protein protease must NOT collapse to the organism alone (that
+# discards "protease"). Only indices with a VERIFIED protein field appear here; others stay taxon-only
+# (a genome/pathogen record has no single protein, so a protein term doesn't apply there).
+# bvbrc_protein.Protein.Product verified live 2026-06-24 (like *protease* -> 11,080 records).
+PROTEIN_FIELD: dict[str, str] = {
+    "bvbrc_protein": "Protein.Product",
+}
+
+
 def _taxon_id_from_resolution(resolution: dict[str, Any]) -> list[int]:
     """Extract integer NCBI taxon IDs from the canonical IRI(s).
 
@@ -239,13 +249,17 @@ def _taxon_id_from_resolution(resolution: dict[str, Any]) -> list[int]:
 
 
 def _build_query_for_index(
-    short: str, resolution: dict[str, Any], limit: int
+    short: str, resolution: dict[str, Any], limit: int, protein_term: str | None = None
 ) -> dict[str, Any] | None:
     """Construct the harmonized Globus payload for one index.
 
     Returns ``None`` when the resolution doesn't yield any value that
     fits the index's filter shape (e.g., resolution missed and we have
     no label/IRI/taxon to filter on).
+
+    When ``protein_term`` is given AND this index has a known protein field (``PROTEIN_FIELD``), the
+    payload is a COMPOUND ``and`` of the taxon filter and a ``like`` on the protein field — so
+    "HIV protease" filters organism=HIV-1 AND protein~protease instead of returning the whole virus.
     """
     spec = HARMONIZED_FILTER.get(short)
     if spec is None:
@@ -261,16 +275,17 @@ def _build_query_for_index(
         return None
     if not values:
         return None
-    return {
-        "filters": [
-            {
-                "type": "match_any",
-                "field_name": spec["field"],
-                "values": values,
-            }
-        ],
-        "limit": limit,
-    }
+    taxon_filter = {"type": "match_any", "field_name": spec["field"], "values": values}
+    protein_field = PROTEIN_FIELD.get(short)
+    if protein_term and protein_field:
+        return {
+            "filters": [{"type": "and", "filters": [
+                taxon_filter,
+                {"type": "like", "field_name": protein_field, "value": f"*{protein_term}*"},
+            ]}],
+            "limit": limit,
+        }
+    return {"filters": [taxon_filter], "limit": limit}
 
 
 def _build_query(iris: list[str], limit: int) -> dict[str, Any]:
@@ -570,6 +585,14 @@ def main() -> int:
     args = parser.parse_args()
 
     resolution = _resolve_term(args.term)
+    # Detect a protein/gene component so a multi-entity query ("HIV protease") builds a COMPOUND
+    # taxon-AND-protein filter instead of collapsing to the organism alone (which discards "protease").
+    try:
+        from apecx_harvesters.query_intent import find_protein_term  # noqa: PLC0415
+        protein_term = find_protein_term(args.term)
+    except Exception:  # noqa: BLE001 — protein detection is optional; fall back to taxon-only
+        protein_term = None
+    resolution["protein_term"] = protein_term
     if args.resolve_only:
         json.dump(resolution, sys.stdout, indent=2)
         sys.stdout.write("\n")
@@ -624,7 +647,7 @@ def main() -> int:
             raw_total, raw_records = _query_raw_one(
                 client, index_id, args.term, args.limit, short_name=short,
             )
-            payload = _build_query_for_index(short, resolution, args.limit)
+            payload = _build_query_for_index(short, resolution, args.limit, protein_term=protein_term)
             if payload is None:
                 harm_total, harm_records = 0, []
                 print(
@@ -667,7 +690,7 @@ def main() -> int:
     try:
         for short in target_short_names:
             index_id = INDICES.get(short, short)
-            payload = _build_query_for_index(short, resolution, args.limit)
+            payload = _build_query_for_index(short, resolution, args.limit, protein_term=protein_term)
             if payload is None:
                 print(
                     f"[{short:25s}] no harmonized filter; skipping",
