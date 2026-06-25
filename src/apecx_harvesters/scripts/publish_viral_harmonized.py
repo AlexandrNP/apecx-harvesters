@@ -78,13 +78,23 @@ def _pdb_ids(taxid: str, cap: int) -> list[str]:
 
 
 def _emdb_ids(organism: str, cap: int) -> list[str]:
+    # The EMDB search caps at 100 rows/page, so PAGINATE (page=1,2,... until a short/empty page) — a
+    # single page silently truncated high-volume viruses to 100.
     q = urllib.parse.quote(f'organism:"{organism}"')
-    try:
-        rows = json.loads(urllib.request.urlopen(f"{_EMDB}/{q}?rows={cap}&page=1", timeout=60).read())
-        return [r["emdb_id"] for r in (rows if isinstance(rows, list) else []) if r.get("emdb_id")]
-    except Exception as exc:  # noqa: BLE001
-        print(f"  EMDB search error {organism!r}: {exc}", file=sys.stderr)
-        return []
+    ids: list[str] = []
+    page = 1
+    while len(ids) < cap:
+        try:
+            rows = json.loads(urllib.request.urlopen(f"{_EMDB}/{q}?rows=100&page={page}", timeout=60).read())
+        except Exception as exc:  # noqa: BLE001
+            print(f"  EMDB search error {organism!r} page {page}: {exc}", file=sys.stderr)
+            break
+        rows = rows if isinstance(rows, list) else []
+        ids += [r["emdb_id"] for r in rows if r.get("emdb_id")]
+        if len(rows) < 100:  # last page
+            break
+        page += 1
+    return ids[:cap]
 
 
 async def _harvest(harvester, resolver, ids: list[str]) -> list:
@@ -117,25 +127,26 @@ async def _ingest(dest: str, records: list, dry_run: bool) -> int:
     return total
 
 
-async def main_async(n_viruses: int | None, cap: int, dry_run: bool) -> int:
+async def main_async(n_viruses: int | None, cap: int, dry_run: bool, source: str) -> int:
     configure_dictionary_path(default_dictionary_path())
     pdb_resolver = make_resolver_for_source("pdb")
     emdb_resolver = make_resolver_for_source("emdb")
     viruses = VIRUSES[:n_viruses] if n_viruses else VIRUSES
+    do_pdb, do_emdb = source in ("both", "pdb"), source in ("both", "emdb")
     pdb_records: list = []
     emdb_records: list = []
     for disp, taxid, organism in viruses:
-        pids = _pdb_ids(taxid, cap)
-        eids = _emdb_ids(organism, cap)
-        pdb_records += await _harvest(PDBHarvester(), pdb_resolver, pids)
-        emdb_records += await _harvest(EMDBHarvester(), emdb_resolver, eids)
+        pids = _pdb_ids(taxid, cap) if do_pdb else []
+        eids = _emdb_ids(organism, cap) if do_emdb else []
+        pdb_records += await _harvest(PDBHarvester(), pdb_resolver, pids) if do_pdb else []
+        emdb_records += await _harvest(EMDBHarvester(), emdb_resolver, eids) if do_emdb else []
         print(f"  {disp}: PDB {len(pids)} ids, EMDB {len(eids)} ids harvested", file=sys.stderr)
     # de-dup by canonical_uri (a structure can match multiple viruses' searches only rarely)
     pdb_records = list({r.canonical_uri: r for r in pdb_records}.values())
     emdb_records = list({r.canonical_uri: r for r in emdb_records}.values())
     print(f"\nHarvested {len(pdb_records)} distinct PDB + {len(emdb_records)} distinct EMDB records.", file=sys.stderr)
-    np = await _ingest(PDB_DEST, pdb_records, dry_run)
-    ne = await _ingest(EMDB_DEST, emdb_records, dry_run)
+    np = await _ingest(PDB_DEST, pdb_records, dry_run) if do_pdb else 0
+    ne = await _ingest(EMDB_DEST, emdb_records, dry_run) if do_emdb else 0
     print(f"{'[dry-run] ' if dry_run else ''}PDB ingested {np}, EMDB ingested {ne}.", file=sys.stderr)
     return 0
 
@@ -145,8 +156,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--viruses", type=int, default=None, help="cap the virus count (smoke runs)")
     ap.add_argument("--cap", type=int, default=200, help="max structures per virus per source")
     ap.add_argument("--dry-run", action="store_true", help="harvest + build docs but do NOT ingest")
+    ap.add_argument("--source", choices=["both", "pdb", "emdb"], default="both",
+                    help="publish only PDB, only EMDB, or both (default)")
     args = ap.parse_args(argv)
-    return asyncio.run(main_async(args.viruses, args.cap, args.dry_run))
+    return asyncio.run(main_async(args.viruses, args.cap, args.dry_run, args.source))
 
 
 if __name__ == "__main__":
