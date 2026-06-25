@@ -123,7 +123,8 @@ class GatedItem:
     evidence: str
 
 
-def run_loop(max_iters: int, indices, max_queries, held_out_every, out_dir: Path) -> int:
+def run_loop(max_iters: int, indices, max_queries, held_out_every, out_dir: Path,
+             categories=("abbreviations",)) -> int:
     dict_path = default_dictionary_path()
     if not dict_path.exists():
         print(f"dictionary not present at {dict_path}", file=sys.stderr)
@@ -136,7 +137,9 @@ def run_loop(max_iters: int, indices, max_queries, held_out_every, out_dir: Path
     client = _build_client()
     pairs = [(name, src, DEST_REGISTRY[src]) for src, (name, _) in SOURCE_REGISTRY.items()
              if indices is None or name in indices]
-    queries = _load_queries("abbreviations")
+    seen: set[str] = set()
+    queries = [q for cat in categories for q in _load_queries(cat)
+               if not (q in seen or seen.add(q))]  # de-dup across categories, preserve order
     if max_queries:
         queries = queries[:max_queries]
     train, held = split_queries(queries, held_out_every)
@@ -217,10 +220,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--indices", default=None, help="comma-separated source short names (default: all 9)")
     ap.add_argument("--max-queries", type=int, default=None)
     ap.add_argument("--held-out-every", type=int, default=5, help="every Kth query (sorted) is held out; 0 disables")
+    ap.add_argument("--categories", default="abbreviations",
+                    help="comma-separated: mu_virus,abbreviations,real_world (default: abbreviations)")
     ap.add_argument("--out", default=str(_HERE / "output"))
     args = ap.parse_args(argv)
     return run_loop(args.max_iters, args.indices.split(",") if args.indices else None,
-                    args.max_queries, args.held_out_every, Path(args.out))
+                    args.max_queries, args.held_out_every, Path(args.out),
+                    categories=tuple(args.categories.split(",")))
 
 
 if __name__ == "__main__":
