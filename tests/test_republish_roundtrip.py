@@ -24,10 +24,15 @@ from pathlib import Path
 
 import pytest
 
+from unittest.mock import patch
+
 from apecx_harvesters.dict_reader import configure_dictionary_path
 from apecx_harvesters.pipeline.canonical_resolver_adapter import make_resolver_for_source
 from apecx_harvesters.pipeline.harmonize import DEST_REGISTRY, SOURCE_REGISTRY
-from apecx_harvesters.pipeline.republish_with_canonical import _reparse_dest_content
+from apecx_harvesters.pipeline.republish_with_canonical import (
+    _assert_full_lineage_ready,
+    _reparse_dest_content,
+)
 
 _DICT_PATH = Path(
     os.environ.get(
@@ -120,3 +125,49 @@ def test_resolver_idempotent_on_rerun(source_uuid: str, source_name: str) -> Non
         assert {s.valueUri for s in (once.subjects or [])} == {
             s.valueUri for s in (twice.subjects or [])
         }, f"{source_name}: re-resolve changed the subject set (not idempotent)"
+
+
+# ---------------------------------------------------------------------------
+# FIX 3: protabank full-lineage republish must FAIL LOUD (not silently under-
+# stamp) when the dictionary lacks a taxon_hierarchy. The assert is a no-op for
+# every other source. The function does a local import of get_dictionary_index
+# from dict_reader.loader, so we patch it at that module.
+# ---------------------------------------------------------------------------
+
+
+class _StubHierarchyIndex:
+    """Minimal stand-in exposing only has_hierarchy."""
+
+    def __init__(self, has_hierarchy: bool):
+        self._has_hierarchy = has_hierarchy
+
+    @property
+    def has_hierarchy(self) -> bool:
+        return self._has_hierarchy
+
+
+def test_assert_full_lineage_ready_raises_for_protabank_without_hierarchy():
+    with patch(
+        "apecx_harvesters.dict_reader.loader.get_dictionary_index",
+        return_value=(None, "not set"),
+    ):
+        with pytest.raises(RuntimeError, match="taxon_hierarchy"):
+            _assert_full_lineage_ready("protabank")
+
+
+def test_assert_full_lineage_ready_noop_for_other_sources():
+    """Even with a missing/hierarchy-less dictionary, non-protabank sources are
+    untouched — the guard must not raise."""
+    with patch(
+        "apecx_harvesters.dict_reader.loader.get_dictionary_index",
+        return_value=(None, "not set"),
+    ):
+        _assert_full_lineage_ready("bvbrc_protein")  # must not raise
+
+
+def test_assert_full_lineage_ready_passes_when_hierarchy_present():
+    with patch(
+        "apecx_harvesters.dict_reader.loader.get_dictionary_index",
+        return_value=(_StubHierarchyIndex(has_hierarchy=True), None),
+    ):
+        _assert_full_lineage_ready("protabank")  # must not raise

@@ -116,8 +116,14 @@ async def republish_index(
     if source_uuid not in SOURCE_REGISTRY:
         raise KeyError(f"no parser registered for source {source_uuid!r}")
     name, parser = SOURCE_REGISTRY[source_uuid]
+    _assert_full_lineage_ready(name)
     resolver = make_resolver_for_source(
-        name, violin_pathogen_crosswalk=await _maybe_violin_crosswalk(name, client)
+        name,
+        violin_pathogen_crosswalk=await _maybe_violin_crosswalk(name, client),
+        uniprot_taxid_map=await _maybe_uniprot_taxid_map(
+            name, dest_uuid, client, page_size=page_size
+        ),
+        full_lineage=(name == "protabank"),
     )
 
     stats = RepublishStats(
@@ -241,8 +247,14 @@ async def preflight_index(
     if source_uuid not in SOURCE_REGISTRY:
         raise KeyError(f"no parser registered for source {source_uuid!r}")
     name, parser = SOURCE_REGISTRY[source_uuid]
+    _assert_full_lineage_ready(name)
     resolver = make_resolver_for_source(
-        name, violin_pathogen_crosswalk=await _maybe_violin_crosswalk(name, client)
+        name,
+        violin_pathogen_crosswalk=await _maybe_violin_crosswalk(name, client),
+        uniprot_taxid_map=await _maybe_uniprot_taxid_map(
+            name, dest_uuid, client, max_records=max_records, page_size=page_size
+        ),
+        full_lineage=(name == "protabank"),
     )
     stats = PreflightStats(
         source_name=name,
@@ -393,6 +405,66 @@ async def _maybe_violin_crosswalk(
     )
 
     return await build_violin_pathogen_crosswalk(client)
+
+
+def _assert_full_lineage_ready(source_name: str) -> None:
+    """Fail LOUD (not a silent no-op) when a protabank full-lineage republish is
+    requested but the dictionary has no ``taxon_hierarchy`` — otherwise every
+    record would get only its strain taxid and the post-ICTV-rename matching the
+    whole feature exists for would silently fail while the run reports success."""
+    if source_name != "protabank":
+        return
+    from apecx_harvesters.dict_reader.loader import get_dictionary_index
+
+    index, err = get_dictionary_index()
+    if index is None or not index.has_hierarchy:
+        raise RuntimeError(
+            "protabank full-lineage republish requires a dictionary with a "
+            f"taxon_hierarchy table; got: {err or 'hierarchy table absent'}. "
+            "Point APECX_SYNONYM_DICT_PATH at a hierarchy-bearing dictionary."
+        )
+
+
+async def _maybe_uniprot_taxid_map(
+    source_name: str,
+    dest_uuid: str,
+    client: globus_sdk.SearchClient,
+    *,
+    max_records: int | None = None,
+    page_size: int = 1000,
+) -> dict[str, int] | None:
+    """Pre-resolve every UniProt accession on the dest index to its organism
+    taxid, in one batched pass — only for protabank.
+
+    ProtaBank carries no organism name or taxid; its UniProt accession is the
+    only taxon signal. Returns None for every other source. ``max_records``
+    bounds the scroll so a preflight samples the same prefix the resolve loop does
+    (``page_size`` matches the resolve loop so the two scrolls return the same prefix).
+    """
+    if source_name != "protabank":
+        return None
+    from apecx_harvesters.loaders.base.uniprot_client import (
+        resolve_uniprot_taxids,
+        split_accession_field,
+    )
+
+    accessions: list[str] = []
+    seen: set[str] = set()
+    read = 0
+    async for rec in scroll_index_records(
+        dest_uuid, client=client, query="*", page_size=page_size
+    ):
+        if max_records is not None and read >= max_records:
+            break
+        read += 1
+        for alt in (rec.get("content") or {}).get("alternateIdentifiers") or []:
+            if alt.get("alternateIdentifierType") != "UniProt":
+                continue
+            for acc in split_accession_field(alt.get("alternateIdentifier") or ""):
+                if acc not in seen:
+                    seen.add(acc)
+                    accessions.append(acc)
+    return await resolve_uniprot_taxids(accessions)
 
 
 def _resolve_dictionary_version() -> str:

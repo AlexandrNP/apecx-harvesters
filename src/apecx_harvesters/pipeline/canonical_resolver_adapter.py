@@ -33,6 +33,7 @@ from apecx_harvesters.dict_reader import (
     lookup_entity,
 )
 from apecx_harvesters.loaders.base import DataCite, Subject
+from apecx_harvesters.loaders.base.uniprot_client import split_accession_field
 
 log = logging.getLogger(__name__)
 
@@ -246,6 +247,8 @@ def make_resolver_for_source(
     source_name: str,
     *,
     violin_pathogen_crosswalk: dict[int, int] | None = None,
+    uniprot_taxid_map: dict[str, int] | None = None,
+    full_lineage: bool = False,
 ) -> Callable[[DataCite], DataCite]:
     """Return a resolver callable for ``source_name``.
 
@@ -261,6 +264,16 @@ def make_resolver_for_source(
     vaccine inherits its target pathogen(s)' NCBI taxon — the cross-table
     join VIOLIN's fragmentation otherwise hides. Build it with
     ``violin_crosswalk.build_violin_pathogen_crosswalk``.
+
+    ``uniprot_taxid_map`` (only used for ``protabank``): a ``{UniProt accession:
+    NCBI taxid}`` map, pre-resolved in batch (ProtaBank carries only UniProt
+    accessions, no organism name or taxid). When supplied, each record's UniProt
+    alt-id is stamped as its organism NCBITaxon subject. ``full_lineage=True``
+    (also protabank) then rolls each taxon up its FULL ancestor chain — not just
+    the species rank — so a query resolving to a post-ICTV-rename intermediate
+    node (e.g. the old "Influenza A virus" 11320, now a sub-species under
+    2955291) still matches a strain-stamped record. Other sources leave both
+    defaulted off and are byte-for-byte unchanged.
 
     Construction is fast (no SQLite hit); the dictionary singleton is
     lazily materialized on the first ``lookup_entity`` call.
@@ -297,6 +310,20 @@ def make_resolver_for_source(
         species_iri = index.species_iri_for(taxon_iri) if index is not None else None
         _species_cache[taxon_iri] = species_iri
         return species_iri
+
+    # Full-lineage memoization (full_lineage path only) — same rationale as
+    # _species_cache: a republish hits the same handful of distinct taxa across
+    # all records; cache the IRI→ancestor-IRIs walk after the first lookup.
+    _ancestor_cache: dict[str, list[str]] = {}
+
+    def _full_ancestor_iris_for(taxon_iri: str) -> list[str]:
+        cached = _ancestor_cache.get(taxon_iri)
+        if cached is not None:
+            return cached
+        index, _load_error = get_dictionary_index()
+        ancestors = index.full_ancestor_iris_for(taxon_iri) if index is not None else []
+        _ancestor_cache[taxon_iri] = ancestors
+        return ancestors
 
     def _resolve_surface(surface: str, entity_type: Any) -> list[Subject]:
         key = (surface, entity_type)
@@ -352,6 +379,27 @@ def make_resolver_for_source(
                     new_subjects.append(s)
                     any_hit = True
 
+        # UNIPROT TAXON BRIDGE (protabank): ProtaBank records carry ONLY UniProt
+        # accessions — no organism name-slot, no NCBI-Taxonomy alt-id. Stamp the
+        # organism taxon resolved from each UniProt id (pre-resolved batch map);
+        # the rollup below then expands it. No-op when the map is empty.
+        if uniprot_taxid_map:
+            for alt in record.alternateIdentifiers or []:
+                if alt.alternateIdentifierType != "UniProt":
+                    continue
+                # ProtaBank packs multiple accessions into one id ("P1; P2; P3").
+                for acc in split_accession_field(alt.alternateIdentifier or ""):
+                    taxid = uniprot_taxid_map.get(acc)
+                    if taxid is None:
+                        continue
+                    taxon_iri = f"{_OBO_BASE}NCBITaxon_{taxid}"
+                    if _subject_already_present(new_subjects, taxon_iri):
+                        continue
+                    subject = _ncbitaxon_species_subject(taxon_iri)
+                    if subject is not None:
+                        new_subjects.append(subject)
+                        any_hit = True
+
         # STRAIN→SPECIES NORMALIZATION: for every NCBITaxon subject now on the
         # record (slot-resolved, dual-stamped, or crosswalk-derived), also
         # stamp its species-rank ancestor. A record carrying strain 1773's
@@ -365,15 +413,22 @@ def make_resolver_for_source(
             if s.valueUri and s.valueUri.startswith(f"{_OBO_BASE}NCBITaxon_")
         ]
         for taxon_iri in taxon_iris:
-            species_iri = _species_iri_for(taxon_iri)
-            if species_iri is None or species_iri == taxon_iri:
-                continue
-            if _subject_already_present(new_subjects, species_iri):
-                continue
-            species_subject = _ncbitaxon_species_subject(species_iri)
-            if species_subject is not None:
-                new_subjects.append(species_subject)
-                any_hit = True
+            if full_lineage:
+                # protabank: roll up the WHOLE ancestor chain (sub-species →
+                # species → genus → …) so a query at any rank matches.
+                rollup_iris = _full_ancestor_iris_for(taxon_iri)
+            else:
+                species_iri = _species_iri_for(taxon_iri)
+                rollup_iris = (
+                    [] if species_iri is None or species_iri == taxon_iri else [species_iri]
+                )
+            for rollup_iri in rollup_iris:
+                if _subject_already_present(new_subjects, rollup_iri):
+                    continue
+                rollup_subject = _ncbitaxon_species_subject(rollup_iri)
+                if rollup_subject is not None:
+                    new_subjects.append(rollup_subject)
+                    any_hit = True
 
         if not any_hit:
             # No subject resolved on any slot; pass record through to keep

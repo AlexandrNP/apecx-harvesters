@@ -33,6 +33,13 @@ log = logging.getLogger(__name__)
 _NOT_LOADED = object()
 _NCBITAXON_OBO_PREFIX = "http://purl.obolibrary.org/obo/NCBITaxon_"
 
+# Universal top-of-tree taxa that match an entire domain — meaningless as a
+# taxon-IRI filter, so excluded from the full-lineage rollup (a record stamped
+# with these would match a "viruses" or empty query). NOT a rank filter (the
+# hierarchy table carries no ranks); intermediate clades above family still
+# roll up, which is acceptable — a query rarely resolves to them.
+_UNIVERSAL_TAXIDS = frozenset({1, 131567, 10239})  # root, cellular organisms, Viruses
+
 _ANCESTOR_CTE = """
 WITH RECURSIVE anc(id, depth) AS (
     SELECT h.parent_taxon_id, 1
@@ -191,6 +198,40 @@ class DictionaryIndex:
         if row is None:
             return None
         return f"{_NCBITAXON_OBO_PREFIX}{int(row[0])}"
+
+    def full_ancestor_iris_for(self, iri: str) -> list[str]:
+        """Full ancestor lineage: every NCBITaxon ancestor IRI of *iri*, ordered
+        nearest→root, via ``taxon_hierarchy``.
+
+        Unlike :meth:`species_iri_for` (species rank only), this returns the
+        complete ancestor chain, so stamping it lets a query at ANY rank
+        (sub-species, species, genus, …) match a strain-keyed record — the case
+        ``species_iri_for`` misses when the query resolves BELOW the species
+        rank (post-ICTV-rename intermediate nodes). Returns ``[]`` when the
+        hierarchy table is absent or the taxon has no ancestors. Does NOT
+        include *iri* itself.
+        """
+        if not self._has_hierarchy or self._db_path is None or not iri.startswith(
+            _NCBITAXON_OBO_PREFIX
+        ):
+            return []
+        try:
+            taxon_id = int(iri[len(_NCBITAXON_OBO_PREFIX):])
+        except ValueError:
+            return []
+        try:
+            conn = sqlite3.connect(f"file:{self._db_path}?mode=ro", uri=True)
+            try:
+                rows = conn.execute(_ANCESTOR_CTE, {"taxon_id": taxon_id}).fetchall()
+            finally:
+                conn.close()
+        except sqlite3.OperationalError:
+            return []
+        return [
+            f"{_NCBITAXON_OBO_PREFIX}{int(r[0])}"
+            for r in rows
+            if int(r[0]) not in _UNIVERSAL_TAXIDS
+        ]
 
     def lookup_ancestor(self, iri: str) -> DictionaryEntry | None:
         """Walk the NCBITaxon hierarchy upward to the nearest in-dict ancestor."""

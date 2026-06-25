@@ -16,6 +16,7 @@ unit tests; no SQLite + no Globus required.
 
 from __future__ import annotations
 
+import os
 from typing import Any
 from unittest.mock import patch
 
@@ -483,3 +484,103 @@ def test_species_expansion_noop_without_dictionary():
     ):
         out = resolver(record)
     assert {s.valueUri for s in out.subjects} == {f"{_PREF}83332"}
+
+
+# ---------------------------------------------------------------------------
+# EF1: ProtaBank UniProt → taxon bridge + full-lineage rollup. Both are gated
+# behind defaults-off params so every other source is byte-for-byte unchanged.
+# ---------------------------------------------------------------------------
+
+
+class _StubLineageIndex:
+    """Stand-in exposing BOTH species_iri_for and full_ancestor_iris_for.
+
+    The full-lineage path calls full_ancestor_iris_for; species_iri_for must
+    still exist (returns None here) so the index satisfies the same interface
+    the non-lineage rollup pass would touch.
+    """
+
+    def __init__(self, lineage: dict[str, list[str]]):
+        self._lineage = lineage
+
+    def species_iri_for(self, iri: str) -> str | None:
+        return None
+
+    def full_ancestor_iris_for(self, iri: str) -> list[str]:
+        return self._lineage.get(iri, [])
+
+
+def test_adapter_protabank_uniprot_full_lineage():
+    """protabank: a UniProt alt-id is bridged to its organism taxon, then the
+    FULL ancestor chain is rolled up — so a query at a higher rank (11652)
+    matches a record stamped only with strain-level taxa (11706, 11676)."""
+    resolver = make_resolver_for_source(
+        "protabank",
+        uniprot_taxid_map={"P04608": 11706, "Q72501": 11676},
+        full_lineage=True,
+    )
+    record = _make_violin_record().model_copy(
+        update={
+            "alternateIdentifiers": [
+                AlternateIdentifier(
+                    alternateIdentifier="P04608; Q72501",
+                    alternateIdentifierType="UniProt",
+                )
+            ],
+            "subjects": [],
+        }
+    )
+    lineage = {
+        f"{_PREF}11706": [f"{_PREF}11676", f"{_PREF}11652"],
+        f"{_PREF}11676": [f"{_PREF}11652"],
+    }
+    with patch(
+        "apecx_harvesters.pipeline.canonical_resolver_adapter.get_dictionary_index",
+        return_value=(_StubLineageIndex(lineage), None),
+    ):
+        out = resolver(record)
+    iris = {s.valueUri for s in out.subjects}
+    assert f"{_PREF}11706" in iris  # split strain A
+    assert f"{_PREF}11676" in iris  # split strain B
+    assert f"{_PREF}11652" in iris  # rolled-up shared ancestor (higher-rank query)
+
+
+def test_adapter_uniprot_bridge_off_for_other_sources():
+    """Other sources keep the UniProt bridge + full-expansion OFF (defaults): a
+    record carrying ONLY a UniProt alt-id gains NO subjects. Pins the
+    'other sources byte-for-byte unchanged' contract."""
+    resolver = make_resolver_for_source("bvbrc_protein")  # no map, full_lineage off
+    record = _make_violin_record().model_copy(
+        update={
+            "alternateIdentifiers": [
+                AlternateIdentifier(
+                    alternateIdentifier="P04608",
+                    alternateIdentifierType="UniProt",
+                )
+            ],
+            "subjects": [],
+        }
+    )
+    out = resolver(record)
+    assert out.subjects == []
+
+
+@pytest.mark.skipif(
+    not os.path.isfile(os.environ.get("APECX_SYNONYM_DICT_PATH", "")),
+    reason="APECX_SYNONYM_DICT_PATH not set to an existing dictionary file",
+)
+def test_full_ancestor_iris_for_real_dict():
+    """Integration (mocks-policy parity for the stubbed unit test above): the
+    full ancestor lineage of influenza-A strain 211044 must include both the
+    post-ICTV-rename intermediate 11320 AND the species 2955291."""
+    from apecx_harvesters.dict_reader.loader import DictionaryIndex
+
+    index = DictionaryIndex.load(os.environ["APECX_SYNONYM_DICT_PATH"])
+    iris = index.full_ancestor_iris_for(f"{_PREF}211044")
+    ids = {iri.rsplit("_", 1)[-1] for iri in iris}
+    assert "11320" in ids  # post-ICTV-rename intermediate the query resolves to
+    assert "2955291" in ids  # the species
+    # FIX 1: the rollup is BOUNDED — universal/root taxa are excluded so a
+    # higher-rank query can't collapse to "all of life" or "all viruses".
+    assert "1" not in ids  # root
+    assert "10239" not in ids  # Viruses
