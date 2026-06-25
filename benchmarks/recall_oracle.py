@@ -138,8 +138,71 @@ def _recall_fractions(raw_ids: set[str], harm_ids: set[str], gold_ids: set[str]
     return round(len(raw_ids & gold_ids) / g, 4), round(len(harm_ids & gold_ids) / g, 4)
 
 
+# --- Full-corpus recall (NO --limit): exact count queries + facets over the entire index ---
+_MATCH_CAP = 1000  # Globus match_any value cap; viral pathogens have far fewer distinct organisms
+
+
+def _facet_org_values(client, dest: str, field: str, *, filters=None, q: str = "*") -> list[str]:
+    """Distinct native-organism values over the (filtered) FULL corpus via a terms facet (limit:0)."""
+    payload = {"q": q, "facets": [{"name": "o", "type": "terms", "field_name": field, "size": 2000}], "limit": 0}
+    if filters:
+        payload["filters"] = filters
+    try:
+        d = client.post_search(dest, payload).data
+    except Exception as exc:  # noqa: BLE001
+        print(f"  facet error {dest}: {exc}", file=sys.stderr)
+        return []
+    fr = d.get("facet_results") or []
+    return [b.get("value") for b in (fr[0].get("buckets", []) if fr else []) if isinstance(b.get("value"), str)]
+
+
+def _count(client, dest: str, *, filters=None, q: str = "*") -> int:
+    payload = {"q": q, "limit": 0}
+    if filters:
+        payload["filters"] = filters
+    try:
+        return int(client.post_search(dest, payload).data.get("total", 0))
+    except Exception as exc:  # noqa: BLE001
+        print(f"  count error {dest}: {exc}", file=sys.stderr)
+        return 0
+
+
+def _organism_resolves(organism: str, s_q, desc_ids) -> bool:
+    rr = resolve_query(organism, enable_fuzzy=False)
+    return bool(rr.iris) and any(_taxon_matches(ti, s_q, desc_ids) for ti in rr.iris)
+
+
+def measure_recall_full(client, source: str, dest: str, term: str) -> RecallRow | None:
+    """Full-corpus recall (NO limit) via exact count queries. Independent gold = records whose NATIVE
+    organism resolves to the pathogen (candidate organisms gathered from the harm+raw facets, kept if
+    they resolve into the subtree). recall_before/after = (raw/harm ∩ gold) / gold."""
+    res = resolve_query(term)
+    if not res.iris:
+        return None
+    desc_ids = _query_descendants(res.iris)
+    field = f"{source}.{ORGANISM_FIELD.get(source, '')}"
+    s_q_filter = [{"type": "match_any", "field_name": "subjects.valueUri", "values": sorted(res.s_q)}]
+    raw_q = _raw_payload(term, 0)["q"]
+    cands = set(_facet_org_values(client, dest, field, filters=s_q_filter))
+    cands |= set(_facet_org_values(client, dest, field, q=raw_q))
+    gold_orgs = sorted(o for o in cands if _organism_resolves(o, res.s_q, desc_ids))
+    if not gold_orgs:
+        return None
+    if len(gold_orgs) > _MATCH_CAP:
+        print(f"  note {source}/{term!r}: {len(gold_orgs)} gold organisms > {_MATCH_CAP} cap — truncated",
+              file=sys.stderr)
+        gold_orgs = gold_orgs[:_MATCH_CAP]
+    org_filter = {"type": "match_any", "field_name": field, "values": gold_orgs}
+    gold = _count(client, dest, filters=[org_filter])                          # all gold records (full index)
+    harm_gold = _count(client, dest, filters=[org_filter] + s_q_filter)        # harm ∩ gold
+    raw_gold = _count(client, dest, filters=[org_filter], q=raw_q)             # raw ∩ gold
+    before, after = (round(raw_gold / gold, 4), round(harm_gold / gold, 4)) if gold else (None, None)
+    return RecallRow(source=source, query=term, gold=gold, recall_before=before, recall_after=after,
+                     unjudged=0, saturated=False)
+
+
 def run(categories: list[str], max_queries: int | None, limit: int, indices: list[str] | None,
-        out_dir: Path) -> int:
+        out_dir: Path, full: bool = False) -> int:
     dict_path = Path(os.environ.get("APECX_SYNONYM_DICT_PATH", str(default_dictionary_path())))
     if not dict_path.exists():
         print(f"dictionary not present at {dict_path}", file=sys.stderr)
@@ -159,7 +222,8 @@ def run(categories: list[str], max_queries: int | None, limit: int, indices: lis
             queries = queries[:max_queries]
         for term in queries:
             for name, src, dst in pairs:
-                row = measure_recall(client, name, dst, term, limit)
+                row = (measure_recall_full(client, name, dst, term) if full
+                       else measure_recall(client, name, dst, term, limit))
                 if row and row.gold:
                     rows.append(row)
 
@@ -178,15 +242,18 @@ def run(categories: list[str], max_queries: int | None, limit: int, indices: lis
     }
     report = {"generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
               "judge": "independent native-organism oracle (non-circular vs subjects.valueUri)",
-              "limit_per_cell": limit, "aggregate": agg, "rows": [asdict(r) for r in rows]}
+              "mode": "full-corpus (exact counts, NO limit)" if full else f"pooled@limit={limit}",
+              "aggregate": agg, "rows": [asdict(r) for r in rows]}
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "recall_oracle_report.json").write_text(json.dumps(report, indent=2))
-    print(f"\n=== independent recall (before vs after harmonization), {len(clean)}/{len(valid)} "
-          f"unsaturated cells (judge: native organism, non-circular) ===", file=sys.stderr)
+    mode = "FULL-CORPUS (exact, no limit)" if full else f"pooled@limit={limit}"
+    print(f"\n=== independent recall (before vs after harmonization) — {mode}, {len(clean)}/{len(valid)} "
+          f"cells (judge: native organism, non-circular) ===", file=sys.stderr)
     print(f"  mean recall_before (substring): {agg['mean_recall_before']}", file=sys.stderr)
     print(f"  mean recall_after  (taxon-IRI): {agg['mean_recall_after']}", file=sys.stderr)
-    print(f"  ({agg['saturated_cells']} saturated cells excluded — gold exceeded --limit; raise --limit "
-          f"to measure them)", file=sys.stderr)
+    if not full:
+        print(f"  ({agg['saturated_cells']} saturated cells excluded — gold exceeded --limit; use --full "
+              f"for exact whole-corpus recall)", file=sys.stderr)
     print(f"  wrote {out_dir}/recall_oracle_report.json", file=sys.stderr)
     return 0
 
@@ -195,12 +262,14 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--categories", default="abbreviations", help="comma-separated: mu_virus,abbreviations,real_world")
     ap.add_argument("--max-queries", type=int, default=None)
-    ap.add_argument("--limit", type=int, default=200, help="records/cell pooled for the recall sample")
+    ap.add_argument("--limit", type=int, default=200, help="records/cell pooled (DESKTOP only; ignored with --full)")
+    ap.add_argument("--full", action="store_true",
+                    help="exact whole-corpus recall via counts+facets (NO limit) — the loop mode")
     ap.add_argument("--indices", default=None, help="comma-separated source short names (default: all 9)")
     ap.add_argument("--out", default=str(_HERE / "output"))
     args = ap.parse_args(argv)
     return run(args.categories.split(","), args.max_queries, args.limit,
-               args.indices.split(",") if args.indices else None, Path(args.out))
+               args.indices.split(",") if args.indices else None, Path(args.out), full=args.full)
 
 
 if __name__ == "__main__":
