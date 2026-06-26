@@ -272,8 +272,10 @@ def make_resolver_for_source(
     (also protabank) then rolls each taxon up its FULL ancestor chain — not just
     the species rank — so a query resolving to a post-ICTV-rename intermediate
     node (e.g. the old "Influenza A virus" 11320, now a sub-species under
-    2955291) still matches a strain-stamped record. Other sources leave both
-    defaulted off and are byte-for-byte unchanged.
+    2955291) still matches a strain-stamped record. ``uniprot_taxid_map`` stays
+    protabank-only; ``full_lineage`` is enabled for EVERY harmonization source by
+    the republish driver (so an any-rank query matches across sources). Both
+    still default off here, so a caller that passes neither is unchanged.
 
     Construction is fast (no SQLite hit); the dictionary singleton is
     lazily materialized on the first ``lookup_entity`` call.

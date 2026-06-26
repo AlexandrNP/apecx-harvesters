@@ -123,7 +123,7 @@ async def republish_index(
         uniprot_taxid_map=await _maybe_uniprot_taxid_map(
             name, dest_uuid, client, page_size=page_size
         ),
-        full_lineage=(name == "protabank"),
+        full_lineage=True,
     )
 
     stats = RepublishStats(
@@ -254,7 +254,7 @@ async def preflight_index(
         uniprot_taxid_map=await _maybe_uniprot_taxid_map(
             name, dest_uuid, client, max_records=max_records, page_size=page_size
         ),
-        full_lineage=(name == "protabank"),
+        full_lineage=True,
     )
     stats = PreflightStats(
         source_name=name,
@@ -408,18 +408,19 @@ async def _maybe_violin_crosswalk(
 
 
 def _assert_full_lineage_ready(source_name: str) -> None:
-    """Fail LOUD (not a silent no-op) when a protabank full-lineage republish is
-    requested but the dictionary has no ``taxon_hierarchy`` — otherwise every
-    record would get only its strain taxid and the post-ICTV-rename matching the
-    whole feature exists for would silently fail while the run reports success."""
-    if source_name != "protabank":
-        return
+    """Fail LOUD (not a silent no-op) when a full-lineage republish is requested
+    but the dictionary has no ``taxon_hierarchy`` — otherwise every record would
+    get only its own taxid (no ancestor rollup) and the post-ICTV-rename matching
+    the feature exists for would silently fail while the run reports success.
+
+    Every harmonization source now rolls up the full lineage (was protabank-only
+    while EF4 was parked), so this guards them all."""
     from apecx_harvesters.dict_reader.loader import get_dictionary_index
 
     index, err = get_dictionary_index()
     if index is None or not index.has_hierarchy:
         raise RuntimeError(
-            "protabank full-lineage republish requires a dictionary with a "
+            f"full-lineage republish of {source_name!r} requires a dictionary with a "
             f"taxon_hierarchy table; got: {err or 'hierarchy table absent'}. "
             "Point APECX_SYNONYM_DICT_PATH at a hierarchy-bearing dictionary."
         )

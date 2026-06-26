@@ -155,14 +155,15 @@ def test_assert_full_lineage_ready_raises_for_protabank_without_hierarchy():
             _assert_full_lineage_ready("protabank")
 
 
-def test_assert_full_lineage_ready_noop_for_other_sources():
-    """Even with a missing/hierarchy-less dictionary, non-protabank sources are
-    untouched — the guard must not raise."""
+def test_assert_full_lineage_ready_raises_for_any_source_without_hierarchy():
+    """Full-lineage is now enabled for EVERY harmonization source, so the guard
+    fires for non-protabank sources too (was protabank-only while EF4 was parked)."""
     with patch(
         "apecx_harvesters.dict_reader.loader.get_dictionary_index",
         return_value=(None, "not set"),
     ):
-        _assert_full_lineage_ready("bvbrc_protein")  # must not raise
+        with pytest.raises(RuntimeError, match="taxon_hierarchy"):
+            _assert_full_lineage_ready("bvbrc_protein")
 
 
 def test_assert_full_lineage_ready_passes_when_hierarchy_present():
